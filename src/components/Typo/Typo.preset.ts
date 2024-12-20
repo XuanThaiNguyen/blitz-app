@@ -3,74 +3,72 @@ import {FontSizeDefault} from './TypoSize';
 import {FontDefault} from '../../themes/Font';
 
 type PresetProps = {
-  body12: any;
-  body12B: any;
-  body14: any;
-  body14B: any;
-  body16: any;
-  body16B: any;
-  body18: any;
-  body18B: any;
-  body20: any;
-  body20B: any;
-  body22B: any;
-  body24B: any;
-  body28B: any;
+  b32: any;
+  b24: any;
+  m20: any;
+  r18: any;
+  m18: any;
+  s18: any;
+  b16: any;
+  r16: any;
+  b14: any;
+  sb14: any;
+  r14: any;
 };
 
 export const TypoPresets = (): PresetProps =>
   StyleSheet.create({
-    body12: {
-      fontFamily: FontDefault.Regular,
-      fontSize: FontSizeDefault.FONT_12,
-    },
-    body12B: {
+    b32: {
       fontFamily: FontDefault.Bold,
-      fontSize: FontSizeDefault.FONT_12,
+      fontSize: FontSizeDefault.FONT_32,
+      lineHeight: 51.2,
     },
-    body14: {
-      fontFamily: FontDefault.Regular,
-      fontSize: FontSizeDefault.FONT_14,
-    },
-    body14B: {
-      fontFamily: FontDefault.Bold,
-      fontSize: FontSizeDefault.FONT_14,
-    },
-    body16: {
-      fontFamily: FontDefault.Regular,
-      fontSize: FontSizeDefault.FONT_16,
-    },
-    body16B: {
-      fontFamily: FontDefault.Bold,
-      fontSize: FontSizeDefault.FONT_16,
-    },
-    body18: {
-      fontFamily: FontDefault.Regular,
-      fontSize: FontSizeDefault.FONT_18,
-    },
-    body18B: {
-      fontFamily: FontDefault.Bold,
-      fontSize: FontSizeDefault.FONT_18,
-    },
-    body20: {
-      fontFamily: FontDefault.Regular,
-      fontSize: FontSizeDefault.FONT_20,
-    },
-    body20B: {
-      fontFamily: FontDefault.Bold,
-      fontSize: FontSizeDefault.FONT_20,
-    },
-    body22B: {
-      fontFamily: FontDefault.Bold,
-      fontSize: FontSizeDefault.FONT_22,
-    },
-    body24B: {
+    b24: {
       fontFamily: FontDefault.Bold,
       fontSize: FontSizeDefault.FONT_24,
+      lineHeight: 38.4,
     },
-    body28B: {
+    m20: {
+      fontFamily: FontDefault.Medium,
+      fontSize: FontSizeDefault.FONT_20,
+      lineHeight: 32,
+    },
+    r18: {
+      fontFamily: FontDefault.Regular,
+      fontSize: FontSizeDefault.FONT_18,
+      lineHeight: 28.8,
+    },
+    m18: {
+      fontFamily: FontDefault.Medium,
+      fontSize: FontSizeDefault.FONT_18,
+      lineHeight: 28.8,
+    },
+    s18: {
+      fontFamily: FontDefault.Semibold,
+      fontSize: FontSizeDefault.FONT_18,
+      lineHeight: 28.8,
+    },
+    b16: {
       fontFamily: FontDefault.Bold,
-      fontSize: FontSizeDefault.FONT_28,
+      fontSize: FontSizeDefault.FONT_16,
+      lineHeight: 25.6,
+    },
+    r16: {
+      fontFamily: FontDefault.Regular,
+      fontSize: FontSizeDefault.FONT_16,
+      lineHeight: 25.6,
+    },
+    b14: {
+      fontFamily: FontDefault.Bold,
+      fontSize: FontSizeDefault.FONT_14,
+    },
+    sb14: {
+      fontFamily: FontDefault.Semibold,
+      fontSize: FontSizeDefault.FONT_14,
+    },
+    r14: {
+      fontFamily: FontDefault.Regular,
+      fontSize: FontSizeDefault.FONT_14,
     },
   });
 

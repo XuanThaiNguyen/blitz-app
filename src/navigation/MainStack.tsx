@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import MainTab from './MainTab';
 import Screen from './Screen';
+import CreateTask from '../features/Manage/screens/CreateTask';
 
 // const Stack = createNativeStackNavigator<MainStackScreenProps>();
 const Stack = createNativeStackNavigator<any>();
@@ -18,6 +19,7 @@ const MainStack = () => {
       screenOptions={{headerShown: false}}
       initialRouteName={initialRouteName}>
       <Stack.Screen name={Screen.MainTab} component={MainTab} />
+      <Stack.Screen name={Screen.CreateTask} component={CreateTask} />
     </Stack.Navigator>
   );
 };

@@ -8,12 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* blitzTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* blitzTests.m */; };
+		05A539E856314931AF70AA4D /* Urbanist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 080F5A45607D4E869555F1E8 /* Urbanist-Regular.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-blitz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-blitz.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		14D998DA0CA242F388ED9244 /* Urbanist-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A657994B81C64A25B52132F8 /* Urbanist-Bold.ttf */; };
+		67B63DCBADDA446D90394744 /* Urbanist-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BE3FDCAD8844154B6410C23 /* Urbanist-SemiBold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-blitz-blitzTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-blitz-blitzTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		AC86A8DFC5D54324BF9684AC /* Urbanist-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9295EDE99234DAC97584AE5 /* Urbanist-Medium.ttf */; };
 		BBCB7D909037FF54009E74C2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +35,7 @@
 		00E356EE1AD99517003FC87E /* blitzTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blitzTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* blitzTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = blitzTests.m; sourceTree = "<group>"; };
+		080F5A45607D4E869555F1E8 /* Urbanist-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-Regular.ttf"; path = "../src/assets/fonts/Urbanist-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* blitz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blitz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = blitz/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = blitz/AppDelegate.mm; sourceTree = "<group>"; };
@@ -43,8 +48,11 @@
 		5709B34CF0A7D63546082F79 /* Pods-blitz.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blitz.release.xcconfig"; path = "Target Support Files/Pods-blitz/Pods-blitz.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-blitz-blitzTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blitz-blitzTests.debug.xcconfig"; path = "Target Support Files/Pods-blitz-blitzTests/Pods-blitz-blitzTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-blitz.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blitz.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BE3FDCAD8844154B6410C23 /* Urbanist-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-SemiBold.ttf"; path = "../src/assets/fonts/Urbanist-SemiBold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = blitz/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-blitz-blitzTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blitz-blitzTests.release.xcconfig"; path = "Target Support Files/Pods-blitz-blitzTests/Pods-blitz-blitzTests.release.xcconfig"; sourceTree = "<group>"; };
+		A657994B81C64A25B52132F8 /* Urbanist-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-Bold.ttf"; path = "../src/assets/fonts/Urbanist-Bold.ttf"; sourceTree = "<group>"; };
+		B9295EDE99234DAC97584AE5 /* Urbanist-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-Medium.ttf"; path = "../src/assets/fonts/Urbanist-Medium.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -125,6 +133,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				AF34473FE45C4FB79ADDA498 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -138,6 +147,18 @@
 				00E356EE1AD99517003FC87E /* blitzTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		AF34473FE45C4FB79ADDA498 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A657994B81C64A25B52132F8 /* Urbanist-Bold.ttf */,
+				B9295EDE99234DAC97584AE5 /* Urbanist-Medium.ttf */,
+				080F5A45607D4E869555F1E8 /* Urbanist-Regular.ttf */,
+				7BE3FDCAD8844154B6410C23 /* Urbanist-SemiBold.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -247,6 +268,10 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				BBCB7D909037FF54009E74C2 /* PrivacyInfo.xcprivacy in Resources */,
+				14D998DA0CA242F388ED9244 /* Urbanist-Bold.ttf in Resources */,
+				AC86A8DFC5D54324BF9684AC /* Urbanist-Medium.ttf in Resources */,
+				05A539E856314931AF70AA4D /* Urbanist-Regular.ttf in Resources */,
+				67B63DCBADDA446D90394744 /* Urbanist-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

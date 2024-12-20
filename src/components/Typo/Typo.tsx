@@ -39,7 +39,7 @@ const TypoComponent = (props: TypoProps) => {
     fontStyle,
     letterSpacing,
     lineHeight,
-    preset = 'body12',
+    preset = 'b16',
     style: styleOverride = {},
     applyDisabledStyle,
     ...rest

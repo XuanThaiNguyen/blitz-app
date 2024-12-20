@@ -33,24 +33,19 @@ const images = {
   ic_setting_active: require('../assets/images/ic_setting_active.png'),
   ic_manage: require('../assets/images/ic_manage.png'),
   ic_manage_active: require('../assets/images/ic_manage_active.png'),
-  ic_background_add: require('../assets/images/ic_background_add.png'),
   ic_add: require('../assets/images/ic_add.png'),
   ic_tag: require('../assets/images/ic_tag.png'),
   ic_task: require('../assets/images/ic_task.png'),
+  ic_priority: require('../assets/images/ic_priority.png'),
+  ic_play: require('../assets/images/ic_play.png'),
+  ic_timer: require('../assets/images/ic_timer.png'),
+  ic_calendar: require('../assets/images/ic_calendar.png'),
+
+  //new
   ic_today: require('../assets/images/ic_today.png'),
   ic_tomorrow: require('../assets/images/ic_tomorrow.png'),
   ic_week: require('../assets/images/ic_week.png'),
   ic_planned: require('../assets/images/ic_planned.png'),
-  ic_priority: require('../assets/images/ic_priority.png'),
-  ic_today_outline: require('../assets/images/ic_today_outline.png'),
-  ic_background_today: require('../assets/images/ic_background_today.png'),
-  ic_background_tomorrow: require('../assets/images/ic_background_tomorrow.png'),
-  ic_background_week: require('../assets/images/ic_background_week.png'),
-  ic_background_planned: require('../assets/images/ic_background_planned.png'),
-  ic_background_tick: require('../assets/images/ic_background_tick.png'),
-  ic_play: require('../assets/images/ic_play.png'),
-  ic_timer: require('../assets/images/ic_timer.png'),
-  ic_calendar: require('../assets/images/ic_calendar.png'),
 };
 
 export default images;
