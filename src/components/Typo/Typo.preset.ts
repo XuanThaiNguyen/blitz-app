@@ -5,11 +5,13 @@ import {FontDefault} from '../../themes/Font';
 type PresetProps = {
   b32: any;
   b24: any;
+  sb20: any;
   m20: any;
   r18: any;
   m18: any;
   s18: any;
   b16: any;
+  sb16: any;
   r16: any;
   b14: any;
   sb14: any;
@@ -27,6 +29,11 @@ export const TypoPresets = (): PresetProps =>
       fontFamily: FontDefault.Bold,
       fontSize: FontSizeDefault.FONT_24,
       lineHeight: 38.4,
+    },
+    sb20: {
+      fontFamily: FontDefault.Semibold,
+      fontSize: FontSizeDefault.FONT_20,
+      lineHeight: 32,
     },
     m20: {
       fontFamily: FontDefault.Medium,
@@ -50,6 +57,11 @@ export const TypoPresets = (): PresetProps =>
     },
     b16: {
       fontFamily: FontDefault.Bold,
+      fontSize: FontSizeDefault.FONT_16,
+      lineHeight: 25.6,
+    },
+    sb16: {
+      fontFamily: FontDefault.Semibold,
       fontSize: FontSizeDefault.FONT_16,
       lineHeight: 25.6,
     },

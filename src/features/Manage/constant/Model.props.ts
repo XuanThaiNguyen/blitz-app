@@ -7,3 +7,16 @@ export interface TimeProjectProps {
   timeEst: string;
   icon: IconTypes;
 }
+
+export enum PriorityTask {
+  NO = 'NO',
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
+
+export interface PriorityProps {
+  key: PriorityTask;
+  value: string;
+  color: string;
+}

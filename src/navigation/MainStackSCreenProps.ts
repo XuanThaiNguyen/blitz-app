@@ -9,4 +9,5 @@ export type MainStackScreenProps = {
   [Screen.Register]: undefined;
   [Screen.Login]: undefined;
   [Screen.CreateTask]: undefined;
+  [Screen.CreateTag]: undefined;
 };

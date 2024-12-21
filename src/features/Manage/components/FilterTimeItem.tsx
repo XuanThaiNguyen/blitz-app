@@ -2,13 +2,13 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Block} from '../../../components/Block/Block';
-import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {TimeProjectProps} from '../constant/Model.props';
 import images from '../../../themes/Images';
+import Button from '../../../components/Button/Button';
 
 interface FilterTimeItemProps {
   item: TimeProjectProps;
@@ -23,7 +23,7 @@ const FilterTimeItem = ({item, index}: FilterTimeItemProps) => {
   };
 
   return (
-    <Button key={item.title} onPress={onManageTask(item)}>
+    <Button onPress={onManageTask(item)} key={item.title}>
       <Block
         mRight={(index + 1) % 2 === 0 ? 0 : 12}
         paddingVertical={16}
@@ -32,7 +32,8 @@ const FilterTimeItem = ({item, index}: FilterTimeItemProps) => {
         mBottom={8}
         borderRadius={6}
         borderWidth={1}
-        borderColor={item.color}>
+        borderColor={item.color}
+      >
         <Block row alignCenter>
           <FastImage tintColor={item.color} source={images?.[item.icon]} style={styles.image} />
           <Spacer width={'tiny'} />

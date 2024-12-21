@@ -1,5 +1,5 @@
 import colors from '../../../themes/Colors';
-import {TimeProjectProps} from './Model.props';
+import {PriorityProps, PriorityTask, TimeProjectProps} from './Model.props';
 
 export const ITEM_SIZE_SPACE = 18;
 
@@ -32,4 +32,51 @@ export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
     timeEst: '20h 50m',
     icon: 'ic_planned',
   },
+];
+
+export const PRIORITIES: PriorityProps[] = [
+  {
+    key: PriorityTask.NO,
+    value: 'No Priority',
+    color: '#607D8A',
+  },
+  {
+    key: PriorityTask.LOW,
+    value: 'Low Priority',
+    color: '#4AAF57',
+  },
+  {
+    key: PriorityTask.MEDIUM,
+    value: 'Medium Priority',
+    color: '#FF981F',
+  },
+  {
+    key: PriorityTask.HIGH,
+    value: 'High Priority',
+    color: '#F54336',
+  },
+];
+
+
+export const COLORS = [
+  '#F54336',
+  '#EA1D61',
+  '#9D28AC',
+  '#673AB3',
+  '#3F51B2',
+  '#1A96F0',
+  '#00A9F2',
+  '#00BCD3',
+  '#009689',
+  '#4AAF57',
+  '#8BC255',
+  '#CDDC4C',
+  '#FFEB4F',
+  '#FFC02D',
+  '#FF981F',
+  '#FF5726',
+  '#7A5548',
+  '#607D8A',
+  '#FF6347',
+  '#02FFB9',
 ];

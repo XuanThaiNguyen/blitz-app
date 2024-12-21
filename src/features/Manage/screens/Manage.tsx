@@ -28,7 +28,7 @@ const Manage = () => {
   };
 
   return (
-    <Block block paddingHorizontal={SpacingDefault.medium}>
+    <Block block paddingHorizontal={SpacingDefault.medium} bgColor={theme.background}>
       <InsetSubstitute />
       <Block row alignCenter justifyContent="space-between">
         <FastImage source={images.setting} style={styles.icon} tintColor={colors.primary} />

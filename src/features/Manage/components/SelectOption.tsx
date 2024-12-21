@@ -32,7 +32,6 @@ const SelectOption = ({value = '', title = '', onSelect}: SelectOptionProps) => 
 const useStyles = ((theme: Theme) => StyleSheet.create({
   button: {
     borderRadius: 8,
-    paddingVertical: 16,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: theme.backgroundInput,

@@ -8,7 +8,7 @@ import {useAppDispatch} from '../redux/hook';
 type ThemeType = 'light' | 'dark';
 
 interface ThemeContextProps {
-  dark: boolean;
+  isDark: boolean;
   theme: Theme;
   setScheme: (theme: ThemeType) => void;
 }
@@ -16,7 +16,7 @@ interface ThemeContextProps {
 export type Theme = typeof lightColors;
 
 export const ThemeContext = createContext<ThemeContextProps>({
-  dark: false,
+  isDark: false,
   theme: lightColors,
   setScheme: () => {
     //
@@ -28,12 +28,12 @@ export interface ThemeContextProviderProps {
 }
 
 export const ThemeProvider = ({children}: ThemeContextProviderProps) => {
-  const isDark = useSelector((state: AppState) => state.app.isDark);
+  const _isDark = useSelector((state: AppState) => state.app.isDark);
   const dispatch = useAppDispatch();
 
   const defaultTheme = {
-    dark: isDark,
-    theme: isDark ? darkColors : lightColors,
+    isDark: _isDark,
+    theme: _isDark ? darkColors : lightColors,
     setScheme: (scheme: ThemeType) =>
       dispatch(AppActions.setIsDark(scheme === 'dark')),
   };

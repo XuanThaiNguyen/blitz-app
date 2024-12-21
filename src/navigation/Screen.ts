@@ -13,6 +13,7 @@ enum Screen {
   ProjectDetail = 'ProjectDetail',
   TaskDetail = 'TaskDetail',
   CreateTask = 'CreateTask',
+  CreateTag = 'CreateTag',
   TaskManagement = 'TaskManagement',
 
   //Authen

@@ -8,7 +8,7 @@ interface Props {
 
 export const InsetSubstitute: FC<Props> = ({type = 'top'}) => {
   const insets = useSafeAreaInsets();
-  const rootStyles = {height: insets[type] || 20};
+  const rootStyles = {height: Math.max(insets[type], 20)};
 
   return <View style={rootStyles} />;
 };

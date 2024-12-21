@@ -3,7 +3,6 @@ const images = {
   profile: require('../assets/images/profile.png'),
   right: require('../assets/images/right.png'),
   left: require('../assets/images/left.png'),
-  close: require('../assets/images/close.png'),
   notification: require('../assets/images/notification.png'),
   logout: require('../assets/images/logout.png'),
   help: require('../assets/images/help.png'),
@@ -42,10 +41,15 @@ const images = {
   ic_calendar: require('../assets/images/ic_calendar.png'),
 
   //new
+  ic_close: require('../assets/images/close.webp'),
+  ic_check: require('../assets/images/check.png'),
   ic_today: require('../assets/images/ic_today.png'),
   ic_tomorrow: require('../assets/images/ic_tomorrow.png'),
   ic_week: require('../assets/images/ic_week.png'),
   ic_planned: require('../assets/images/ic_planned.png'),
+
+  empty_dark: require('../assets/images/empty_dark.png'),
+  empty_light: require('../assets/images/empty_light.png'),
 };
 
 export default images;

@@ -10,7 +10,7 @@ const Button = (props: ButtonProps) => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const {
     preset = '',
-    textPreset = 'b24',
+    textPreset = 'b16',
     textColor,
     tx,
     text,
