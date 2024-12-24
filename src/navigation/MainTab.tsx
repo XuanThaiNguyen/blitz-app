@@ -1,7 +1,9 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
-import Screen from './Screen';
+
 import Manage from '../features/Manage/screens/Manage';
+import Setting from '../features/Setting/screens/Setting';
+import Screen from './Screen';
 
 // import {Icon} from '../components/Icon/Icon';
 // import {IconTypes} from '../themes/Images';
@@ -23,6 +25,18 @@ const MainTab = () => {
       <Tab.Screen
         name={Screen.Manage}
         component={Manage}
+        options={{
+          // tabBarActiveTintColor: colors.primaryButton,
+          // tabBarIcon: ({focused}) => (
+          //   <RenderIcon
+          //     icon={focused ? images.ic_manage_active : images.ic_manage}
+          //   />
+          // ),
+        }}
+      />
+      <Tab.Screen
+        name={Screen.Setting}
+        component={Setting}
         options={{
           // tabBarActiveTintColor: colors.primaryButton,
           // tabBarIcon: ({focused}) => (

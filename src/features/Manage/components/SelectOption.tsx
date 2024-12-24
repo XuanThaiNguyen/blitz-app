@@ -20,10 +20,10 @@ const SelectOption = ({value = '', title = '', onSelect}: SelectOptionProps) => 
 
   return (
     <Block>
-      <Typo text={title} preset="m18" color={theme.primaryText} />
+      <Typo text={title} preset="r12" color={theme.primaryText} />
       <Spacer height={8} />
       <Button onPress={onSelect} style={styles.button}>
-        <Typo text={value} preset="r16" color={theme.primaryText} />
+        <Typo text={value} preset="r14" color={theme.primaryText} />
       </Button>
     </Block>
   );
@@ -36,6 +36,7 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     alignItems: 'center',
     backgroundColor: theme.backgroundInput,
     paddingHorizontal: SpacingDefault.small,
+    height: 44,
   },
 }));
 

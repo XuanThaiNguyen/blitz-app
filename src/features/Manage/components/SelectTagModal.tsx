@@ -2,16 +2,16 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import RNModal from 'react-native-modal';
+
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
-import {useTheme} from '../../../context/ThemeProvider';
-import colors from '../../../themes/Colors';
-import {SpacingDefault} from '../../../themes/Spacing';
-import images from '../../../themes/Images';
+import {Theme, useTheme} from '../../../context/ThemeProvider';
 import {navigationRef} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
+import images from '../../../themes/Images';
+import {SpacingDefault} from '../../../themes/Spacing';
 
 interface SelectTagModalProps {
   tags: string[];
@@ -22,6 +22,7 @@ interface SelectTagModalProps {
 
 const EmptyTag = ({onCreateTag}: {onCreateTag: () => void}) => {
   const {isDark, theme} = useTheme();
+  const styles = useStyles(theme);
 
   return (
     <Block center>
@@ -37,6 +38,7 @@ const EmptyTag = ({onCreateTag}: {onCreateTag: () => void}) => {
 
 const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag}: SelectTagModalProps) => {
   const {theme} = useTheme();
+  const styles = useStyles(theme);
 
   const renderTagItem = (item: string) => {
     console.log('itemmmm', item);
@@ -67,8 +69,8 @@ const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag}: SelectTagM
           <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
         </Button>
         <Spacer height={24} />
-        <Typo text="Tags" preset="sb20" color={theme.primaryText} />
-        <Spacer height={24} />
+        <Typo text="Tags" preset="b20" color={theme.primaryText} />
+        <Spacer height={32} />
         {tags?.length === 0 ? <EmptyTag onCreateTag={_onCreateTag} /> : tags.map(renderTagItem)}
         <Spacer height={16} />
       </Block>
@@ -76,7 +78,7 @@ const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag}: SelectTagM
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = ((theme: Theme) => StyleSheet.create({
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   block: {
-    backgroundColor: colors.white,
+    backgroundColor: theme.background,
     paddingHorizontal: SpacingDefault.medium,
   },
   buttonItem: {
@@ -111,6 +113,6 @@ const styles = StyleSheet.create({
     height: 124,
     alignSelf: 'center',
   },
-});
+}));
 
 export default SelectTagModal;

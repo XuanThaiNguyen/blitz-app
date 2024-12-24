@@ -1,14 +1,15 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
+
 import {Block} from '../../../components/Block/Block';
+import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
+import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {TimeProjectProps} from '../constant/Model.props';
-import images from '../../../themes/Images';
-import Button from '../../../components/Button/Button';
 
 interface FilterTimeItemProps {
   item: TimeProjectProps;
@@ -37,11 +38,11 @@ const FilterTimeItem = ({item, index}: FilterTimeItemProps) => {
         <Block row alignCenter>
           <FastImage tintColor={item.color} source={images?.[item.icon]} style={styles.image} />
           <Spacer width={'tiny'} />
-          <Typo preset="sb14" color={theme.primaryText} text={item.title} />
+          <Typo preset="r16" color={theme.primaryText} text={item.title} />
         </Block>
         <Spacer height={8} />
         <Typo
-          preset="b14"
+          preset="b16"
           color={theme.primaryText}
           text={`${item.timeEst} (${item.total})`}
         />

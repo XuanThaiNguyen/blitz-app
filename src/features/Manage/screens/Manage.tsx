@@ -1,37 +1,49 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {Block} from '../../../components/Block/Block';
-import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
-import {Typo} from '../../../components/Typo/Typo';
-import colors from '../../../themes/Colors';
-import {useTheme} from '../../../context/ThemeProvider';
+import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import images from '../../../themes/Images';
-import {SpacingDefault} from '../../../themes/Spacing';
+import {useSelector} from 'react-redux';
+
+import {Block} from '../../../components/Block/Block';
+import Button from '../../../components/Button/Button';
+import Container from '../../../components/Container/Container';
+import {Divider} from '../../../components/Divider/DIvider';
+import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import TextField from '../../../components/TextField/TextField';
-import {TIME_PROJECT_DEFAULT} from '../constant/Constant';
-import FilterTimeItem from '../components/FilterTimeItem';
-import Button from '../../../components/Button/Button';
-import {StyleSheet} from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {Typo} from '../../../components/Typo/Typo';
+import {useTheme} from '../../../context/ThemeProvider';
+import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
+import {showLoginModal} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
-import {MainStackScreenProps} from '../../../navigation/MainStackSCreenProps';
+import {AppState} from '../../../redux/reducer';
+import colors from '../../../themes/Colors';
+import images from '../../../themes/Images';
+import {SpacingDefault} from '../../../themes/Spacing';
+import FilterTimeItem from '../components/FilterTimeItem';
+import {TIME_PROJECT_DEFAULT} from '../constant/Constant';
 
 const Manage = () => {
   const {theme} = useTheme();
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
 
+  const user = useSelector((state: AppState) => state.user.user);
+  console.log('user', user);
+
   const [search, setSearch] = useState('');
 
   const onAddTask = () => {
+    if (!user) {
+      return showLoginModal();
+    }
     navigate(Screen.CreateTask);
   };
 
   return (
-    <Block block paddingHorizontal={SpacingDefault.medium} bgColor={theme.background}>
+    <Container style={styles.container}>
       <InsetSubstitute />
       <Block row alignCenter justifyContent="space-between">
-        <FastImage source={images.setting} style={styles.icon} tintColor={colors.primary} />
+        <FastImage source={images.ic_logo} style={styles.icon} tintColor={colors.primary} />
         <Typo text="Blitz" preset="b24" color={theme.primaryText} />
         <FastImage source={images.notification} style={styles.icon} tintColor={theme.primaryText} />
       </Block>
@@ -47,17 +59,24 @@ const Manage = () => {
         {TIME_PROJECT_DEFAULT.map((item, index) => <FilterTimeItem key={item.title} item={item} index={index} />)}
       </Block>
       <Spacer height={16} />
-      <Typo text="Tasks" preset="b14" color={theme.secondaryText} />
+      <Block row alignCenter overflow="hidden">
+        <Typo text="Tasks" preset="b14" color={theme.secondaryText} />
+        <Spacer width={'small'} />
+        <Divider width={'100%'} height={1} />
+      </Block>
       <Spacer height={24} />
 
       <Button style={styles.buttonAdd} onPress={onAddTask}>
         <FastImage source={images.ic_add} style={styles.iconAdd} tintColor={colors.white} />
       </Button>
-    </Block>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: SpacingDefault.medium,
+  },
   icon: {
     width: 20,
     height: 20,

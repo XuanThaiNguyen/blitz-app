@@ -7,7 +7,7 @@ import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
-import {useTheme} from '../../../context/ThemeProvider';
+import {Theme, useTheme} from '../../../context/ThemeProvider';
 import colors from '../../../themes/Colors';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
@@ -23,6 +23,7 @@ interface SelectPriorityModalProps {
 
 const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModal}: SelectPriorityModalProps) => {
   const {theme} = useTheme();
+  const styles = useStyles(theme);
 
   const _onSelect = (item: PriorityProps) => () => {
     onSelectPriority(item);
@@ -33,11 +34,11 @@ const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModa
     return (
       <Button key={item.key} style={styles.buttonItem} onPress={_onSelect(item)}>
         <Block row alignCenter>
-          <Block center w={48} h={48} bgColor={item.color} borderRadius={24}>
+          <Block center w={32} h={32} bgColor={item.color} borderRadius={24}>
             <FastImage source={images.ic_today} style={styles.iconFlag} tintColor={colors.white} />
           </Block>
-          <Spacer width={'smaller'} />
-          <Typo text={item.value} color={item.key === priority.key ? theme.primaryText : theme.secondaryText} preset={item.key === priority.key ? 'sb16' : 'r16'} />
+          <Spacer width={'small'} />
+          <Typo text={item.value} color={item.key === priority.key ? theme.primaryText : theme.secondaryText} preset={item.key === priority.key ? 'b14' : 'r14'} />
         </Block>
         {item.key === priority.key ? (
           <FastImage source={images.ic_check} style={styles.iconCheck} tintColor={theme.primaryText} />
@@ -65,8 +66,8 @@ const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModa
           <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
         </Button>
         <Spacer height={24} />
-        <Typo text="Priority" preset="sb20" color={theme.primaryText} />
-        <Spacer height={24} />
+        <Typo text="Priority" preset="b20" color={theme.primaryText} />
+        <Spacer height={32} />
         {PRIORITIES.map(renderPriorityItem)}
         <Spacer height={16} />
       </Block>
@@ -74,10 +75,11 @@ const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModa
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = ((theme: Theme) => StyleSheet.create({
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
+    backgroundColor: theme.backgroundModal,
   },
   buttonClose: {
     alignItems: 'flex-end',
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   block: {
-    backgroundColor: colors.white,
+    backgroundColor: theme.background,
     paddingHorizontal: SpacingDefault.medium,
   },
   buttonItem: {
@@ -97,13 +99,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   iconFlag: {
-    width: 32,
-    height: 32,
+    width: 24,
+    height: 24,
   },
   iconCheck: {
     width: 24,
     height: 24,
   },
-});
+}));
 
 export default SelectPriorityModal;

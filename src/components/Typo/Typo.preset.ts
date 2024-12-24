@@ -1,21 +1,21 @@
 import {StyleSheet} from 'react-native';
-import {FontSizeDefault} from './TypoSize';
+
 import {FontDefault} from '../../themes/Font';
+import {FontSizeDefault} from './TypoSize';
 
 type PresetProps = {
   b32: any;
   b24: any;
-  sb20: any;
-  m20: any;
+  r24: any;
+  b20: any;
+  r20: any;
+  b18: any;
   r18: any;
-  m18: any;
-  s18: any;
   b16: any;
-  sb16: any;
   r16: any;
   b14: any;
-  sb14: any;
   r14: any;
+  r12: any;
 };
 
 export const TypoPresets = (): PresetProps =>
@@ -23,64 +23,50 @@ export const TypoPresets = (): PresetProps =>
     b32: {
       fontFamily: FontDefault.Bold,
       fontSize: FontSizeDefault.FONT_32,
-      lineHeight: 51.2,
     },
     b24: {
       fontFamily: FontDefault.Bold,
       fontSize: FontSizeDefault.FONT_24,
-      lineHeight: 38.4,
     },
-    sb20: {
-      fontFamily: FontDefault.Semibold,
-      fontSize: FontSizeDefault.FONT_20,
-      lineHeight: 32,
+    r24: {
+      fontFamily: FontDefault.Regular,
+      fontSize: FontSizeDefault.FONT_24,
     },
-    m20: {
-      fontFamily: FontDefault.Medium,
+    b20: {
+      fontFamily: FontDefault.Bold,
       fontSize: FontSizeDefault.FONT_20,
-      lineHeight: 32,
+    },
+    r20: {
+      fontFamily: FontDefault.Regular,
+      fontSize: FontSizeDefault.FONT_20,
+    },
+    b18: {
+      fontFamily: FontDefault.Bold,
+      fontSize: FontSizeDefault.FONT_18,
     },
     r18: {
       fontFamily: FontDefault.Regular,
       fontSize: FontSizeDefault.FONT_18,
-      lineHeight: 28.8,
-    },
-    m18: {
-      fontFamily: FontDefault.Medium,
-      fontSize: FontSizeDefault.FONT_18,
-      lineHeight: 28.8,
-    },
-    s18: {
-      fontFamily: FontDefault.Semibold,
-      fontSize: FontSizeDefault.FONT_18,
-      lineHeight: 28.8,
     },
     b16: {
       fontFamily: FontDefault.Bold,
       fontSize: FontSizeDefault.FONT_16,
-      lineHeight: 25.6,
-    },
-    sb16: {
-      fontFamily: FontDefault.Semibold,
-      fontSize: FontSizeDefault.FONT_16,
-      lineHeight: 25.6,
     },
     r16: {
       fontFamily: FontDefault.Regular,
       fontSize: FontSizeDefault.FONT_16,
-      lineHeight: 25.6,
     },
     b14: {
       fontFamily: FontDefault.Bold,
       fontSize: FontSizeDefault.FONT_14,
     },
-    sb14: {
-      fontFamily: FontDefault.Semibold,
-      fontSize: FontSizeDefault.FONT_14,
-    },
     r14: {
       fontFamily: FontDefault.Regular,
       fontSize: FontSizeDefault.FONT_14,
+    },
+    r12: {
+      fontFamily: FontDefault.Regular,
+      fontSize: FontSizeDefault.FONT_12,
     },
   });
 

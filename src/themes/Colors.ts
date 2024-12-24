@@ -42,12 +42,14 @@ const colors = {
   darkBackgroundBox: '#1F222A',
   lightBackgroundTooltip: '#FFFFFF',
   darkBackgroundTooltip: '#252934',
+  lightBackgroundModal: 'rgba(0,0,0,0.6)',
+  darkBackgroundModal: 'rgba(0,0,0,0.8)',
 
   //text
   lightPrimaryText: '#212121',
-  darkPrimaryText: '#ffffff',
-  lightSecondaryText: '#626262',
-  darkSecondaryText: '#EFEFEF',
+  darkPrimaryText: '#FFFFFF',
+  lightSecondaryText: '#9E9E9E',
+  darkSecondaryText: '#BFBFC1',
   lightPlacehoderText: '#9D9E9E',
   darkPlacehoderText: '#9D9E9E',
 

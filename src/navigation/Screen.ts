@@ -3,18 +3,13 @@ enum Screen {
   MainTab = 'MainTab',
 
   //Main Tabbar
-  Home = 'Home',
-  Profile = 'Profile',
-  Post = 'Post',
   Manage = 'Manage',
+  Setting = 'Setting',
 
   //Screen
-  ProfileInfo = 'ProfileInfo',
-  ProjectDetail = 'ProjectDetail',
-  TaskDetail = 'TaskDetail',
   CreateTask = 'CreateTask',
   CreateTag = 'CreateTag',
-  TaskManagement = 'TaskManagement',
+  Profile = 'Profile',
 
   //Authen
   Login = 'Login',

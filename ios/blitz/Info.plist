@@ -49,10 +49,8 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Urbanist-Bold.ttf</string>
-		<string>Urbanist-Medium.ttf</string>
-		<string>Urbanist-Regular.ttf</string>
-		<string>Urbanist-SemiBold.ttf</string>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

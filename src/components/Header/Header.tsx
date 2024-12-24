@@ -23,11 +23,11 @@ const Header = ({titleHeader, color, renderRight}: HeaderProps) => {
   const _color = color ? color : theme.primaryText;
 
   return (
-    <Block row alignCenter justifyContent="space-between">
+    <Block row alignCenter justifyContent="space-between" h={52}>
       <Button onPress={goBack} style={styles.button}>
         <FastImage source={images.left} style={styles.iconLeft} tintColor={_color} />
         <Spacer width={'smaller'} />
-        <Typo text={titleHeader} preset="b24" color={_color} />
+        <Typo text={titleHeader} preset="b16" lineHeight={24} color={_color} />
       </Button>
       {renderRight ? renderRight() : <></>}
     </Block>
@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconLeft: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
   },
 });
 

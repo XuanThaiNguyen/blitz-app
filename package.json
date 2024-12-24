@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
@@ -20,7 +21,7 @@
     "patch-package": "^8.0.0",
     "react": "18.3.1",
     "react-fast-compare": "^3.2.2",
-    "react-hook-form": "^7.54.0",
+    "react-hook-form": "^7.54.2",
     "react-native": "0.76.5",
     "react-native-calendars": "^1.1307.0",
     "react-native-config": "^1.5.3",
@@ -33,7 +34,7 @@
     "react-native-screens": "^4.3.0",
     "react-redux": "^9.2.0",
     "redux-persist": "^6.0.0",
-    "yup": "^1.5.0"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -1,18 +1,20 @@
 import React, {useState} from 'react';
-import {Block} from '../../../components/Block/Block';
-import {Typo} from '../../../components/Typo/Typo';
-import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
+import {StyleSheet} from 'react-native';
+
+import Container from '../../../components/Container/Container';
 import Header from '../../../components/Header/Header';
-import {SpacingDefault} from '../../../themes/Spacing';
+import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
-import {useTheme} from '../../../context/ThemeProvider';
 import TextField from '../../../components/TextField/TextField';
+import {Typo} from '../../../components/Typo/Typo';
+import {useTheme} from '../../../context/ThemeProvider';
+import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
 import SelectOption from '../components/SelectOption';
-import {PriorityProps} from '../constant/Model.props';
 import SelectPriorityModal from '../components/SelectPriorityModal';
-import {PRIORITIES} from '../constant/Constant';
 import SelectTagModal from '../components/SelectTagModal';
+import {PRIORITIES} from '../constant/Constant';
+import {PriorityProps} from '../constant/Model.props';
 
 const CreateTask = () => {
   const {theme} = useTheme();
@@ -39,11 +41,11 @@ const CreateTask = () => {
   };
 
   return (
-    <Block block paddingHorizontal={SpacingDefault.medium} bgColor={theme.background}>
+    <Container style={styles.container}>
       <InsetSubstitute />
       <Header titleHeader="Create Task" />
       <Spacer height={24} />
-      <Typo text="Title" preset="m18" color={theme.primaryText} />
+      <Typo text="Title" preset="r12" color={theme.primaryText} />
       <Spacer height={8} />
       <TextField value={title} placeholder={'Enter task name'} onChangeText={setTitle} />
       <Spacer height={16} />
@@ -55,8 +57,14 @@ const CreateTask = () => {
 
       <SelectPriorityModal priority={priority} onSelectPriority={onSelectPriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
       <SelectTagModal tags={tags} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />
-    </Block>
+    </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: SpacingDefault.medium,
+  },
+});
 
 export default CreateTask;

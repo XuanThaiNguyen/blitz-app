@@ -64,7 +64,7 @@ const TextField = ({
           onChangeText={onChangeText}
           value={value}
           editable={editable}
-          placeholderTextColor={theme.placeholderText}
+          placeholderTextColor={theme.secondaryText}
           style={[styles.input, error && styles.errorInput]}
         />
         <Spacer height={4} />

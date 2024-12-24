@@ -41,6 +41,7 @@ const images = {
   ic_calendar: require('../assets/images/ic_calendar.png'),
 
   //new
+  ic_logo: require('../assets/images/logo.png'),
   ic_close: require('../assets/images/close.webp'),
   ic_check: require('../assets/images/check.png'),
   ic_today: require('../assets/images/ic_today.png'),
