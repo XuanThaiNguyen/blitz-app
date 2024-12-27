@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type TypesBase = | 'bigint' | 'boolean' | 'function' | 'number' | 'object' | 'string' | 'symbol' | 'undefined';
 
@@ -22,3 +22,5 @@ export const onCheckType = (
 ): source is TypesBase => {
   return typeof source === type;
 };
+
+export const conditionalStyle = (condition: boolean, trueStyle: ViewStyle | TextStyle, falseStyle?: ViewStyle | TextStyle): ViewStyle | TextStyle => condition ? trueStyle : falseStyle ?? {};

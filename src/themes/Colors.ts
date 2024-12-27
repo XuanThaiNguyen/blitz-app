@@ -46,6 +46,8 @@ const colors = {
   darkBackgroundModal: 'rgba(0,0,0,0.8)',
 
   //text
+  lightDefault: '#FFFFFF',
+  darkDefault: '#212121',
   lightPrimaryText: '#212121',
   darkPrimaryText: '#FFFFFF',
   lightSecondaryText: '#9E9E9E',

@@ -9,6 +9,7 @@ export const lightColors = {
   backgroundBox: colors.lightBackgroundBox,
   backgroundModal: colors.lightBackgroundModal,
   divider: colors.lightDivider,
+  default: colors.lightDefault,
 };
 
 export const darkColors = {
@@ -20,4 +21,5 @@ export const darkColors = {
   backgroundBox: colors.darkBackgroundBox,
   backgroundModal: colors.darkBackgroundModal,
   divider: colors.darkDivider,
+  default: colors.darkDefault,
 };

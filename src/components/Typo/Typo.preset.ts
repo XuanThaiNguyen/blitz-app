@@ -16,6 +16,8 @@ type PresetProps = {
   b14: any;
   r14: any;
   r12: any;
+  b10: any;
+  r10: any;
 };
 
 export const TypoPresets = (): PresetProps =>
@@ -67,6 +69,14 @@ export const TypoPresets = (): PresetProps =>
     r12: {
       fontFamily: FontDefault.Regular,
       fontSize: FontSizeDefault.FONT_12,
+    },
+    b10: {
+      fontFamily: FontDefault.Bold,
+      fontSize: FontSizeDefault.FONT_10,
+    },
+    r10: {
+      fontFamily: FontDefault.Regular,
+      fontSize: FontSizeDefault.FONT_10,
     },
   });
 

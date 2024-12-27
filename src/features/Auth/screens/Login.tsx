@@ -1,9 +1,13 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
@@ -20,13 +24,18 @@ import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {LoginFormProps} from '../constant/Auth.props';
 import {initialLoginForm, validationLoginSchema} from '../constant/Constrant';
+import http from '../../../utils/http';
+import APIs from '../../../services/api/APIs';
+import {useAppDispatch} from '../../../redux/hook';
+import {actions as UserActions} from '../../../redux/user';
 
 const Login = () => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
+  const dispatch = useAppDispatch();
 
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -37,12 +46,61 @@ const Login = () => {
     resolver: yupResolver(validationLoginSchema),
   });
 
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '73955915174-t1m0oovfvg83aj84q69099r0bdhtgcvi.apps.googleusercontent.com',
+      iosClientId: '73955915174-eje561bltsk8dtbbfc966cac1cjtpat8.apps.googleusercontent.com',
+    });
+  }, []);
+
   const onForgotPassword = () => { };
   const onLoginEmailPassword = () => { };
   const onSignup = () => {
     navigate(Screen.Register);
   };
-  const onLoginGoogle = () => { };
+
+  const loginToServer = async (user: any) => {
+    setLoading(true);
+    try {
+      const params = {
+        email: user.user.email,
+        firstname: user.user.givenName,
+        lastname: user.user.familyName,
+        fullname: user.user.name,
+        avatar: user.user.photo,
+        // accessToken: user.idToken,
+        // locale: 'vi',
+      };
+      const {status, data} = await http.post(APIs.LOGIN_WITH_GOOGLE, params);
+      if (status === 200) {
+        dispatch(UserActions.setUser(data));
+        reset(Screen.MainTab);
+      }
+    } catch (err) {
+      console.log('errrrr', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onLoginGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const user = await GoogleSignin.signIn();
+      loginToServer(user.data);
+    } catch (error: any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
+
   const goHome = () => {
     reset(Screen.MainTab);
   };
@@ -136,8 +194,8 @@ const Login = () => {
         onPress={onLoginGoogle}
         disabled={loading}>
         <FastImage source={images.google} style={styles.icon} />
-        <Spacer width="smaller" />
-        <Typo preset="b16">Login with Google</Typo>
+        <Spacer width="small" />
+        <Typo preset="b16" color={theme.default}>Login with Google</Typo>
       </Button>
       <Spacer height={16} />
       <Spacer height={20} />

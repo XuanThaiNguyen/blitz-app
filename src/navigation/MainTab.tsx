@@ -4,47 +4,46 @@ import React from 'react';
 import Manage from '../features/Manage/screens/Manage';
 import Setting from '../features/Setting/screens/Setting';
 import Screen from './Screen';
+import {useTheme} from '../context/ThemeProvider';
+import colors from '../themes/Colors';
+import TabBar from './TabBar';
 
 // import {Icon} from '../components/Icon/Icon';
 // import {IconTypes} from '../themes/Images';
 
 // const Tab = createBottomTabNavigator<MainTabScreenProps>();
+const defaultOptions: any = {
+  lazy: true,
+  tabBarVisible: true,
+};
+
 const Tab = createBottomTabNavigator<any>();
 
 const MainTab = () => {
-  // const {theme} = useTheme();
+  const {theme} = useTheme();
 
   return (
     <Tab.Navigator
+      tabBar={props => <TabBar {...props} />}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          // backgroundColor: theme.background,
+          backgroundColor: theme.background,
         },
-      }}>
+        tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: theme.secondaryText,
+      }}
+    >
       <Tab.Screen
         name={Screen.Manage}
         component={Manage}
-        options={{
-          // tabBarActiveTintColor: colors.primaryButton,
-          // tabBarIcon: ({focused}) => (
-          //   <RenderIcon
-          //     icon={focused ? images.ic_manage_active : images.ic_manage}
-          //   />
-          // ),
-        }}
+        options={defaultOptions}
       />
       <Tab.Screen
         name={Screen.Setting}
         component={Setting}
-        options={{
-          // tabBarActiveTintColor: colors.primaryButton,
-          // tabBarIcon: ({focused}) => (
-          //   <RenderIcon
-          //     icon={focused ? images.ic_manage_active : images.ic_manage}
-          //   />
-          // ),
-        }}
+        options={defaultOptions}
       />
     </Tab.Navigator>
   );

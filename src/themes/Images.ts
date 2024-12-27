@@ -51,6 +51,13 @@ const images = {
 
   empty_dark: require('../assets/images/empty_dark.png'),
   empty_light: require('../assets/images/empty_light.png'),
+
+  tabs: {
+    ic_main_tab_manage_active: require('../assets/images/tabs/ic_main_tab_manage_active.png'),
+    ic_main_tab_manage_inactive: require('../assets/images/tabs/ic_main_tab_manage_inactive.png'),
+    ic_main_tab_profile_active: require('../assets/images/tabs/ic_main_tab_profile_active.png'),
+    ic_main_tab_profile_inactive: require('../assets/images/tabs/ic_main_tab_profile_inactive.png'),
+  },
 };
 
 export default images;

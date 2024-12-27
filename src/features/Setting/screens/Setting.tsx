@@ -19,7 +19,6 @@ import {SettingProps} from '../constants/Setting.props';
 
 const Setting = () => {
   const {theme, setScheme, isDark} = useTheme();
-  console.log('isDark', isDark);
 
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
 
@@ -32,8 +31,6 @@ const Setting = () => {
   };
 
   const renderBlockItem = (item: SettingProps) => {
-    console.log('itemmmm', item);
-
     return (
       <Button style={styles.blockItem} key={item.key} onPress={onPressBlock(item)}>
         <Block row alignCenter>

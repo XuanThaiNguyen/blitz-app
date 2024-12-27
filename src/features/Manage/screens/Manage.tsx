@@ -28,7 +28,6 @@ const Manage = () => {
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
 
   const user = useSelector((state: AppState) => state.user.user);
-  console.log('user', user);
 
   const [search, setSearch] = useState('');
 
