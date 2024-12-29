@@ -1,9 +1,9 @@
 import React, {createContext, useContext} from 'react';
-import {darkColors, lightColors} from '../themes/ThemeColors';
-import {useSelector} from 'react-redux';
-import {AppState} from '../redux/reducer';
+
 import {actions as AppActions} from '../redux/app';
-import {useAppDispatch} from '../redux/hook';
+import {useAppDispatch, useAppSelector} from '../redux/hook';
+import {AppState} from '../redux/reducer';
+import {darkColors, lightColors} from '../themes/ThemeColors';
 
 type ThemeType = 'light' | 'dark';
 
@@ -28,7 +28,7 @@ export interface ThemeContextProviderProps {
 }
 
 export const ThemeProvider = ({children}: ThemeContextProviderProps) => {
-  const _isDark = useSelector((state: AppState) => state.app.isDark);
+  const _isDark = useAppSelector((state: AppState) => state.app.isDark);
   const dispatch = useAppDispatch();
 
   const defaultTheme = {

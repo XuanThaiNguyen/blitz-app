@@ -34,6 +34,7 @@ const FilterTimeItem = ({item, index}: FilterTimeItemProps) => {
         borderRadius={6}
         borderWidth={1}
         borderColor={item.color}
+        bgColor={theme.backgroundBox}
       >
         <Block row alignCenter>
           <FastImage tintColor={item.color} source={images?.[item.icon]} style={styles.image} />

@@ -8,10 +8,6 @@ import {useTheme} from '../context/ThemeProvider';
 import colors from '../themes/Colors';
 import TabBar from './TabBar';
 
-// import {Icon} from '../components/Icon/Icon';
-// import {IconTypes} from '../themes/Images';
-
-// const Tab = createBottomTabNavigator<MainTabScreenProps>();
 const defaultOptions: any = {
   lazy: true,
   tabBarVisible: true,
@@ -24,6 +20,7 @@ const MainTab = () => {
 
   return (
     <Tab.Navigator
+      // eslint-disable-next-line react/no-unstable-nested-components
       tabBar={props => <TabBar {...props} />}
       screenOptions={{
         headerShown: false,
@@ -48,9 +45,5 @@ const MainTab = () => {
     </Tab.Navigator>
   );
 };
-
-// const RenderIcon = ({icon}: {icon: IconTypes}) => (
-//   <Icon icon={icon} resizeMode="contain" size={'medium'} />
-// );
 
 export default MainTab;

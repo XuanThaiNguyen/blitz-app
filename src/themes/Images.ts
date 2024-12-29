@@ -48,6 +48,8 @@ const images = {
   ic_tomorrow: require('../assets/images/ic_tomorrow.png'),
   ic_week: require('../assets/images/ic_week.png'),
   ic_planned: require('../assets/images/ic_planned.png'),
+  ic_success_check_circle: require('../assets/images/ic_success_check_circle.png'),
+  ic_faill_cross_circle: require('../assets/images/ic_faill_cross_circle.png'),
 
   empty_dark: require('../assets/images/empty_dark.png'),
   empty_light: require('../assets/images/empty_light.png'),

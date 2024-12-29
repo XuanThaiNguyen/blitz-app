@@ -1,13 +1,13 @@
 import {yupResolver} from '@hookform/resolvers/yup';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
 
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
@@ -19,15 +19,15 @@ import {Theme, useTheme} from '../../../context/ThemeProvider';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import {reset} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
+import {useAppDispatch} from '../../../redux/hook';
+import {actions as UserActions} from '../../../redux/user';
+import APIs from '../../../services/api/APIs';
 import colors from '../../../themes/Colors';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
+import http from '../../../utils/http';
 import {LoginFormProps} from '../constant/Auth.props';
 import {initialLoginForm, validationLoginSchema} from '../constant/Constrant';
-import http from '../../../utils/http';
-import APIs from '../../../services/api/APIs';
-import {useAppDispatch} from '../../../redux/hook';
-import {actions as UserActions} from '../../../redux/user';
 
 const Login = () => {
   const {theme} = useTheme();
@@ -68,12 +68,10 @@ const Login = () => {
         lastname: user.user.familyName,
         fullname: user.user.name,
         avatar: user.user.photo,
-        // accessToken: user.idToken,
-        // locale: 'vi',
       };
       const {status, data} = await http.post(APIs.LOGIN_WITH_GOOGLE, params);
       if (status === 200) {
-        dispatch(UserActions.setUser(data));
+        dispatch(UserActions.setUser(data?.data));
         reset(Screen.MainTab);
       }
     } catch (err) {
@@ -195,7 +193,7 @@ const Login = () => {
         disabled={loading}>
         <FastImage source={images.google} style={styles.icon} />
         <Spacer width="small" />
-        <Typo preset="b16" color={theme.default}>Login with Google</Typo>
+        <Typo preset="b16" color={colors.lightPrimaryText}>Login with Google</Typo>
       </Button>
       <Spacer height={16} />
       <Spacer height={20} />

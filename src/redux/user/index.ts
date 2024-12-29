@@ -11,16 +11,13 @@ interface User {
     isPrivateAccount: boolean;
     theme: 'light' | 'dark';
   };
-  avatar: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  fullname: string;
-  jwt: {
-    expiredAt: string;
-    token: string;
-  };
+  jwt: string;
   profileInfo: {
+    avatar: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    fullname: string;
     locale: 'vi' | 'en';
     phoneNumber: string[];
     tags: Record<string, TagModel>;

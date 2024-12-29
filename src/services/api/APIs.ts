@@ -1,14 +1,14 @@
 enum APIs {
   //authen
   LOGIN_WITH_GOOGLE = 'auth/signin/google',
-  LOGOUT = 'auth/signout',
+  LOGOUT = 'auth/logout',
 
   //profile
   GET_PROFILE = 'accounts/profile',
 
   //tasks
   CREATE_TASK = 'tasks/create',
-  GET_TASKS = 'accounts/tasks',
+  GET_TASKS = 'tasks/my-tasks',
   GET_TASK_BY_ID = 'tasks/:taskId',
 
   //tags

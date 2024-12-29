@@ -1,5 +1,6 @@
 import React from 'react';
-import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Block} from '../components/Block/Block';
@@ -59,6 +60,10 @@ const TabBar = (props: any) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
 
+  const onNavigateTab = (routeName: Screen) => () => {
+    navigation.navigate(routeName);
+  };
+
   const renderTab = (route: any, routeIndex: number) => {
     const isRouteActive = routeIndex === activeTabIndex;
     const tabbarInfo = getIconTabBar(
@@ -77,39 +82,13 @@ const TabBar = (props: any) => {
           conditionalStyle(routeIndex === 0, {marginLeft: SpacingDefault.none}),
           conditionalStyle(routeIndex !== 0, {marginLeft: SpacingDefault.small}),
         ]}
-        onPress={() => {
-          navigation.navigate(route?.name);
-        }}>
-        {routeIndex === 2
-          ? (
-            <>
-              <Block style={styles.iconTabBar} />
-              <Block
-                h={40}
-                w={40}
-                center
-                position="absolute"
-                bottom={24}
-                bgColor={colors.primary}
-                borderRadius={24} >
-                <Image
-                  resizeMode="contain"
-                  source={tabbarInfo.icon}
-                  style={styles.iconTabBar}
-                />
-              </Block>
-            </>
-          )
-          : (
-            <>
-              <Image
-                resizeMode="contain"
-                source={tabbarInfo.icon}
-                style={styles.iconTabBar}
-              />
-            </>
-          )
-        }
+        onPress={onNavigateTab(route?.name)}>
+        <FastImage
+          resizeMode="contain"
+          source={tabbarInfo.icon}
+          tintColor={!isRouteActive ? theme.secondaryText : colors.primary}
+          style={styles.iconTabBar}
+        />
         <Spacer height={4} />
         <Typo
           preset={isRouteActive ? 'b10' : 'r10'}

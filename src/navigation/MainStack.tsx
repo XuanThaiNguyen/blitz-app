@@ -6,6 +6,8 @@ import Register from '../features/Auth/screens/Register';
 import CreateTag from '../features/Manage/screens/CreateTag';
 import CreateTask from '../features/Manage/screens/CreateTask';
 import Profile from '../features/Profile/screens/Profile';
+import {useAppSelector} from '../redux/hook';
+import {AppState} from '../redux/reducer';
 import {MainStackScreenProps} from './MainStackScreenProps';
 import MainTab from './MainTab';
 import Screen from './Screen';
@@ -13,11 +15,11 @@ import Screen from './Screen';
 const Stack = createNativeStackNavigator<MainStackScreenProps>();
 
 const MainStack = () => {
-  // const user = useSelector((state: AppState) => state.user.user);
+  const user = useAppSelector((state: AppState) => state.user.user);
   let initialRouteName = Screen.MainTab;
-  // if (!user) {
-  //   initialRouteName = Screen.Login;
-  // }
+  if (!user) {
+    initialRouteName = Screen.Login;
+  }
 
   return (
     <Stack.Navigator

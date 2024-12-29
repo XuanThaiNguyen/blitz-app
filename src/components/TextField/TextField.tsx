@@ -48,9 +48,7 @@ const TextField = ({
         paddingVertical={16}
         row
         alignCenter
-        bgColor={
-          mode === 'default' ? theme.backgroundInput : colors.transparent
-        }>
+        bgColor={mode === 'default' ? theme.backgroundInput : colors.transparent}>
         {!!iconLeft && (
           <>
             <Spacer width="small" />

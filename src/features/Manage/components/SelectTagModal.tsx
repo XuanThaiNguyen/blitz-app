@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import RNModal from 'react-native-modal';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
@@ -39,6 +40,7 @@ const EmptyTag = ({onCreateTag}: {onCreateTag: () => void}) => {
 const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag}: SelectTagModalProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
+  const insets = useSafeAreaInsets();
 
   const renderTagItem = (item: string) => {
     console.log('itemmmm', item);
@@ -72,7 +74,7 @@ const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag}: SelectTagM
         <Typo text="Tags" preset="b20" color={theme.primaryText} />
         <Spacer height={32} />
         {tags?.length === 0 ? <EmptyTag onCreateTag={_onCreateTag} /> : tags.map(renderTagItem)}
-        <Spacer height={16} />
+        <Spacer height={insets.bottom + 16} />
       </Block>
     </RNModal>
   );

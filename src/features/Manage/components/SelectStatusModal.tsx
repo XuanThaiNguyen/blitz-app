@@ -9,40 +9,33 @@ import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
 import {Theme, useTheme} from '../../../context/ThemeProvider';
-import colors from '../../../themes/Colors';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
-import {PRIORITIES} from '../constant/Constant';
-import {PriorityProps} from '../constant/Model.props';
+import {STATUSES} from '../constant/Constant';
+import {StatusProps} from '../constant/Model.props';
 
-interface SelectPriorityModalProps {
-  priority: PriorityProps;
-  onSelectPriority: (item: PriorityProps) => void;
+interface SelectStatusModalProps {
+  status: StatusProps;
+  onSelectStatus: (item: StatusProps) => void;
   isVisible: boolean;
   onCloseModal: () => void;
 }
 
-const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModal}: SelectPriorityModalProps) => {
+const SelectStatusModal = ({status, onSelectStatus, isVisible, onCloseModal}: SelectStatusModalProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
   const insets = useSafeAreaInsets();
 
-  const _onSelect = (item: PriorityProps) => () => {
-    onSelectPriority(item);
+  const _onSelect = (item: StatusProps) => () => {
+    onSelectStatus(item);
     onCloseModal();
   };
 
-  const renderPriorityItem = (item: PriorityProps) => {
+  const renderStatusItem = (item: StatusProps) => {
     return (
       <Button key={item.key} style={styles.buttonItem} onPress={_onSelect(item)}>
-        <Block row alignCenter>
-          <Block center w={32} h={32} bgColor={item.color} borderRadius={24}>
-            <FastImage source={images.ic_today} style={styles.iconFlag} tintColor={colors.white} />
-          </Block>
-          <Spacer width={'small'} />
-          <Typo text={item.value} color={item.key === priority.key ? theme.primaryText : theme.secondaryText} preset={item.key === priority.key ? 'b14' : 'r14'} />
-        </Block>
-        {item.key === priority.key ? (
+        <Typo text={item.value} color={item.key === status.key ? theme.primaryText : theme.secondaryText} preset={item.key === status.key ? 'b14' : 'r14'} />
+        {item.key === status.key ? (
           <FastImage source={images.ic_check} style={styles.iconCheck} tintColor={theme.primaryText} />
         ) : <></>}
       </Button>
@@ -70,7 +63,7 @@ const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModa
         <Spacer height={24} />
         <Typo text="Priority" preset="b20" color={theme.primaryText} />
         <Spacer height={32} />
-        {PRIORITIES.map(renderPriorityItem)}
+        {STATUSES.map(renderStatusItem)}
         <Spacer height={insets.bottom + 16} />
       </Block>
     </RNModal>
@@ -109,4 +102,4 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   },
 }));
 
-export default SelectPriorityModal;
+export default SelectStatusModal;

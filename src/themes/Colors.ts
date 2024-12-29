@@ -34,16 +34,14 @@ const colors = {
   primary: '#FF6347',
 
   //background
-  lightBackground: '#FFFFFF',
+  lightBackground: '#F5F5F5',
   darkBackground: '#181A20',
-  lightBackgroundInput: '#FAFAFA',
+  lightBackgroundInput: '#FFFFFF',
   darkBackgroundInput: '#1F222A',
   lightBackgroundBox: '#FFFFFF',
   darkBackgroundBox: '#1F222A',
   lightBackgroundTooltip: '#FFFFFF',
   darkBackgroundTooltip: '#252934',
-  lightBackgroundModal: 'rgba(0,0,0,0.6)',
-  darkBackgroundModal: 'rgba(0,0,0,0.8)',
 
   //text
   lightDefault: '#FFFFFF',

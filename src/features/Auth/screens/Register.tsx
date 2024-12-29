@@ -121,7 +121,7 @@ const Register = () => {
         <Button style={styles.loginSocialBtn} onPress={onLoginGoogle}>
           <FastImage source={images.google} style={styles.icon} />
           <Spacer width="smaller" />
-          <Typo preset="b16">Login with Google</Typo>
+          <Typo preset="b16" color={colors.lightPrimaryText}>Login with Google</Typo>
         </Button>
         <Spacer height={16} />
         <Typo preset="r14" center color={theme.primaryText}>

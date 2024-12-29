@@ -1,5 +1,5 @@
 import colors from '../../../themes/Colors';
-import {PriorityProps, PriorityTask, TimeProjectProps} from './Model.props';
+import {PriorityProps, PriorityTask, StatusProps, StatusTask, TimeProjectProps} from './Model.props';
 
 export const ITEM_SIZE_SPACE = 18;
 
@@ -36,27 +36,49 @@ export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
 
 export const PRIORITIES: PriorityProps[] = [
   {
-    key: PriorityTask.NO,
-    value: 'No Priority',
-    color: '#607D8A',
-  },
-  {
     key: PriorityTask.LOW,
     value: 'Low Priority',
-    color: '#4AAF57',
+    color: colors.priorityLow,
   },
   {
     key: PriorityTask.MEDIUM,
     value: 'Medium Priority',
-    color: '#FF981F',
+    color: colors.priorityMedium,
   },
   {
     key: PriorityTask.HIGH,
     value: 'High Priority',
-    color: '#F54336',
+    color: colors.priorityHigh,
+  },
+  {
+    key: PriorityTask.Critical,
+    value: 'Critical Priority',
+    color: colors.priorityCritical,
   },
 ];
 
+export const STATUSES: StatusProps[] = [
+  {
+    key: StatusTask.NotStartYet,
+    value: 'Not Start Yet',
+  },
+  {
+    key: StatusTask.Pending,
+    value: 'Pending',
+  },
+  {
+    key: StatusTask.InProgress,
+    value: 'In Progress',
+  },
+  {
+    key: StatusTask.Done,
+    value: 'Done',
+  },
+  {
+    key: StatusTask.Archived,
+    value: 'Archived',
+  },
+];
 
 export const COLORS = [
   '#F54336',

@@ -9,14 +9,27 @@ export interface TimeProjectProps {
 }
 
 export enum PriorityTask {
-  NO = 'NO',
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
+  LOW = 'Low',
+  MEDIUM = 'Medium',
+  HIGH = 'High',
+  Critical = 'Critical'
 }
 
 export interface PriorityProps {
   key: PriorityTask;
   value: string;
   color: string;
+}
+
+export enum StatusTask {
+  NotStartYet = 'NotStartYet',
+  InProgress = 'InProgress',
+  Pending = 'Pending',
+  Done = 'Done',
+  Archived = 'Archived',
+}
+
+export interface StatusProps {
+  key: StatusTask;
+  value: string;
 }

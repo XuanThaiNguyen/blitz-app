@@ -4,12 +4,11 @@ import Config from 'react-native-config';
 
 import {store} from '../redux/store';
 
-// axios.defaults.baseURL = `${Config.API_BASE_URL}/v1/`;
-axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.baseURL = Config.API_BASE_URL;
 
 axios.interceptors.request.use(
   async config => {
-    const token = store.getState().user.user?.jwt.token;
+    const token = store.getState().user.user?.jwt;
     config.headers.authorization = token ? `Bearer ${token}` : '';
     return config;
   },

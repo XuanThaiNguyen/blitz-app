@@ -7,7 +7,6 @@ export const lightColors = {
   backgroundInput: colors.lightBackgroundInput,
   backgroundTooltip: colors.lightBackgroundInput,
   backgroundBox: colors.lightBackgroundBox,
-  backgroundModal: colors.lightBackgroundModal,
   divider: colors.lightDivider,
   default: colors.lightDefault,
 };
@@ -19,7 +18,6 @@ export const darkColors = {
   backgroundInput: colors.darkBackgroundInput,
   backgroundTooltip: colors.darkBackgroundTooltip,
   backgroundBox: colors.darkBackgroundBox,
-  backgroundModal: colors.darkBackgroundModal,
   divider: colors.darkDivider,
   default: colors.darkDefault,
 };
