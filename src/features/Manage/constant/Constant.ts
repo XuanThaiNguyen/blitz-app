@@ -1,5 +1,5 @@
 import colors from '../../../themes/Colors';
-import {PriorityProps, PriorityTask, StatusProps, StatusTask, TimeProjectProps} from './Model.props';
+import {PriorityProps, PriorityTask, StatusProps, StatusTask, TimeFilterKey, TimeProjectProps} from './Model.props';
 
 export const ITEM_SIZE_SPACE = 18;
 
@@ -10,6 +10,7 @@ export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
     total: 4,
     timeEst: '6h 25m',
     icon: 'ic_today',
+    key: TimeFilterKey.TODAY,
   },
   {
     title: 'Tomorrow',
@@ -17,6 +18,7 @@ export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
     total: 4,
     timeEst: '6h 40m',
     icon: 'ic_tomorrow',
+    key: TimeFilterKey.TOMORROW,
   },
   {
     title: 'This week',
@@ -24,6 +26,7 @@ export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
     total: 10,
     timeEst: '13h 20m',
     icon: 'ic_week',
+    key: TimeFilterKey.WEEK,
   },
   {
     title: 'Planned',
@@ -31,6 +34,7 @@ export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
     total: 18,
     timeEst: '20h 50m',
     icon: 'ic_planned',
+    key: TimeFilterKey.PLANNED,
   },
 ];
 

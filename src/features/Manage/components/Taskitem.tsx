@@ -1,10 +1,12 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 
-import {Block} from '../../../components/Block/Block';
+import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
-import {useTheme} from '../../../context/ThemeProvider';
+import {Theme, useTheme} from '../../../context/ThemeProvider';
+import {navigationRef} from '../../../navigation/navigationUtil';
+import Screen from '../../../navigation/Screen';
 import colors from '../../../themes/Colors';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
@@ -16,6 +18,11 @@ interface TaskItemProps {
 
 const Taskitem = ({item}: TaskItemProps) => {
   const {theme} = useTheme();
+  const styles = useStyles(theme);
+
+  const onTaskDetail = () => {
+    navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id});
+  };
 
   // let iconTime = images.ic_planned, iconColor = colors.orange;
   // const hours = moment(item.timing.endDate).diff(moment(new Date()), 'hours');
@@ -49,7 +56,7 @@ const Taskitem = ({item}: TaskItemProps) => {
   // }
 
   return (
-    <Block styleOverride={styles.block} paddingHorizontal={SpacingDefault.normal} pVer={16} borderRadius={6} bgColor={theme.backgroundBox} mBottom={16}>
+    <Button style={styles.buttonTask} onPress={onTaskDetail}>
       <Typo text={item.title} color={theme.primaryText} preset="b16" />
       <Spacer height={8} />
       <Typo text={formatDate(item.timing.endDate, DATE_FORMAT.FIVE)} color={theme.secondaryText} preset="r14" />
@@ -58,15 +65,20 @@ const Taskitem = ({item}: TaskItemProps) => {
         <Spacer width={'small'} />
         <FastImage source={images.ic_today} style={{width: 16, height: 16}} tintColor={priorityColor} />
       </Block> */}
-    </Block>
+    </Button>
   );
 };
 
-const styles = StyleSheet.create({
-  block: {
+const useStyles = ((theme: Theme) => StyleSheet.create({
+  buttonTask: {
     borderLeftWidth: 4,
     borderLeftColor: colors.primary,
+    paddingHorizontal: SpacingDefault.normal,
+    paddingVertical: 16,
+    borderRadius: 6,
+    backgroundColor: theme.backgroundBox,
+    marginBottom: 16,
   },
-});
+}));
 
 export default Taskitem;

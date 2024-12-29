@@ -137,7 +137,7 @@ const Login = () => {
             placeholder="Your email"
             error={errors?.email}
             errorMessage={errors?.email?.message}
-            iconLeft="email"
+            iconLeft={images.ic_email}
             title="Email"
           />
         )}
@@ -154,7 +154,7 @@ const Login = () => {
             placeholder="Your password"
             error={errors?.password}
             errorMessage={errors?.password?.message}
-            iconLeft="password"
+            iconLeft={images.ic_password}
             title="Password"
           />
         )}
@@ -239,7 +239,7 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     alignSelf: 'flex-end',
     padding: 10,
     borderRadius: 256,
-    backgroundColor: theme.background,
+    backgroundColor: theme.backgroundBox,
     borderWidth: 0.5,
     borderColor: theme.secondaryText,
   },

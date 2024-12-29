@@ -18,6 +18,7 @@ interface TextFieldProps extends TextInputProps {
   iconLeft?: any;
   title?: string;
   mode?: 'default' | 'no-border';
+  inputHeight?: number;
 }
 
 const TextField = ({
@@ -30,6 +31,7 @@ const TextField = ({
   editable,
   iconLeft,
   title,
+  inputHeight = 44,
   mode = 'default',
 }: TextFieldProps) => {
   const {theme} = useTheme();
@@ -39,13 +41,13 @@ const TextField = ({
     <Block>
       {!!title && (
         <>
-          <Typo text={title} preset="b24" color={theme.primaryText} />
+          <Typo text={title} preset="b16" color={theme.primaryText} />
           <Spacer height={8} />
         </>
       )}
       <Block
         borderRadius={8}
-        paddingVertical={16}
+        h={inputHeight}
         row
         alignCenter
         bgColor={mode === 'default' ? theme.backgroundInput : colors.transparent}>

@@ -1,11 +1,19 @@
 import {IconTypes} from '../../../themes/Images';
 
+export enum TimeFilterKey {
+  TODAY = 'today',
+  TOMORROW = 'tomorrow',
+  WEEK = 'week',
+  PLANNED = 'planned',
+}
+
 export interface TimeProjectProps {
   title: string;
   color: string;
   total: number;
   timeEst: string;
   icon: IconTypes;
+  key: TimeFilterKey;
 }
 
 export enum PriorityTask {

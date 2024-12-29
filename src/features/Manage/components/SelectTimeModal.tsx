@@ -147,7 +147,7 @@ const SelectTimeModal = ({isVisible, onCloseModal, mode = 'single', minDate, onS
 
     let list = [];
     for (var current = start; current <= end; current.add(1, 'd')) {
-      list.push(current.format(DATE_FORMAT.SECOND));
+      list.push(current.format(DATE_FORMAT.FOUR));
     }
     return list;
   };
@@ -155,13 +155,13 @@ const SelectTimeModal = ({isVisible, onCloseModal, mode = 'single', minDate, onS
   const onPreviousMonth = () => {
     calendarDate = calendarDate.add(-1, 'month');
     monthCount.current = monthCount.current - 1;
-    setToday(calendarDate.format(DATE_FORMAT.SECOND));
+    setToday(calendarDate.format(DATE_FORMAT.FOUR));
   };
 
   const onNextMonth = () => {
     calendarDate = calendarDate.add(1, 'month');
     monthCount.current = monthCount.current + 1;
-    setToday(calendarDate.format(DATE_FORMAT.SECOND));
+    setToday(calendarDate.format(DATE_FORMAT.FOUR));
   };
 
   const renderArrow = (direction: any) => (

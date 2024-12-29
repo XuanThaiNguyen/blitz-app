@@ -9,9 +9,8 @@ import Container from '../../../components/Container/Container';
 import {Divider} from '../../../components/Divider/DIvider';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
-import TextField from '../../../components/TextField/TextField';
 import {Typo} from '../../../components/Typo/Typo';
-import {useTheme} from '../../../context/ThemeProvider';
+import {Theme, useTheme} from '../../../context/ThemeProvider';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import {showLoginModal} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
@@ -29,11 +28,11 @@ import {TIME_PROJECT_DEFAULT} from '../constant/Constant';
 
 const Manage = () => {
   const {theme} = useTheme();
+  const styles = useStyles(theme);
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
 
   const user = useAppSelector((state: AppState) => state.user.user);
 
-  const [search, setSearch] = useState('');
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -62,26 +61,29 @@ const Manage = () => {
 
   const renderItem = ({item, index}: {item: any, index: number}) => <Taskitem item={item} index={index} />;
 
+  const onSearchTask = () => {
+    navigate(Screen.SearchTask);
+  };
+
   return (
     <Container style={styles.container}>
       <InsetSubstitute />
-      <Block row alignCenter justifyContent="space-between">
-        <FastImage source={images.ic_logo} style={styles.icon} tintColor={colors.primary} />
-        <Typo text="Blitz" preset="b24" color={theme.primaryText} />
-        <FastImage source={images.notification} style={styles.icon} tintColor={theme.primaryText} />
+      <Block h={52} row alignCenter>
+        <Block row alignCenter block>
+          <FastImage source={{uri: user?.profileInfo.avatar}} style={styles.avatar} resizeMode="contain" />
+          <Spacer width={'small'} />
+          <Button style={styles.buttonSearch} onPress={onSearchTask}>
+            <FastImage source={images.search} style={styles.iconSearch} tintColor={theme.secondaryText} />
+            <Spacer width={'small'} />
+            <Typo text="Search" preset="r16" color={theme.secondaryText} />
+          </Button>
+        </Block>
       </Block>
-      <Spacer height={16} />
-      <TextField
-        iconLeft={images.search}
-        placeholder="Search"
-        value={search}
-        onChangeText={setSearch}
-      />
-      <Spacer height={24} />
+      <Spacer height={32} />
       <Block row alignCenter flexWrap="wrap">
         {TIME_PROJECT_DEFAULT.map((item, index) => <FilterTimeItem key={item.title} item={item} index={index} />)}
       </Block>
-      <Spacer height={16} />
+      <Spacer height={24} />
       <Block row alignCenter overflow="hidden">
         <Typo text="Tasks" preset="b14" color={theme.secondaryText} />
         <Spacer width={'small'} />
@@ -97,13 +99,18 @@ const Manage = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = ((theme: Theme) => StyleSheet.create({
   container: {
     paddingHorizontal: SpacingDefault.medium,
   },
   icon: {
     width: 20,
     height: 20,
+  },
+  avatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
   },
   buttonAdd: {
     width: 48,
@@ -120,6 +127,19 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
   },
-});
+  buttonSearch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.backgroundBox,
+    flex: 1,
+    height: 36,
+    borderRadius: 8,
+    paddingHorizontal: SpacingDefault.small,
+  },
+  iconSearch: {
+    width: 20,
+    height: 20,
+  },
+}));
 
 export default Manage;

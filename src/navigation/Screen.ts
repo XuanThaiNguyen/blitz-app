@@ -6,9 +6,16 @@ enum Screen {
   Manage = 'Manage',
   Setting = 'Setting',
 
-  //Screen
+  //Task
   CreateTask = 'CreateTask',
+  TaskDetail = 'TaskDetail',
+  TaskManageFilter = 'TaskManageFilter',
+  SearchTask = 'SearchTask',
+
+  //Tag
   CreateTag = 'CreateTag',
+
+  //Profile
   Profile = 'Profile',
 
   //Authen

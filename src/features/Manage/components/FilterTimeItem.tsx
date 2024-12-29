@@ -7,9 +7,11 @@ import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
+import {navigationRef} from '../../../navigation/navigationUtil';
+import Screen from '../../../navigation/Screen';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
-import {TimeProjectProps} from '../constant/Model.props';
+import {TimeFilterKey, TimeProjectProps} from '../constant/Model.props';
 
 interface FilterTimeItemProps {
   item: TimeProjectProps;
@@ -19,12 +21,12 @@ interface FilterTimeItemProps {
 const FilterTimeItem = ({item, index}: FilterTimeItemProps) => {
   const {theme} = useTheme();
 
-  const onManageTask = (_ele: TimeProjectProps) => () => {
-    console.log(_ele);
+  const onManageTask = (_filterKey: TimeFilterKey) => () => {
+    navigationRef.current?.navigate(Screen.TaskManageFilter, {filterKey: _filterKey});
   };
 
   return (
-    <Button onPress={onManageTask(item)} key={item.title}>
+    <Button onPress={onManageTask(item.key)} key={item.title}>
       <Block
         mRight={(index + 1) % 2 === 0 ? 0 : 12}
         paddingVertical={16}

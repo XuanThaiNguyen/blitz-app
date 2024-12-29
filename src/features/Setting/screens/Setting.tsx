@@ -3,9 +3,10 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Block} from '../../../components/Block/Block';
 
+import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
+import Container from '../../../components/Container/Container';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
@@ -13,8 +14,7 @@ import {useTheme} from '../../../context/ThemeProvider';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import {reset} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
-import {useAppDispatch, useAppSelector} from '../../../redux/hook';
-import {AppState} from '../../../redux/reducer';
+import {useAppDispatch} from '../../../redux/hook';
 import {actions as UserActions} from '../../../redux/user';
 import APIs from '../../../services/api/APIs';
 import {ApiStatus} from '../../../services/api/ApiStatus';
@@ -30,7 +30,6 @@ const Setting = () => {
   const {theme, setScheme, isDark} = useTheme();
   const dispatch = useAppDispatch();
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
-  const user = useAppSelector((state: AppState) => state.user.user);
 
   const [loading, setLoading] = useState(false);
 
@@ -58,14 +57,10 @@ const Setting = () => {
   const onLogout = async () => {
     setLoading(true);
     try {
-      const {status} = await http.post(APIs.LOGOUT, {
-        userId: user?._id,
-      });
+      const {status} = await http.post(APIs.LOGOUT);
       if (status === ApiStatus.OK) {
         dispatch(UserActions.setUser(null));
-        if (user?.signinMethod === 'Google') {
-          GoogleSignin.signOut();
-        }
+        GoogleSignin.signOut();
         reset(Screen.Login);
       }
     } catch (err) {
@@ -76,11 +71,12 @@ const Setting = () => {
   };
 
   return (
-    <Block block paddingHorizontal={SpacingDefault.medium} bgColor={theme.background}>
+    <Container style={styles.container}>
       <InsetSubstitute />
+      <Spacer height={8} />
       <Block block>
         <Block row alignCenter justifyContent="space-between">
-          <FastImage source={images.setting} style={styles.icon} tintColor={colors.primary} />
+          <FastImage source={images.ic_logo} style={styles.icon} tintColor={colors.primary} />
           <Typo text="Setting" preset="b24" color={theme.primaryText} />
           <Block />
         </Block>
@@ -91,11 +87,14 @@ const Setting = () => {
       </Block>
       <Button preset="primary" text="Logout" onPress={onLogout} loading={loading} />
       <Spacer height={16} />
-    </Block>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: SpacingDefault.medium,
+  },
   icon: {
     width: 20,
     height: 20,

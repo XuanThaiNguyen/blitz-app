@@ -166,7 +166,7 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     alignSelf: 'flex-end',
     padding: 10,
     borderRadius: 256,
-    backgroundColor: theme.background,
+    backgroundColor: theme.backgroundBox,
     borderWidth: 0.5,
     borderColor: theme.secondaryText,
   },
