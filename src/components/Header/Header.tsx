@@ -9,6 +9,7 @@ import {Block} from '../Block/Block';
 import Button from '../Button/Button';
 import {Spacer} from '../Spacer/Spacer';
 import {Typo} from '../Typo/Typo';
+import {SpacingDefault} from '../../themes/Spacing';
 
 interface HeaderProps {
   titleHeader: string;
@@ -23,9 +24,9 @@ const Header = ({titleHeader, color, renderRight}: HeaderProps) => {
   const _color = color ? color : theme.primaryText;
 
   return (
-    <Block row alignCenter justifyContent="space-between" h={52}>
+    <Block row alignCenter justifyContent="space-between" h={52} paddingHorizontal={SpacingDefault.medium}>
       <Button onPress={goBack} style={styles.button}>
-        <FastImage source={images.left} style={styles.iconLeft} tintColor={_color} />
+        <FastImage source={images.ic_left} style={styles.iconLeft} tintColor={_color} />
         <Spacer width={'smaller'} />
         <Typo text={titleHeader} preset="b16" lineHeight={24} color={_color} />
       </Button>

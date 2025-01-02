@@ -29,7 +29,7 @@ const SearchTask = () => {
             placeholder={'Search task'}
             value={search}
             onChangeText={setSearch}
-            iconLeft={images.search} />
+            iconLeft={images.ic_search} />
         </Block>
         <Spacer width={'normal'} />
         <Button

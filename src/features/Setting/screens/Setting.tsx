@@ -49,7 +49,7 @@ const Setting = () => {
           <Spacer width={'normal'} />
           <Typo text={item.key} preset="b16" color={theme.primaryText} />
         </Block>
-        <FastImage source={images.right} style={styles.iconRight} tintColor={theme.primaryText} />
+        <FastImage source={images.ic_left} style={styles.iconRight} tintColor={theme.primaryText} />
       </Button>
     );
   };
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
   iconRight: {
     width: 16,
     height: 16,
+    transform: [{rotate: '180deg'}],
   },
   blockItem: {
     flexDirection: 'row',

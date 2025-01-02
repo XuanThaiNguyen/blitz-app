@@ -6,6 +6,9 @@ enum Screen {
   Manage = 'Manage',
   Setting = 'Setting',
 
+  //Pomodoro
+  Pomodoro = 'Pomodoro',
+
   //Task
   CreateTask = 'CreateTask',
   TaskDetail = 'TaskDetail',

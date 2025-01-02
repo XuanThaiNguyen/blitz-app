@@ -26,6 +26,7 @@ import {isEmpty} from '../../../utils/handleUtils';
 import FilterTimeItem from '../components/FilterTimeItem';
 import TaskItem from '../components/TaskItem';
 import {TIME_PROJECT_DEFAULT} from '../constant/Constant';
+import {TaskProps} from '../../../model/Task.props';
 
 const Manage = () => {
   const {theme} = useTheme();
@@ -67,7 +68,7 @@ const Manage = () => {
     }
   };
 
-  const renderItem = ({item, index}: {item: any, index: number}) => <TaskItem item={item} index={index} />;
+  const renderItem = ({item}: {item: TaskProps}) => <TaskItem item={item} style={styles.taskItem} />;
 
   const onSearchTask = () => {
     navigate(Screen.SearchTask);
@@ -91,7 +92,7 @@ const Manage = () => {
           )}
           <Spacer width={'small'} />
           <Button style={styles.buttonSearch} onPress={onSearchTask}>
-            <FastImage source={images.search} style={styles.iconSearch} tintColor={theme.secondaryText} />
+            <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.secondaryText} />
             <Spacer width={'small'} />
             <Typo text="Search" preset="r16" color={theme.secondaryText} />
           </Button>
@@ -170,6 +171,10 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   iconAvatar: {
     width: 24,
     height: 24,
+  },
+  taskItem: {
+    marginBottom: 16,
+    marginHorizontal: SpacingDefault.medium,
   },
 }));
 

@@ -166,7 +166,7 @@ const SelectTimeModal = ({isVisible, onCloseModal, mode = 'single', minDate, onS
 
   const renderArrow = (direction: any) => (
     <FastImage
-      source={images.left}
+      source={images.ic_left}
       style={[styles.iconArrow, direction === 'right' ? styles.rightArrow : styles.leftArrow]}
       tintColor={theme.secondaryText}
     />

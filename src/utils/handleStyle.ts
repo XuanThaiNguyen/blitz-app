@@ -1,4 +1,6 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {PriorityTask} from '../features/Manage/constant/Model.props';
+import colors from '../themes/Colors';
 
 type TypesBase = | 'bigint' | 'boolean' | 'function' | 'number' | 'object' | 'string' | 'symbol' | 'undefined';
 
@@ -24,3 +26,24 @@ export const onCheckType = (
 };
 
 export const conditionalStyle = (condition: boolean, trueStyle: ViewStyle | TextStyle, falseStyle?: ViewStyle | TextStyle): ViewStyle | TextStyle => condition ? trueStyle : falseStyle ?? {};
+
+export const getColorsByPriority = ({priority}: {priority: PriorityTask;}) => {
+  let _color = colors.priorityLow;
+  switch (priority) {
+    case PriorityTask.LOW:
+      _color = colors.priorityLow;
+      break;
+    case PriorityTask.MEDIUM:
+      _color = colors.priorityMedium;
+      break;
+    case PriorityTask.HIGH:
+      _color = colors.priorityHigh;
+      break;
+    case PriorityTask.Critical:
+      _color = colors.priorityCritical;
+      break;
+    default:
+      break;
+  }
+  return _color;
+};

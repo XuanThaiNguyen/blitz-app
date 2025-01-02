@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
 
 import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
@@ -10,13 +10,14 @@ import Screen from '../../../navigation/Screen';
 import colors from '../../../themes/Colors';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
+import {TaskProps} from '../../../model/Task.props';
 
 interface TaskItemProps {
-  item: any;
-  index: number;
+  item: TaskProps;
+  style?: StyleProp<ViewStyle>;
 }
 
-const TaskItem = ({item}: TaskItemProps) => {
+const TaskItem = ({item, style}: TaskItemProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
 
@@ -55,11 +56,21 @@ const TaskItem = ({item}: TaskItemProps) => {
   //     break;
   // }
 
+  const renderTime = () => {
+    let _time = formatDate(item?.timing?.startDate || item?.timing?.endDate, DATE_FORMAT.FIVE);
+    if (item?.timing?.startDate && item?.timing?.endDate) {
+      _time = `${formatDate(item?.timing?.startDate, DATE_FORMAT.FIVE)} - ${formatDate(item?.timing?.endDate, DATE_FORMAT.FIVE)}`;
+    }
+    return (
+      <Typo text={_time} color={theme.secondaryText} preset="r14" />
+    );
+  };
+
   return (
-    <Button style={styles.buttonTask} onPress={onTaskDetail}>
+    <Button style={[styles.buttonTask, style]} onPress={onTaskDetail}>
       <Typo text={item.title} color={theme.primaryText} preset="b16" />
       <Spacer height={8} />
-      <Typo text={formatDate(item.timing.endDate, DATE_FORMAT.FIVE)} color={theme.secondaryText} preset="r14" />
+      {renderTime()}
       {/* <Block row alignCenter>
         <FastImage source={iconTime} style={{width: 16, height: 16}} tintColor={iconColor} />
         <Spacer width={'small'} />
@@ -77,8 +88,6 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 6,
     backgroundColor: theme.backgroundBox,
-    marginBottom: 16,
-    marginHorizontal: SpacingDefault.medium,
   },
 }));
 

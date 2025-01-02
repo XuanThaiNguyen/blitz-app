@@ -26,6 +26,7 @@
     "react-native": "0.76.5",
     "react-native-calendars": "^1.1307.0",
     "react-native-config": "^1.5.3",
+    "react-native-countdown-circle-timer": "^3.2.1",
     "react-native-device-info": "^14.0.1",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.21.2",
@@ -33,6 +34,7 @@
     "react-native-reanimated": "^3.16.5",
     "react-native-safe-area-context": "^5.0.0",
     "react-native-screens": "^4.3.0",
+    "react-native-svg": "^15.10.1",
     "react-redux": "^9.2.0",
     "redux-persist": "^6.0.0",
     "yup": "^1.6.1"
