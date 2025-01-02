@@ -8,7 +8,7 @@ export type UseModalParams = {
 };
 
 const DEFAULT_OPTIONS: ModalOptions = {
-  dismissable: true,
+  dismissable: false,
   position: 'center',
   animated: false,
 };
@@ -23,7 +23,6 @@ export const useModal = ({defaultOptions}: UseModalParams) => {
     DEFAULT_OPTIONS,
     defaultOptions,
   ) as Required<ModalOptions>;
-
   const [options, setOptions] = useState<ModalOptions>(initialOptions);
 
   const show = useCallback(
@@ -35,6 +34,7 @@ export const useModal = ({defaultOptions}: UseModalParams) => {
         dismissable: params.dismissable ?? initialOptions.dismissable,
         position: params.position ?? initialOptions.position,
         animated: params.animated,
+        onCustomXPress: params?.onCustomXPress,
       });
       setIsVisible(true);
     },

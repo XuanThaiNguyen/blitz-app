@@ -5,15 +5,16 @@ import Login from '../features/Auth/screens/Login';
 import Register from '../features/Auth/screens/Register';
 import CreateTag from '../features/Manage/screens/CreateTag';
 import CreateTask from '../features/Manage/screens/CreateTask';
+import SearchTask from '../features/Manage/screens/SearchTask';
 import TaskDetail from '../features/Manage/screens/TaskDetail';
 import TaskManageFilter from '../features/Manage/screens/TaskManageFilter';
+import Pomodoro from '../features/Pomodoro/screens/Pomodoro';
 import Profile from '../features/Profile/screens/Profile';
 import {useAppSelector} from '../redux/hook';
 import {AppState} from '../redux/reducer';
 import {MainStackScreenProps} from './MainStackScreenProps';
 import MainTab from './MainTab';
 import Screen from './Screen';
-import SearchTask from '../features/Manage/screens/SearchTask';
 
 const Stack = createNativeStackNavigator<MainStackScreenProps>();
 
@@ -37,6 +38,7 @@ const MainStack = () => {
       <Stack.Screen name={Screen.TaskDetail} component={TaskDetail} />
       <Stack.Screen name={Screen.TaskManageFilter} component={TaskManageFilter} />
       <Stack.Screen name={Screen.SearchTask} component={SearchTask} />
+      <Stack.Screen name={Screen.Pomodoro} component={Pomodoro} />
     </Stack.Navigator>
   );
 };

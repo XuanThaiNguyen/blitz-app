@@ -176,7 +176,7 @@ const Login = () => {
         onPress={handleSubmit(onLoginEmailPassword)}
         disabled={loading}
         loading={loading}
-        buttonColor={colors.primaryButton}
+        buttonColor={colors.primary}
       />
       <Spacer height={24} />
       <Block row alignCenter>

@@ -30,6 +30,7 @@ const images = {
   ic_planned: require('../assets/images/ic_planned.png'),
   ic_success_check_circle: require('../assets/images/ic_success_check_circle.png'),
   ic_faill_cross_circle: require('../assets/images/ic_faill_cross_circle.png'),
+  ic_personal: require('../assets/images/ic_personal.webp'),
 
   empty_dark: require('../assets/images/empty_dark.png'),
   empty_light: require('../assets/images/empty_light.png'),

@@ -1,8 +1,14 @@
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import axios from 'axios';
 import qs from 'query-string';
 import Config from 'react-native-config';
 
+import {alertBottomModal} from '../components/AlertBottomContent/AlertBottomContent';
+import Screen from '../navigation/Screen';
+import {reset} from '../navigation/navigationUtil';
 import {store} from '../redux/store';
+import {actions as UserActions} from '../redux/user';
+import {ApiStatus} from '../services/api/ApiStatus';
 
 axios.defaults.baseURL = Config.API_BASE_URL;
 
@@ -16,7 +22,38 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-  response => response,
+  (response: any) => {
+    if (response?.data?.status === ApiStatus.UNAUTHORIZED) {
+      return alertBottomModal({
+        title: 'Unauthorized',
+        message: 'Please login again',
+        dismissable: false,
+        showCloseIcon: false,
+        status: 'error',
+        buttons: [
+          {
+            text: 'Login Again',
+            preset: 'primary',
+            onPress: () => {
+              store.dispatch(UserActions.setUser(null));
+              GoogleSignin.signOut();
+              reset(Screen.Login);
+            },
+          },
+          {
+            text: 'Back to Home',
+            preset: 'secondary',
+            onPress: () => {
+              store.dispatch(UserActions.setUser(null));
+              GoogleSignin.signOut();
+              reset(Screen.MainTab);
+            },
+          },
+        ],
+      });
+    }
+    return response;
+  },
   error => handleError(error),
 );
 

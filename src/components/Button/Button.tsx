@@ -103,12 +103,8 @@ const Button = (props: ButtonProps) => {
     if (primaryTextChecker.includes(preset)) {
       _typoColor = colors.white;
     }
-    if (preset === 'outline') {
-      _typoColor = colors.gray;
-    }
-
-    if (preset === 'outlineChip') {
-      _typoColor = colors.black;
+    if (preset === 'secondary') {
+      _typoColor = colors.primary;
     }
 
     return (

@@ -1,20 +1,22 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {DeviceEventEmitter, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container/Container';
-import ErrorContent from '../../../components/Error/ErrorContent';
 import Header from '../../../components/Header/Header';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
-import Modal from '../../../components/Modal';
 import {Spacer} from '../../../components/Spacer/Spacer';
-import SuccessContent from '../../../components/Success/SuccessContent';
 import TextField from '../../../components/TextField/TextField';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
+import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
+import Screen from '../../../navigation/Screen';
 import {createTask} from '../../../services/api/task';
+import {EmitterKeys} from '../../../services/emitter/EmitterKeys';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate, getEstimationDays} from '../../../utils/handleDateTime';
 import SelectOption from '../components/SelectOption';
@@ -28,6 +30,7 @@ import {PriorityProps, StatusProps} from '../constant/Model.props';
 const CreateTask = () => {
   const {theme} = useTheme();
   const insets = useSafeAreaInsets();
+  const {navigate, goBack} = useNavigation<NavigationProp<MainStackScreenProps>>();
 
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
@@ -74,7 +77,7 @@ const CreateTask = () => {
     const params = {
       title,
       timing: {
-        endDate: dueDate,
+        startDate: dueDate,
         estimation: getEstimationDays(dueDate),
       },
       priority: priority.key,
@@ -83,17 +86,35 @@ const CreateTask = () => {
     try {
       const {data} = await createTask(params);
       if (data?.data) {
-        Modal.show({
-          children: <SuccessContent title="Create Task Successfully" />,
+        alertBottomModal({
+          title: 'Success',
+          message: 'Create Task Successfully',
+          status: 'success',
           dismissable: true,
-          position: 'bottom',
+          onCustomXPress: () => {
+            goBack();
+            DeviceEventEmitter.emit(EmitterKeys.RELOAD_TASKS);
+          },
+          buttons: [
+            {
+              text: 'Go to Task Detail',
+              preset: 'primary',
+              onPress: () => {
+                navigate(Screen.TaskDetail, {
+                  taskId: data.data._id,
+                  fromScreen: Screen.CreateTask,
+                });
+              },
+            },
+          ],
         });
       }
     } catch (err: any) {
-      Modal.show({
-        children: <ErrorContent title="Create Task Fail" errMsg={err?.message} />,
+      alertBottomModal({
+        title: 'Fail',
+        message: err?.message || 'Create Task Failed',
+        status: 'error',
         dismissable: true,
-        position: 'bottom',
       });
     } finally {
       setLoading(false);

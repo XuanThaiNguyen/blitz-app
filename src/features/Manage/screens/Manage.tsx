@@ -1,6 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {DeviceEventEmitter, FlatList, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Block} from '../../../components/Block/Block';
@@ -18,12 +18,13 @@ import {useAppSelector} from '../../../redux/hook';
 import {AppState} from '../../../redux/reducer';
 import {ApiStatus} from '../../../services/api/ApiStatus';
 import {getTasks} from '../../../services/api/task';
+import {EmitterKeys} from '../../../services/emitter/EmitterKeys';
 import colors from '../../../themes/Colors';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {isEmpty} from '../../../utils/handleUtils';
 import FilterTimeItem from '../components/FilterTimeItem';
-import Taskitem from '../components/Taskitem';
+import TaskItem from '../components/TaskItem';
 import {TIME_PROJECT_DEFAULT} from '../constant/Constant';
 
 const Manage = () => {
@@ -40,6 +41,13 @@ const Manage = () => {
       onGetTasks();
     }
   }, [user]);
+
+  useEffect(() => {
+    const taskListener = DeviceEventEmitter.addListener(EmitterKeys.RELOAD_TASKS, onGetTasks);
+    return () => {
+      taskListener.remove();
+    };
+  }, []);
 
   const onAddTask = () => {
     if (!user) {
@@ -59,18 +67,28 @@ const Manage = () => {
     }
   };
 
-  const renderItem = ({item, index}: {item: any, index: number}) => <Taskitem item={item} index={index} />;
+  const renderItem = ({item, index}: {item: any, index: number}) => <TaskItem item={item} index={index} />;
 
   const onSearchTask = () => {
     navigate(Screen.SearchTask);
   };
 
+  const onLogin = () => {
+    showLoginModal();
+  };
+
   return (
-    <Container style={styles.container}>
+    <Container>
       <InsetSubstitute />
-      <Block h={52} row alignCenter>
+      <Block h={52} row alignCenter paddingHorizontal={SpacingDefault.medium}>
         <Block row alignCenter block>
-          <FastImage source={{uri: user?.profileInfo.avatar}} style={styles.avatar} resizeMode="contain" />
+          {!isEmpty(user?.profileInfo.avatar) ? (
+            <FastImage source={{uri: user?.profileInfo.avatar}} style={styles.avatarUser} resizeMode="contain" />
+          ) : (
+            <Button style={styles.buttonAvatar} onPress={onLogin}>
+              <FastImage source={images.ic_personal} style={styles.iconAvatar} tintColor={theme.secondaryText} />
+            </Button>
+          )}
           <Spacer width={'small'} />
           <Button style={styles.buttonSearch} onPress={onSearchTask}>
             <FastImage source={images.search} style={styles.iconSearch} tintColor={theme.secondaryText} />
@@ -80,17 +98,20 @@ const Manage = () => {
         </Block>
       </Block>
       <Spacer height={32} />
-      <Block row alignCenter flexWrap="wrap">
+      <Block row alignCenter flexWrap="wrap" paddingHorizontal={SpacingDefault.medium}>
         {TIME_PROJECT_DEFAULT.map((item, index) => <FilterTimeItem key={item.title} item={item} index={index} />)}
       </Block>
       <Spacer height={24} />
-      <Block row alignCenter overflow="hidden">
+      <Block row alignCenter overflow="hidden" paddingHorizontal={SpacingDefault.medium}>
         <Typo text="Tasks" preset="b14" color={theme.secondaryText} />
         <Spacer width={'small'} />
         <Divider width={'100%'} height={1} />
       </Block>
       <Spacer height={24} />
-      <FlatList data={tasks} keyExtractor={item => item._id} renderItem={renderItem} />
+      <FlatList
+        data={tasks}
+        keyExtractor={item => item._id}
+        renderItem={renderItem} />
 
       <Button style={styles.buttonAdd} onPress={onAddTask}>
         <FastImage source={images.ic_add} style={styles.iconAdd} tintColor={colors.white} />
@@ -100,14 +121,11 @@ const Manage = () => {
 };
 
 const useStyles = ((theme: Theme) => StyleSheet.create({
-  container: {
-    paddingHorizontal: SpacingDefault.medium,
-  },
   icon: {
     width: 20,
     height: 20,
   },
-  avatar: {
+  avatarUser: {
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -139,6 +157,19 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   iconSearch: {
     width: 20,
     height: 20,
+  },
+  buttonAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.secondaryText,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconAvatar: {
+    width: 24,
+    height: 24,
   },
 }));
 

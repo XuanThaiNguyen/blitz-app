@@ -14,9 +14,11 @@ export type MainStackScreenProps = {
   [Screen.Profile]: undefined;
   [Screen.TaskDetail]: {
     taskId: string;
+    fromScreen?: Screen;
   };
   [Screen.TaskManageFilter]: {
     filterKey: TimeFilterKey;
   };
   [Screen.SearchTask]: undefined;
+  [Screen.Pomodoro]: undefined;
 };

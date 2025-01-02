@@ -2,6 +2,7 @@ import React, {useCallback} from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import RNModal from 'react-native-modal';
 
+import {Modal} from '../Modal';
 import {ModalConfig, ModalData, ModalHideParams, ModalOptions, ModalShowParams} from '../types';
 
 export type ModalUIProps = {
@@ -12,6 +13,7 @@ export type ModalUIProps = {
   hide: (params: ModalHideParams) => void;
   config?: ModalConfig;
   onHide: () => void;
+  onCustomXPress?: () => void;
 };
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('screen');
@@ -20,20 +22,21 @@ export const ModalUI = ({
   isVisible,
   data,
   options,
-  hide,
   onHide,
   config,
 }: ModalUIProps) => {
   const {children} = data;
   const {style} = config || {};
-  const {dismissable, position} = options;
+  const {dismissable, position, onCustomXPress} = options;
 
   const onBackdropPress = useCallback(() => {
     if (dismissable) {
-      hide({});
+      if (onCustomXPress) {
+        onCustomXPress?.();
+      }
+      Modal.hide();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dismissable, onCustomXPress]);
 
   if (!children) {
     return null;

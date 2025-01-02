@@ -13,7 +13,6 @@ import {TimeFilterKey} from '../constant/Model.props';
 const TaskManageFilter = () => {
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.TaskManageFilter>>();
   const {filterKey = TimeFilterKey.TODAY} = route.params;
-  console.log('filterKey', filterKey);
 
   return (
     <Container style={styles.container}>

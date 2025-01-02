@@ -106,7 +106,7 @@ const Register = () => {
         <Button
           preset="primary"
           text="Sign Up"
-          buttonColor={colors.primaryButton}
+          buttonColor={colors.primary}
           onPress={handleSubmit(onRegisterEmailPassword)}
         />
         <Spacer height={24} />
@@ -128,7 +128,7 @@ const Register = () => {
           Already have Account?
           <Typo
             preset="b14"
-            color={colors.primaryButton}
+            color={colors.primary}
             onPress={onLogin}
             suppressHighlighting>
             {' '}

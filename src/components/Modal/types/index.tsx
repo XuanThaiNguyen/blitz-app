@@ -11,6 +11,7 @@ export type ModalOptions = {
   dismissable: boolean;
   animated?: boolean;
   position: 'center' | 'bottom';
+  onCustomXPress?: () => void;
 };
 
 export type ModalShowParams = ModalData & ModalOptions;

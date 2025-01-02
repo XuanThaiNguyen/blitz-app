@@ -16,7 +16,7 @@ interface TaskItemProps {
   index: number;
 }
 
-const Taskitem = ({item}: TaskItemProps) => {
+const TaskItem = ({item}: TaskItemProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
 
@@ -37,7 +37,7 @@ const Taskitem = ({item}: TaskItemProps) => {
   //   iconColor = colors.purple;
   // }
 
-  // let priorityColor = colors.gray1;
+  // let priorityColor = colors.gray;
   // switch (item.priority) {
   //   case 'Low':
   //     priorityColor = colors.priorityLow;
@@ -78,7 +78,8 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     borderRadius: 6,
     backgroundColor: theme.backgroundBox,
     marginBottom: 16,
+    marginHorizontal: SpacingDefault.medium,
   },
 }));
 
-export default Taskitem;
+export default TaskItem;
