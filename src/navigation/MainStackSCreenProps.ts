@@ -11,6 +11,7 @@ export type MainStackScreenProps = {
   [Screen.Login]: undefined;
   [Screen.CreateTask]: undefined;
   [Screen.CreateTag]: undefined;
+  [Screen.CreateProject]: undefined;
   [Screen.Profile]: undefined;
   [Screen.TaskDetail]: {
     taskId: string;

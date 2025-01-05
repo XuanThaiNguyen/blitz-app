@@ -27,10 +27,12 @@ interface User {
 }
 interface InitialUserProps {
   user: User | null;
+  searchHistories: string[];
 }
 
 const initialState: InitialUserProps = {
   user: null,
+  searchHistories: [],
 };
 
 const userSlice = createSlice({
@@ -39,6 +41,18 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, {payload}) => {
       state.user = payload;
+    },
+    setSearchHistories: (state, {payload}) => {
+      if (state.searchHistories.length > 4) {
+        state.searchHistories.pop();
+      }
+      state.searchHistories.unshift(payload);
+    },
+    deleteSearchHistories: (state, {payload}) => {
+      const payloadIndex = state.searchHistories.findIndex(item => item === payload);
+      if (payloadIndex !== -1) {
+        state.searchHistories.splice(payloadIndex, 1);
+      }
     },
   },
 });

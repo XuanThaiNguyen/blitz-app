@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TextInput, TextInputProps} from 'react-native';
+import {StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, ViewStyle} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Theme, useTheme} from '../../context/ThemeProvider';
@@ -19,6 +19,9 @@ interface TextFieldProps extends TextInputProps {
   title?: string;
   mode?: 'default' | 'no-border';
   inputHeight?: number;
+  multiline?: boolean;
+  inputStyle?: StyleProp<ViewStyle> | StyleProp<TextStyle>;
+  blockInputStyle?: StyleProp<ViewStyle>;
 }
 
 const TextField = ({
@@ -33,6 +36,9 @@ const TextField = ({
   title,
   inputHeight = 44,
   mode = 'default',
+  multiline = false,
+  inputStyle,
+  blockInputStyle,
 }: TextFieldProps) => {
   const {theme} = useTheme();
   const styles = getStyles(theme);
@@ -50,7 +56,8 @@ const TextField = ({
         h={inputHeight}
         row
         alignCenter
-        bgColor={mode === 'default' ? theme.backgroundInput : colors.transparent}>
+        bgColor={mode === 'default' ? theme.backgroundBox : colors.transparent}
+        styleOverride={blockInputStyle}>
         {!!iconLeft && (
           <>
             <Spacer width="small" />
@@ -61,11 +68,12 @@ const TextField = ({
         <TextInput
           placeholder={placeholder}
           onBlur={onBlur}
+          multiline={multiline}
           onChangeText={onChangeText}
           value={value}
           editable={editable}
           placeholderTextColor={theme.secondaryText}
-          style={[styles.input, error && styles.errorInput]}
+          style={[styles.input, error && styles.errorInput, inputStyle]}
         />
         <Spacer height={4} />
         {error && <Typo text={errorMessage} color={colors.red} />}

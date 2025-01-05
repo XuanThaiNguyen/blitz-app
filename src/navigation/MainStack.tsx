@@ -3,6 +3,7 @@ import React from 'react';
 
 import Login from '../features/Auth/screens/Login';
 import Register from '../features/Auth/screens/Register';
+import CreateProject from '../features/Manage/screens/CreateProject';
 import CreateTag from '../features/Manage/screens/CreateTag';
 import CreateTask from '../features/Manage/screens/CreateTask';
 import SearchTask from '../features/Manage/screens/SearchTask';
@@ -32,6 +33,7 @@ const MainStack = () => {
       <Stack.Screen name={Screen.MainTab} component={MainTab} />
       <Stack.Screen name={Screen.CreateTask} component={CreateTask} />
       <Stack.Screen name={Screen.CreateTag} component={CreateTag} />
+      <Stack.Screen name={Screen.CreateProject} component={CreateProject} />
       <Stack.Screen name={Screen.Login} component={Login} />
       <Stack.Screen name={Screen.Register} component={Register} />
       <Stack.Screen name={Screen.Profile} component={Profile} />

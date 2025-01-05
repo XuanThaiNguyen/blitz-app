@@ -11,18 +11,22 @@ import colors from '../../../themes/Colors';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
 import {TaskProps} from '../../../model/Task.props';
+import {Block} from '../../../components/Block/Block';
+import {getColorsByPriority} from '../../../utils/handleStyle';
 
 interface TaskItemProps {
   item: TaskProps;
   style?: StyleProp<ViewStyle>;
+  onCustomPress?: () => void;
 }
 
-const TaskItem = ({item, style}: TaskItemProps) => {
+const TaskItem = ({item, style, onCustomPress}: TaskItemProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
 
   const onTaskDetail = () => {
     navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id});
+    onCustomPress?.();
   };
 
   // let iconTime = images.ic_planned, iconColor = colors.orange;
@@ -67,9 +71,13 @@ const TaskItem = ({item, style}: TaskItemProps) => {
   };
 
   return (
-    <Button style={[styles.buttonTask, style]} onPress={onTaskDetail}>
-      <Typo text={item.title} color={theme.primaryText} preset="b16" />
-      <Spacer height={8} />
+    <Button style={[styles.buttonTask, style, {borderLeftColor: getColorsByPriority({priority: item.priority})}]} onPress={onTaskDetail}>
+      <Block row alignCenter>
+        <Block w={24} h={24} bgColor={theme.backgroundBox} borderWidth={3} borderColor={colors.primary} borderRadius={16} center />
+        <Spacer width={'small'} />
+        <Typo text={item.title} color={theme.primaryText} preset="b16" />
+      </Block>
+      <Spacer height={12} />
       {renderTime()}
       {/* <Block row alignCenter>
         <FastImage source={iconTime} style={{width: 16, height: 16}} tintColor={iconColor} />
@@ -83,7 +91,6 @@ const TaskItem = ({item, style}: TaskItemProps) => {
 const useStyles = ((theme: Theme) => StyleSheet.create({
   buttonTask: {
     borderLeftWidth: 4,
-    borderLeftColor: colors.primary,
     paddingHorizontal: SpacingDefault.normal,
     paddingVertical: 16,
     borderRadius: 6,

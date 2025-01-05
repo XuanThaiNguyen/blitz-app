@@ -13,7 +13,7 @@ const persistedAppConfig = {
 const persistedUserConfig = {
   key: 'userReducer',
   storage: AsyncStorage,
-  whitelist: ['user'],
+  whitelist: ['user', 'searchHistories'],
 };
 
 export const allReducers = combineReducers({

@@ -18,6 +18,9 @@ enum Screen {
   //Tag
   CreateTag = 'CreateTag',
 
+  //Project
+  CreateProject = 'CreateProject',
+
   //Profile
   Profile = 'Profile',
 

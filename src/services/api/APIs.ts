@@ -14,6 +14,10 @@ enum APIs {
   //tags
   CREATE_TAG = 'tags/create',
   GET_TAGS = 'tags',
+
+  //projects
+  GET_PROJECTS = 'projects/my-projects',
+  CREATE_PROJECT = 'projects/create'
 }
 
 export default APIs;

@@ -13,10 +13,10 @@ import colors from '../../../themes/Colors';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {PRIORITIES} from '../constant/Constant';
-import {PriorityProps} from '../constant/Model.props';
+import {PriorityProps, PriorityTask} from '../constant/Model.props';
 
 interface SelectPriorityModalProps {
-  priority: PriorityProps;
+  priority: PriorityTask;
   onSelectPriority: (item: PriorityProps) => void;
   isVisible: boolean;
   onCloseModal: () => void;
@@ -40,9 +40,9 @@ const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModa
             <FastImage source={images.ic_today} style={styles.iconFlag} tintColor={colors.white} />
           </Block>
           <Spacer width={'small'} />
-          <Typo text={item.value} color={item.key === priority.key ? theme.primaryText : theme.secondaryText} preset={item.key === priority.key ? 'b14' : 'r14'} />
+          <Typo text={item.value} color={item.key === priority ? theme.primaryText : theme.secondaryText} preset={item.key === priority ? 'b14' : 'r14'} />
         </Block>
-        {item.key === priority.key ? (
+        {item.key === priority ? (
           <FastImage source={images.ic_check} style={styles.iconCheck} tintColor={theme.primaryText} />
         ) : <></>}
       </Button>

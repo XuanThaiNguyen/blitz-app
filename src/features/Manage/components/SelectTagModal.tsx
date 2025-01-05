@@ -31,7 +31,7 @@ const EmptyTag = ({onCreateTag}: {onCreateTag: () => void}) => {
       <Spacer height={12} />
       <Typo text="You have no tags right now" preset="r16" color={theme.primaryText} center />
       <Spacer height={12} />
-      <Button height={44} preset="primary" text="Create Now" onPress={onCreateTag} />
+      <Button height={44} preset="primary" text="Create Now" onPress={onCreateTag} style={{paddingHorizontal: SpacingDefault.normal}} />
       <Spacer height={16} />
     </Block>
   );

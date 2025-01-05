@@ -21,7 +21,7 @@ const TaskPomodoroItem = ({task, style}: TaskPomodoroItemProps) => {
   const styles = useStyles(theme);
 
   return (
-    <Button style={[styles.buttonTask, style, {borderColor: getColorsByPriority({priority: task.priority})}]}>
+    <Button style={[styles.buttonTask, style, {borderLeftColor: getColorsByPriority({priority: task.priority})}]}>
       <Block w={24} h={24} bgColor={theme.backgroundBox} borderWidth={3} borderColor={colors.primary} borderRadius={16} center />
       <Spacer width={'small'} />
       <Typo text={task?.title || ''} color={theme.primaryText} preset="b16" />

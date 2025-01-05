@@ -9,6 +9,7 @@ import Modal, {BaseBottomModalContainer} from '../Modal';
 import {Spacer} from '../Spacer/Spacer';
 import {Typo} from '../Typo/Typo';
 import {AlertBottomContentProps, AlertErrorProps} from './AlertBottom.props';
+import {ButtonProps} from '../Button/Button.props';
 
 const AlertBottomContent = ({
   message = '',
@@ -33,12 +34,14 @@ const AlertBottomContent = ({
   }
 
   const renderButtons = () => {
-    return buttons.map((button: any, index: number) => {
-      const {preset, onPress, text} = button;
+    return buttons.map((button: ButtonProps, index: number) => {
+      const {preset, onPress, text, loading} = button;
 
       const _onPressButton = () => {
-        Modal.hide();
-        onPress();
+        if (!loading) {
+          Modal.hide();
+        }
+        onPress?.();
       };
 
       return (

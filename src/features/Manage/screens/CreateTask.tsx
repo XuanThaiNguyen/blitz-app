@@ -1,6 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {DeviceEventEmitter, StyleSheet} from 'react-native';
+import {DeviceEventEmitter} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
@@ -47,7 +47,7 @@ const CreateTask = () => {
   const openPriorityModal = () => setIsPriorityVisible(true);
   const closePriorityModal = () => setIsPriorityVisible(false);
 
-  const openStatusModal = () => setIsStatusVisible(true);
+  // const openStatusModal = () => setIsStatusVisible(true);
   const closeStatusModal = () => setIsStatusVisible(false);
 
   const openTagModal = () => setIsTagVisible(true);
@@ -122,11 +122,11 @@ const CreateTask = () => {
   };
 
   return (
-    <Container style={styles.container}>
+    <Container>
       <InsetSubstitute />
       <Header titleHeader="Create Task" />
       <Spacer height={24} />
-      <Block block>
+      <Block block paddingHorizontal={SpacingDefault.medium}>
         <Typo text="Title" preset="r12" color={theme.primaryText} />
         <Spacer height={8} />
         <TextField value={title} placeholder={'Enter task name'} onChangeText={setTitle} />
@@ -134,26 +134,20 @@ const CreateTask = () => {
         <SelectOption title="Due Date" value={formatDate(dueDate, DATE_FORMAT.FIRST)} onSelect={openTimeModal} />
         <Spacer height={16} />
         <SelectOption title="Priority" value={priority.value} onSelect={openPriorityModal} />
-        <Spacer height={16} />
-        <SelectOption title="Status" value={status.value} onSelect={openStatusModal} />
+        {/* <Spacer height={16} />
+        <SelectOption title="Status" value={status.value} onSelect={openStatusModal} /> */}
         <Spacer height={16} />
         <SelectOption title="Tags" value={tags?.length === 0 ? '-' : ''} onSelect={openTagModal} />
       </Block>
-      <Button preset="primary" text="Create Task" onPress={onCreateTask} loading={loading} />
+      <Button mHoz={SpacingDefault.medium} preset="primary" text="Create Task" onPress={onCreateTask} loading={loading} />
       <Spacer height={insets.bottom + 16} />
 
       <SelectTimeModal isVisible={isTimeVisible} onCloseModal={closeTimeModal} onSelectTime={onSelectTime} />
-      <SelectPriorityModal priority={priority} onSelectPriority={onSelectPriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
+      <SelectPriorityModal priority={priority.key} onSelectPriority={onSelectPriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
       <SelectStatusModal status={status} onSelectStatus={onSelectStatus} isVisible={isStatusVisible} onCloseModal={closeStatusModal} />
       <SelectTagModal tags={tags} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: SpacingDefault.medium,
-  },
-});
 
 export default CreateTask;

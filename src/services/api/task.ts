@@ -13,6 +13,14 @@ export const getTaskById = async (taskId: string) => {
   return http.get(APIs.GET_TASK_BY_ID.replace(':taskId', taskId));
 };
 
+export const updateTaskById = async (taskId: string, params: any) => {
+  return http.patch(APIs.GET_TASK_BY_ID.replace(':taskId', taskId), params);
+};
+
 export const deleteTaskById = async (taskId: string) => {
   return http.delete(APIs.GET_TASK_BY_ID.replace(':taskId', taskId));
+};
+
+export const searchTasks = async (search: string) => {
+  return http.get(`${APIs.GET_TASKS}?query=${search}`);
 };

@@ -3,6 +3,8 @@ const images = {
   google: require('../assets/images/google.png'),
   empty_dark: require('../assets/images/empty_dark.png'),
   empty_light: require('../assets/images/empty_light.png'),
+  empty_search_light: require('../assets/images/empty_search_light.png'),
+  empty_search_dark: require('../assets/images/empty_search_dark.png'),
 
   //icon
   ic_logout: require('../assets/images/logout.png'),
@@ -26,6 +28,8 @@ const images = {
   ic_faill_cross_circle: require('../assets/images/ic_faill_cross_circle.png'),
   ic_personal: require('../assets/images/ic_personal.webp'),
   ic_more: require('../assets/images/ic_more.webp'),
+  ic_edit: require('../assets/images/ic_edit.webp'),
+  ic_project: require('../assets/images/ic_project.png'),
 
   //tabs
   tabs: {
