@@ -1,5 +1,5 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {DeviceEventEmitter} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -13,14 +13,19 @@ import {Spacer} from '../../../components/Spacer/Spacer';
 import TextField from '../../../components/TextField/TextField';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
+import {ProjectProps} from '../../../model/Project.props';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import Screen from '../../../navigation/Screen';
+import {ApiStatus} from '../../../services/api/ApiStatus';
+import {getProjects} from '../../../services/api/project';
 import {createTask} from '../../../services/api/task';
 import {EmitterKeys} from '../../../services/emitter/EmitterKeys';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate, getEstimationDays} from '../../../utils/handleDateTime';
+import {isEmpty} from '../../../utils/handleUtils';
 import SelectOption from '../components/SelectOption';
 import SelectPriorityModal from '../components/SelectPriorityModal';
+import SelectProjectModal from '../components/SelectProjectModal';
 import SelectStatusModal from '../components/SelectStatusModal';
 import SelectTagModal from '../components/SelectTagModal';
 import SelectTimeModal from '../components/SelectTimeModal';
@@ -38,11 +43,36 @@ const CreateTask = () => {
   const [priority, setPriority] = useState(PRIORITIES[0]);
   const [status, setStatus] = useState(STATUSES[0]);
   const [tags, setTags] = useState<string[]>([]);
+  const [project, setProject] = useState<ProjectProps | null>(null);
+  const [projects, setProjects] = useState<ProjectProps[]>([]);
 
   const [isPriorityVisible, setIsPriorityVisible] = useState(false);
   const [isStatusVisible, setIsStatusVisible] = useState(false);
   const [isTagVisible, setIsTagVisible] = useState(false);
   const [isTimeVisible, setIsTimeVisible] = useState(false);
+  const [isProjectVisible, setIsProjectVisible] = useState(false);
+
+  useEffect(() => {
+    onGetProjects();
+  }, []);
+
+  const onGetProjects = async () => {
+    try {
+      const {data} = await getProjects();
+      if (data?.status === ApiStatus.OK) {
+        setProjects(data.data);
+        const defaultProject = data.data.find((item: ProjectProps) => item.projectInfo.isDefaultProject);
+        if (!isEmpty(defaultProject)) {
+          setProject(defaultProject);
+        }
+      }
+    } catch (err) {
+
+    }
+  };
+
+  const openProjectModal = () => setIsProjectVisible(true);
+  const closeProjectModal = () => setIsProjectVisible(false);
 
   const openPriorityModal = () => setIsPriorityVisible(true);
   const closePriorityModal = () => setIsPriorityVisible(false);
@@ -58,6 +88,10 @@ const CreateTask = () => {
 
   const onSelectPriority = (item: PriorityProps) => {
     setPriority(item);
+  };
+
+  const onSelectProject = (item: ProjectProps) => {
+    setProject(item);
   };
 
   const onSelectStatus = (item: StatusProps) => {
@@ -82,6 +116,7 @@ const CreateTask = () => {
       },
       priority: priority.key,
       status: status.key,
+      projectId: project?._id,
     };
     try {
       const {data} = await createTask(params);
@@ -100,9 +135,11 @@ const CreateTask = () => {
               text: 'Go to Task Detail',
               preset: 'primary',
               onPress: () => {
+                DeviceEventEmitter.emit(EmitterKeys.RELOAD_TASKS);
                 navigate(Screen.TaskDetail, {
                   taskId: data.data._id,
                   fromScreen: Screen.CreateTask,
+                  times: 2,
                 });
               },
             },
@@ -131,6 +168,8 @@ const CreateTask = () => {
         <Spacer height={8} />
         <TextField value={title} placeholder={'Enter task name'} onChangeText={setTitle} />
         <Spacer height={16} />
+        <SelectOption title="Project" value={project?.projectInfo.title || ''} onSelect={openProjectModal} />
+        <Spacer height={16} />
         <SelectOption title="Due Date" value={formatDate(dueDate, DATE_FORMAT.FIRST)} onSelect={openTimeModal} />
         <Spacer height={16} />
         <SelectOption title="Priority" value={priority.value} onSelect={openPriorityModal} />
@@ -146,6 +185,7 @@ const CreateTask = () => {
       <SelectPriorityModal priority={priority.key} onSelectPriority={onSelectPriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
       <SelectStatusModal status={status} onSelectStatus={onSelectStatus} isVisible={isStatusVisible} onCloseModal={closeStatusModal} />
       <SelectTagModal tags={tags} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />
+      <SelectProjectModal selectedProject={project} projects={projects} onSelectProject={onSelectProject} isVisible={isProjectVisible} onCloseModal={closeProjectModal} />
     </Container>
   );
 };

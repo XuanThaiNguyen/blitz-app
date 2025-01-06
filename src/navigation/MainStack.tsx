@@ -6,6 +6,7 @@ import Register from '../features/Auth/screens/Register';
 import CreateProject from '../features/Manage/screens/CreateProject';
 import CreateTag from '../features/Manage/screens/CreateTag';
 import CreateTask from '../features/Manage/screens/CreateTask';
+import ProjectDetail from '../features/Manage/screens/ProjectDetail';
 import SearchTask from '../features/Manage/screens/SearchTask';
 import TaskDetail from '../features/Manage/screens/TaskDetail';
 import TaskManageFilter from '../features/Manage/screens/TaskManageFilter';
@@ -38,6 +39,7 @@ const MainStack = () => {
       <Stack.Screen name={Screen.Register} component={Register} />
       <Stack.Screen name={Screen.Profile} component={Profile} />
       <Stack.Screen name={Screen.TaskDetail} component={TaskDetail} />
+      <Stack.Screen name={Screen.ProjectDetail} component={ProjectDetail} />
       <Stack.Screen name={Screen.TaskManageFilter} component={TaskManageFilter} />
       <Stack.Screen name={Screen.SearchTask} component={SearchTask} />
       <Stack.Screen name={Screen.Pomodoro} component={Pomodoro} />

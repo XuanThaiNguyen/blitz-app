@@ -17,7 +17,8 @@ enum APIs {
 
   //projects
   GET_PROJECTS = 'projects/my-projects',
-  CREATE_PROJECT = 'projects/create'
+  CREATE_PROJECT = 'projects/create',
+  GET_PROJECT_BY_ID = 'projects/:projectId'
 }
 
 export default APIs;

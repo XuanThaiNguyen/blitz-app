@@ -8,6 +8,8 @@ import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
 import {ProjectProps} from '../../../model/Project.props';
+import {navigationRef} from '../../../navigation/navigationUtil';
+import Screen from '../../../navigation/Screen';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 
@@ -19,8 +21,12 @@ interface ProjectItemProps {
 const ProjectItem = ({item, index}: ProjectItemProps) => {
   const {theme} = useTheme();
 
+  const onProjectDetail = () => {
+    navigationRef.current?.navigate(Screen.ProjectDetail, {projectId: item._id});
+  };
+
   return (
-    <Button key={item._id}>
+    <Button key={item._id} onPress={onProjectDetail}>
       <Block
         mRight={(index + 1) % 2 === 0 ? 0 : 12}
         paddingVertical={16}

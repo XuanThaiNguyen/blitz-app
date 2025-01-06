@@ -1,4 +1,4 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {NavigationProp, RouteProp, StackActions, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {DeviceEventEmitter, ScrollView, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -53,7 +53,9 @@ const TAGS = [
 const TaskDetail = () => {
   const insets = useSafeAreaInsets();
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.TaskDetail>>();
-  const {taskId = ''} = route.params;
+  const {dispatch} = useNavigation<NavigationProp<MainStackScreenProps>>();
+  const {taskId = '', times = 1} = route.params;
+  const popActions = StackActions.pop(times);
   const {theme} = useTheme();
   const refMeasure = useRef<any>(null);
 
@@ -74,6 +76,8 @@ const TaskDetail = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
+
+  const onBack = () => dispatch(popActions);
 
   const onShowTooltip = () => {
     refMeasure?.current?.measure(
@@ -213,7 +217,6 @@ const TaskDetail = () => {
   };
 
   const onUpdatePriority = async (_priority: PriorityProps) => {
-    console.log('11111', {priority: _priority.key});
     try {
       const {data} = await updateTaskById(taskId, {priority: _priority.key});
       console.log('22222', data);
@@ -232,7 +235,7 @@ const TaskDetail = () => {
   return (
     <Container>
       <InsetSubstitute />
-      <Header titleHeader="Task Detail" renderRight={_renderRight} />
+      <Header titleHeader="Task Detail" renderRight={_renderRight} onPressLeft={onBack} />
       <Spacer height={8} />
       <ScrollView contentContainerStyle={{paddingBottom: insets.bottom + 16, paddingTop: 8}}>
         <Block block>

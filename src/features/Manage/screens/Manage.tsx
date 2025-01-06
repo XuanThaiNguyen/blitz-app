@@ -1,6 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {DeviceEventEmitter, FlatList, StyleSheet} from 'react-native';
+import {DeviceEventEmitter, FlatList, ScrollView, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Block} from '../../../components/Block/Block';
@@ -35,7 +35,7 @@ import TaskItem from '../components/TaskItem';
 import {TIME_PROJECT_DEFAULT} from '../constant/Constant';
 
 const Manage = () => {
-  const {theme} = useTheme();
+  const {theme, isDark} = useTheme();
   const styles = useStyles(theme);
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
   const refMeasure = useRef<any>(null);
@@ -134,6 +134,21 @@ const Manage = () => {
     setShowTooltip(false);
   };
 
+  const renderEmpty = () => {
+    return (
+      <Block center>
+        <FastImage source={isDark ? images.empty_dark : images.empty_light} style={styles.iconEmpty} />
+        <Spacer height={12} />
+        <Typo text="You have no tasks right now" preset="r16" color={theme.primaryText} center />
+        <Spacer height={12} />
+        <Button onPress={onCreate(Screen.CreateTask)}>
+          <Typo text="Create Now" preset="b16" color={colors.primary} />
+        </Button>
+        <Spacer height={16} />
+      </Block >
+    );
+  };
+
   return (
     <Container>
       <InsetSubstitute />
@@ -155,30 +170,34 @@ const Manage = () => {
         </Block>
       </Block>
       <Spacer height={32} />
-      <Block row alignCenter flexWrap="wrap" paddingHorizontal={SpacingDefault.medium}>
-        {TIME_PROJECT_DEFAULT.map((item, index) => <FilterTimeItem key={item.title} item={item} index={index} />)}
-      </Block>
-      <Spacer height={24} />
-      <Block row alignCenter overflow="hidden" paddingHorizontal={SpacingDefault.medium}>
-        <Typo text="Projects" preset="b14" color={theme.secondaryText} />
-        <Spacer width={'small'} />
-        <Divider width={'100%'} height={1} />
-      </Block>
-      <Spacer height={24} />
-      <Block row alignCenter flexWrap="wrap" paddingHorizontal={SpacingDefault.medium}>
-        {data.projects.map((item: ProjectProps, index: number) => <ProjectItem key={item._id} item={item} index={index} />)}
-      </Block>
-      <Spacer height={24} />
-      <Block row alignCenter overflow="hidden" paddingHorizontal={SpacingDefault.medium}>
-        <Typo text="Tasks" preset="b14" color={theme.secondaryText} />
-        <Spacer width={'small'} />
-        <Divider width={'100%'} height={1} />
-      </Block>
-      <Spacer height={24} />
-      <FlatList
-        data={data.tasks}
-        keyExtractor={item => item._id}
-        renderItem={renderItem} />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Block row alignCenter flexWrap="wrap" paddingHorizontal={SpacingDefault.medium}>
+          {TIME_PROJECT_DEFAULT.map((item, index) => <FilterTimeItem key={item.title} item={item} index={index} />)}
+        </Block>
+        <Spacer height={24} />
+        <Block row alignCenter overflow="hidden" paddingHorizontal={SpacingDefault.medium}>
+          <Typo text="Projects" preset="b14" color={theme.secondaryText} />
+          <Spacer width={'small'} />
+          <Divider width={'100%'} height={1} />
+        </Block>
+        <Spacer height={24} />
+        <Block row alignCenter flexWrap="wrap" paddingHorizontal={SpacingDefault.medium}>
+          {data.projects.map((item: ProjectProps, index: number) => <ProjectItem key={item._id} item={item} index={index} />)}
+        </Block>
+        <Spacer height={24} />
+        <Block row alignCenter overflow="hidden" paddingHorizontal={SpacingDefault.medium}>
+          <Typo text="Tasks" preset="b14" color={theme.secondaryText} />
+          <Spacer width={'small'} />
+          <Divider width={'100%'} height={1} />
+        </Block>
+        <Spacer height={24} />
+        <FlatList
+          nestedScrollEnabled
+          data={data.tasks}
+          ListEmptyComponent={renderEmpty}
+          keyExtractor={item => item._id}
+          renderItem={renderItem} />
+      </ScrollView>
 
       <Button style={styles.buttonAdd} onPress={onShowTooltip}>
         <Block ref={refMeasure}>
@@ -298,6 +317,11 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   },
   flatlistContainer: {
     paddingHorizontal: SpacingDefault.medium,
+  },
+  iconEmpty: {
+    width: 124,
+    height: 124,
+    alignSelf: 'center',
   },
 }));
 

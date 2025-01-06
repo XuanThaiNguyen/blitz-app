@@ -15,17 +15,26 @@ interface HeaderProps {
   titleHeader: string;
   color?: string;
   renderRight?: any;
+  onPressLeft?: () => void;
 }
 
-const Header = ({titleHeader, color, renderRight}: HeaderProps) => {
+const Header = ({titleHeader, color, renderRight, onPressLeft}: HeaderProps) => {
   const {goBack} = useNavigation();
   const {theme} = useTheme();
 
   const _color = color ? color : theme.primaryText;
 
+  const _onBack = () => {
+    if (onPressLeft) {
+      onPressLeft();
+      return;
+    }
+    goBack();
+  };
+
   return (
     <Block row alignCenter justifyContent="space-between" h={52} paddingHorizontal={SpacingDefault.medium}>
-      <Button onPress={goBack} style={styles.button}>
+      <Button onPress={_onBack} style={styles.button}>
         <FastImage source={images.ic_left} style={styles.iconLeft} tintColor={_color} />
         <Spacer width={'smaller'} />
         <Typo text={titleHeader} preset="b16" lineHeight={24} color={_color} />

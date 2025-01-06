@@ -16,6 +16,12 @@ export type MainStackScreenProps = {
   [Screen.TaskDetail]: {
     taskId: string;
     fromScreen?: Screen;
+    times?: number;
+  };
+  [Screen.ProjectDetail]: {
+    projectId: string;
+    fromScreen?: Screen;
+    times?: number;
   };
   [Screen.TaskManageFilter]: {
     filterKey: TimeFilterKey;

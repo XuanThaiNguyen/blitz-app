@@ -8,3 +8,7 @@ export const getProjects = async (params?: any) => {
 export const createProject = async (params: any) => {
   return http.post(APIs.CREATE_PROJECT, params);
 };
+
+export const getProjectDetailById = async (projectId: string) => {
+  return http.get(APIs.GET_PROJECT_BY_ID.replace(':projectId', projectId));
+};

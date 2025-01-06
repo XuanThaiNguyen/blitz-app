@@ -1,7 +1,9 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {DeviceEventEmitter, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
+import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container/Container';
@@ -11,8 +13,11 @@ import {Spacer} from '../../../components/Spacer/Spacer';
 import TextField from '../../../components/TextField/TextField';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
+import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
+import Screen from '../../../navigation/Screen';
 import {ApiStatus} from '../../../services/api/ApiStatus';
 import {createProject} from '../../../services/api/project';
+import {EmitterKeys} from '../../../services/emitter/EmitterKeys';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {moderateScale} from '../../../utils/handleResponsive';
@@ -22,6 +27,7 @@ const SIZE = (SpacingDefault.width - SpacingDefault.medium * 2 - moderateScale(6
 
 const CreateProject = () => {
   const {theme} = useTheme();
+  const {navigate, goBack} = useNavigation<NavigationProp<MainStackScreenProps>>();
 
   const [title, setTitle] = useState('');
   const [color, setColor] = useState('');
@@ -65,7 +71,30 @@ const CreateProject = () => {
     try {
       const {data} = await createProject(params);
       if (data?.status === ApiStatus.OK) {
-        console.log('data', data);
+        alertBottomModal({
+          title: 'Success',
+          message: 'Create Project Successfully',
+          status: 'success',
+          dismissable: true,
+          onCustomXPress: () => {
+            goBack();
+            DeviceEventEmitter.emit(EmitterKeys.RELOAD_PROJECTS);
+          },
+          buttons: [
+            {
+              text: 'Go to Project Detail',
+              preset: 'primary',
+              onPress: () => {
+                DeviceEventEmitter.emit(EmitterKeys.RELOAD_PROJECTS);
+                navigate(Screen.ProjectDetail, {
+                  projectId: data.data._id,
+                  fromScreen: Screen.CreateProject,
+                  times: 2,
+                });
+              },
+            },
+          ],
+        });
       }
     } catch (err) {
 

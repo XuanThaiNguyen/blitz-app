@@ -20,6 +20,7 @@ enum Screen {
 
   //Project
   CreateProject = 'CreateProject',
+  ProjectDetail = 'ProjectDetail',
 
   //Profile
   Profile = 'Profile',

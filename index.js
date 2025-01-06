@@ -7,6 +7,7 @@ import {name as appName} from './app.json';
 import App from './src/App';
 import {persistor, store} from './src/redux/store';
 import './src/utils/ReactotronConfig';
+import './src/YellowBoxIgnores';
 
 const Blitz = () => {
   return (
