@@ -1,3 +1,5 @@
+import {TaskProps} from "./Task.props";
+
 export enum ProjectStatus {
   Planning = 'Planning',
   InProgress = 'InProgress',
@@ -6,6 +8,7 @@ export enum ProjectStatus {
 }
 
 export interface ProjectProps {
+  createdAt: Date | string;
   _id: string;
   documents: {
     urls: string[];
@@ -20,5 +23,6 @@ export interface ProjectProps {
     isDefaultProject: boolean;
     status: ProjectStatus;
     title: string;
-  }
+  };
+  tasks?: TaskProps[];
 }

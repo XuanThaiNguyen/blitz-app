@@ -55,6 +55,8 @@ const TextField = ({
         borderRadius={8}
         h={inputHeight}
         row
+        borderWidth={1}
+        borderColor={error ? colors.red : colors.transparent}
         alignCenter
         bgColor={mode === 'default' ? theme.backgroundBox : colors.transparent}
         styleOverride={blockInputStyle}>
@@ -73,11 +75,15 @@ const TextField = ({
           value={value}
           editable={editable}
           placeholderTextColor={theme.secondaryText}
-          style={[styles.input, error && styles.errorInput, inputStyle]}
+          style={[styles.input, inputStyle]}
         />
-        <Spacer height={4} />
-        {error && <Typo text={errorMessage} color={colors.red} />}
       </Block>
+      {error ? (
+        <Block>
+          <Spacer height={4} />
+          <Typo text={errorMessage} preset="r12" color={colors.red} />
+        </Block>
+      ) : <></>}
     </Block>
   );
 };
@@ -88,9 +94,6 @@ const getStyles = (theme: Theme) =>
       flex: 1,
       fontSize: FontSizeDefault.FONT_16,
       color: theme.primaryText,
-    },
-    errorInput: {
-      borderColor: colors.red,
     },
     icon: {
       width: 24,

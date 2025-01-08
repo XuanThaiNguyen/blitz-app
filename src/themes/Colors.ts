@@ -14,11 +14,11 @@ const colors = {
   disabledButton: '#CC4F39',
 
   //background
-  lightBackground: '#F5F5F5',
+  lightBackground: '#FFFFFF',
   darkBackground: '#181A20',
-  lightBackgroundInput: '#FFFFFF',
+  lightBackgroundInput: '#F6F7F9',
   darkBackgroundInput: '#1F222A',
-  lightBackgroundBox: '#FFFFFF',
+  lightBackgroundBox: '#F6F7F9',
   darkBackgroundBox: '#1F222A',
   lightBackgroundTooltip: '#FFFFFF',
   darkBackgroundTooltip: '#252934',

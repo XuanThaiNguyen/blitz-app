@@ -1,6 +1,9 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {NavigationProp, RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import moment from 'moment';
 import React, {useEffect, useState} from 'react';
-import {DeviceEventEmitter} from 'react-native';
+import {Controller, useForm} from 'react-hook-form';
+import {DeviceEventEmitter, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
@@ -20,8 +23,10 @@ import {ApiStatus} from '../../../services/api/ApiStatus';
 import {getProjects} from '../../../services/api/project';
 import {createTask} from '../../../services/api/task';
 import {EmitterKeys} from '../../../services/emitter/EmitterKeys';
+import colors from '../../../themes/Colors';
+import {NONE_VALUE} from '../../../themes/Constant';
 import {SpacingDefault} from '../../../themes/Spacing';
-import {DATE_FORMAT, formatDate, getEstimationDays} from '../../../utils/handleDateTime';
+import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
 import {isEmpty} from '../../../utils/handleUtils';
 import SelectOption from '../components/SelectOption';
 import SelectPriorityModal from '../components/SelectPriorityModal';
@@ -29,17 +34,30 @@ import SelectProjectModal from '../components/SelectProjectModal';
 import SelectStatusModal from '../components/SelectStatusModal';
 import SelectTagModal from '../components/SelectTagModal';
 import SelectTimeModal from '../components/SelectTimeModal';
-import {PRIORITIES, STATUSES} from '../constant/Constant';
-import {PriorityProps, StatusProps} from '../constant/Model.props';
+import {initialCreateTaskForm, PRIORITIES, STATUSES, validationCreateTaskSchema} from '../constant/Constant';
+import {CreateTaskFormProps, PriorityProps, StatusProps} from '../constant/Model.props';
 
 const CreateTask = () => {
   const {theme} = useTheme();
   const insets = useSafeAreaInsets();
   const {navigate, goBack} = useNavigation<NavigationProp<MainStackScreenProps>>();
+  const route = useRoute<RouteProp<MainStackScreenProps, Screen.CreateTask>>();
+  const {projectId = ''} = route.params;
+
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: {errors},
+  } = useForm<CreateTaskFormProps>({
+    defaultValues: initialCreateTaskForm,
+    resolver: yupResolver(validationCreateTaskSchema),
+  });
 
   const [loading, setLoading] = useState(false);
-  const [title, setTitle] = useState('');
-  const [dueDate, setDueDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
   const [priority, setPriority] = useState(PRIORITIES[0]);
   const [status, setStatus] = useState(STATUSES[0]);
   const [tags, setTags] = useState<string[]>([]);
@@ -54,16 +72,23 @@ const CreateTask = () => {
 
   useEffect(() => {
     onGetProjects();
-  }, []);
+  }, [projectId]);
 
   const onGetProjects = async () => {
     try {
       const {data} = await getProjects();
       if (data?.status === ApiStatus.OK) {
         setProjects(data.data);
-        const defaultProject = data.data.find((item: ProjectProps) => item.projectInfo.isDefaultProject);
-        if (!isEmpty(defaultProject)) {
-          setProject(defaultProject);
+        if (!isEmpty(projectId)) {
+          const _project = data.data.find((item: ProjectProps) => item._id === projectId);
+          if (!isEmpty(_project)) {
+            setProject(_project);
+          }
+        } else {
+          const defaultProject = data.data.find((item: ProjectProps) => item.projectInfo.isDefaultProject);
+          if (!isEmpty(defaultProject)) {
+            setProject(defaultProject);
+          }
         }
       }
     } catch (err) {
@@ -83,7 +108,9 @@ const CreateTask = () => {
   const openTagModal = () => setIsTagVisible(true);
   const closeTagModal = () => setIsTagVisible(false);
 
-  const openTimeModal = () => setIsTimeVisible(true);
+  const openTimeModal = () => {
+    setIsTimeVisible(true);
+  };
   const closeTimeModal = () => setIsTimeVisible(false);
 
   const onSelectPriority = (item: PriorityProps) => {
@@ -102,22 +129,34 @@ const CreateTask = () => {
     setTags(prev => ([...prev, item]));
   };
 
-  const onSelectTime = (time: string) => {
-    setDueDate(new Date(time));
+  const onSelectTime = (date: {startDate: Date, endDate: Date}) => {
+    if (!isEmpty(date.startDate)) {
+      setStartDate(new Date(date.startDate));
+    }
+    if (!isEmpty(date.endDate)) {
+      setEndDate(new Date(date.endDate));
+    }
   };
 
   const onCreateTask = async () => {
     setLoading(true);
+    let _timing: any = {};
+    if (startDate) {
+      _timing.startDate = moment(startDate).startOf('day').toDate();
+      _timing.endDate = moment(startDate).endOf('day').toDate();
+    }
+    if (endDate) {
+      _timing.endDate = moment(endDate).endOf('day').toDate();
+    }
+    // estimation: getEstimationDays(endDate),
     const params = {
-      title,
-      timing: {
-        startDate: dueDate,
-        estimation: getEstimationDays(dueDate),
-      },
+      title: getValues().title,
+      timing: _timing,
       priority: priority.key,
-      status: status.key,
       projectId: project?._id,
     };
+    console.log('params', params);
+
     try {
       const {data} = await createTask(params);
       if (data?.data) {
@@ -140,6 +179,7 @@ const CreateTask = () => {
                   taskId: data.data._id,
                   fromScreen: Screen.CreateTask,
                   times: 2,
+                  project: project!,
                 });
               },
             },
@@ -158,30 +198,56 @@ const CreateTask = () => {
     }
   };
 
+  const onClearDate = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
+
   return (
     <Container>
       <InsetSubstitute />
       <Header titleHeader="Create Task" />
       <Spacer height={24} />
-      <Block block paddingHorizontal={SpacingDefault.medium}>
-        <Typo text="Title" preset="r12" color={theme.primaryText} />
-        <Spacer height={8} />
-        <TextField value={title} placeholder={'Enter task name'} onChangeText={setTitle} />
-        <Spacer height={16} />
-        <SelectOption title="Project" value={project?.projectInfo.title || ''} onSelect={openProjectModal} />
-        <Spacer height={16} />
-        <SelectOption title="Due Date" value={formatDate(dueDate, DATE_FORMAT.FIRST)} onSelect={openTimeModal} />
-        <Spacer height={16} />
-        <SelectOption title="Priority" value={priority.value} onSelect={openPriorityModal} />
-        {/* <Spacer height={16} />
-        <SelectOption title="Status" value={status.value} onSelect={openStatusModal} /> */}
-        <Spacer height={16} />
-        <SelectOption title="Tags" value={tags?.length === 0 ? '-' : ''} onSelect={openTagModal} />
-      </Block>
-      <Button mHoz={SpacingDefault.medium} preset="primary" text="Create Task" onPress={onCreateTask} loading={loading} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Block block paddingHorizontal={SpacingDefault.medium}>
+          <Typo preset="r12" color={theme.primaryText}>Title <Typo preset="r12" color={colors.primary}>*</Typo></Typo>
+          <Spacer height={8} />
+          <Controller
+            name="title"
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextField
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                placeholder="Enter task name"
+                error={errors?.title}
+                errorMessage={errors?.title?.message}
+              />
+            )}
+          />
+          {/* <TextField value={title} placeholder={'Enter task name'} onChangeText={setTitle} /> */}
+          <Spacer height={16} />
+          <SelectOption title="Project" value={project?.projectInfo.title || ''} onSelect={openProjectModal} isOptional={false} />
+          <Spacer height={16} />
+          <SelectOption title="Priority" value={priority.value} onSelect={openPriorityModal} isOptional={false} />
+          <Spacer height={16} />
+          <SelectOption title="Due Date" value={endDate && startDate ? `${formatDate(startDate, DATE_FORMAT.FIRST)} - ${formatDate(endDate, DATE_FORMAT.FIRST)}` : (!endDate && startDate) ? formatDate(startDate, DATE_FORMAT.FIRST) : NONE_VALUE} onSelect={openTimeModal} onClearValue={onClearDate} />
+          <Spacer height={16} />
+          <SelectOption title="Tags" value={tags?.length === 0 ? NONE_VALUE : ''} onSelect={openTagModal} />
+        </Block>
+      </TouchableWithoutFeedback>
+      <Button mHoz={SpacingDefault.medium} preset="primary" text="Create Task" onPress={handleSubmit(onCreateTask)} loading={loading} />
       <Spacer height={insets.bottom + 16} />
 
-      <SelectTimeModal isVisible={isTimeVisible} onCloseModal={closeTimeModal} onSelectTime={onSelectTime} />
+      <SelectTimeModal
+        minDate={new Date()}
+        title={'Select Due Date'}
+        mode="multiple"
+        isVisible={isTimeVisible}
+        onCloseModal={closeTimeModal}
+        onSelectTime={onSelectTime} />
       <SelectPriorityModal priority={priority.key} onSelectPriority={onSelectPriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
       <SelectStatusModal status={status} onSelectStatus={onSelectStatus} isVisible={isStatusVisible} onCloseModal={closeStatusModal} />
       <SelectTagModal tags={tags} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />

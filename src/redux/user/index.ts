@@ -6,7 +6,7 @@ export interface TagModel {
   color: string;
 }
 
-interface User {
+export interface User {
   accountSetting: {
     isPrivateAccount: boolean;
     theme: 'light' | 'dark';

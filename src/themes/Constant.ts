@@ -4,7 +4,7 @@ import colors from './Colors';
 
 export const isIOS = Platform.OS === 'ios';
 export const isAndroid = Platform.OS === 'android';
-
+export const NONE_VALUE = '-';
 
 export const calendarHeaderWeekDay = {
   'stylesheet.calendar.header': {

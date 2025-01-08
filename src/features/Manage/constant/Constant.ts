@@ -1,7 +1,12 @@
+import * as yup from 'yup';
+
 import colors from '../../../themes/Colors';
-import {PriorityProps, PriorityTask, StatusProps, StatusTask, TimeFilterKey, TimeProjectProps} from './Model.props';
+import {CreateTaskFormProps, PriorityProps, PriorityTask, StatusProps, StatusTask, TimeFilterKey, TimeProjectProps} from './Model.props';
+import {SpacingDefault} from '../../../themes/Spacing';
 
 export const ITEM_SIZE_SPACE = 18;
+export const SPACING_BETWEEN_CARD = SpacingDefault.large;
+export const ITEM_PROJECT_WIDTH = SpacingDefault.width - SPACING_BETWEEN_CARD * 2;
 
 export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
   {
@@ -106,3 +111,13 @@ export const COLORS = [
   '#FF6347',
   '#02FFB9',
 ];
+
+export const initialCreateTaskForm: CreateTaskFormProps = {
+  title: '',
+  description: ''
+};
+
+export const validationCreateTaskSchema = yup.object({
+  title: yup.string().required('Trường này bắt buộc'),
+  description: yup.string(),
+});

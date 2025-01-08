@@ -1,4 +1,5 @@
 import {NavigationProp, RouteProp, StackActions, useNavigation, useRoute} from '@react-navigation/native';
+import moment from 'moment';
 import React, {useEffect, useRef, useState} from 'react';
 import {DeviceEventEmitter, ScrollView, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -13,6 +14,7 @@ import Header from '../../../components/Header/Header';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import Modal from '../../../components/Modal';
 import {Spacer} from '../../../components/Spacer/Spacer';
+import TextField from '../../../components/TextField/TextField';
 import {initMeasure, TOOLTIP_TASK_DETAIL_HEADER_WIDTH} from '../../../components/Tooltip/Constant';
 import Tooltip from '../../../components/Tooltip/Tooltip';
 import {MeasureObject} from '../../../components/Tooltip/Tooltip.prop';
@@ -26,13 +28,15 @@ import {ApiStatus} from '../../../services/api/ApiStatus';
 import {deleteTaskById, getTaskById, updateTaskById} from '../../../services/api/task';
 import {EmitterKeys} from '../../../services/emitter/EmitterKeys';
 import colors from '../../../themes/Colors';
+import {NONE_VALUE} from '../../../themes/Constant';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
+import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
 import {isEmpty} from '../../../utils/handleUtils';
 import TaskPomodoroItem from '../../Pomodoro/components/TaskPomodoroItem';
-import TextField from '../../../components/TextField/TextField';
-import UpdateTaskItem from '../components/UpdateTaskItem';
 import SelectPriorityModal from '../components/SelectPriorityModal';
+import SelectTimeModal from '../components/SelectTimeModal';
+import UpdateTaskItem from '../components/UpdateTaskItem';
 import {PriorityProps, PriorityTask} from '../constant/Model.props';
 
 const TAGS = [
@@ -48,27 +52,54 @@ const TAGS = [
     key: 'Productive',
     color: '#9E2AAD',
   },
+  {
+    key: 'Productiveeee',
+    color: '#9E2AAD',
+  },
 ];
 
 const TaskDetail = () => {
   const insets = useSafeAreaInsets();
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.TaskDetail>>();
   const {dispatch} = useNavigation<NavigationProp<MainStackScreenProps>>();
-  const {taskId = '', times = 1} = route.params;
+  const {taskId = '', times = 1, project} = route.params;
   const popActions = StackActions.pop(times);
   const {theme} = useTheme();
   const refMeasure = useRef<any>(null);
 
   const [loading, setLoading] = useState(false);
   const [task, setTask] = useState<TaskProps | null>();
+
   const [measure, setMeasure] = useState<MeasureObject>(initMeasure);
   const [showTooltip, setShowTooltip] = useState(false);
   const [tags] = useState(TAGS);
   const [note, setNote] = useState('');
   const [isPriorityVisible, setIsPriorityVisible] = useState(false);
+  const [isTimeVisible, setIsTimeVisible] = useState(false);
 
   const openPriorityModal = () => setIsPriorityVisible(true);
   const closePriorityModal = () => setIsPriorityVisible(false);
+
+  const openTimeModal = () => {
+    setIsTimeVisible(true);
+  };
+  const closeTimeModal = () => setIsTimeVisible(false);
+
+  const onSelectTime = (date: {startDate: Date, endDate: Date}) => {
+    let _timing: any = {};
+    if (!isEmpty(date.startDate)) {
+      _timing = {
+        startDate: moment(date.startDate).startOf('day').toDate(),
+        endDate: moment(date.startDate).endOf('day').toDate(),
+      };
+    }
+    if (!isEmpty(date.endDate)) {
+      _timing = {
+        endDate: moment(date.endDate).endOf('day').toDate(),
+      };
+    }
+    onUpdateTask({timing: _timing});
+  };
 
   useEffect(() => {
     if (!isEmpty(taskId)) {
@@ -138,15 +169,15 @@ const TaskDetail = () => {
       <Block
         key={item.key}
         row
+        styleOverride={{marginBottom: 12, marginRight: SpacingDefault.small}}
         alignCenter
         paddingVertical={4}
         paddingHorizontal={SpacingDefault.smaller}
         borderWidth={1}
         borderColor={item.color}
-        borderRadius={100}
-        mRight={SpacingDefault.small}>
+        borderRadius={100}>
         <Typo text={`#${item.key}`} color={item.color} preset="b14" />
-        <Spacer width={'tiny'} />
+        {/* <Spacer width={'tiny'} /> */}
         <FastImage source={images.ic_add} style={{width: 24, height: 24, transform: [{rotate: '45deg'}]}} tintColor={theme.primaryText} />
       </Block>
     );
@@ -216,13 +247,23 @@ const TaskDetail = () => {
     }, 500);
   };
 
-  const onUpdatePriority = async (_priority: PriorityProps) => {
+  const onUpdateTask = async (params: any) => {
     try {
-      const {data} = await updateTaskById(taskId, {priority: _priority.key});
-      console.log('22222', data);
-      // if (data.status === ApiStatus.OK) {
-      //   console.log('22222', data.data);
-      // }
+      const {data} = await updateTaskById(taskId, params);
+      if (data.status === ApiStatus.OK && !isEmpty(data.data)) {
+        setTask(data.data);
+        setTimeout(() => {
+          alertBottomModal({
+            title: 'Success',
+            message: 'Update Task Successfully',
+            status: 'success',
+            dismissable: true,
+            onCustomXPress: () => {
+              DeviceEventEmitter.emit(EmitterKeys.RELOAD_TASKS);
+            },
+          });
+        }, 500);
+      }
     } catch (err) {
       console.log('err', err);
     }
@@ -237,7 +278,7 @@ const TaskDetail = () => {
       <InsetSubstitute />
       <Header titleHeader="Task Detail" renderRight={_renderRight} onPressLeft={onBack} />
       <Spacer height={8} />
-      <ScrollView contentContainerStyle={{paddingBottom: insets.bottom + 16, paddingTop: 8}}>
+      <ScrollView contentContainerStyle={{paddingBottom: insets.bottom + 16, paddingTop: 8}} showsVerticalScrollIndicator={false}>
         <Block block>
           <TaskPomodoroItem task={task!} style={styles.taskItem} />
           <Spacer height={24} />
@@ -246,20 +287,17 @@ const TaskDetail = () => {
             paddingHorizontal={SpacingDefault.normal}
             bgColor={theme.backgroundBox}
             borderRadius={12}>
-            <Block row alignCenter justifyContent="space-between" paddingVertical={16}>
-              <Block>
-                <Typo text="Pomodoro" />
-              </Block>
-              <Block>
-                <Typo text="4" />
-              </Block>
-            </Block>
-            <Divider height={StyleSheet.hairlineWidth} width={'100%'} color={theme.divider} />
-            <UpdateTaskItem title={'Due Date'} value={'Today'} />
-            <Divider height={StyleSheet.hairlineWidth} width={'100%'} color={theme.divider} />
-            <UpdateTaskItem title={'Priority'} value={task?.priority || PriorityTask.LOW} onUpdateTask={openPriorityModal} />
-            {/* <Divider height={StyleSheet.hairlineWidth} width={'100%'} color={theme.divider} />
-            <UpdateTaskItem title={'Status'} value={'Not Start Yet'} /> */}
+            <UpdateTaskItem iconTitle={images.ic_pomodoro} title={'Pomodoro'} value={'4'} />
+            <Divider />
+            <UpdateTaskItem iconTitle={images.ic_planned} title={'Due Date'} value={task?.timing.endDate && task.timing.startDate ? `${formatDate(task.timing.startDate, DATE_FORMAT.FIRST)} - ${formatDate(task.timing.endDate, DATE_FORMAT.FIRST)}` : (!task?.timing.endDate && task?.timing.startDate) ? formatDate(task.timing.startDate, DATE_FORMAT.FIRST) : NONE_VALUE} onUpdateTask={openTimeModal} />
+            <Divider />
+            {/* <UpdateTaskItem iconTitle={images.ic_today} title={'Start Date'} value={!isEmpty(task?.timing.startDate) ? formatDate(task?.timing.startDate!, DATE_FORMAT.FIVE) : NONE_VALUE} onUpdateTask={openTimeModal('start')} />
+            <Divider />
+            <UpdateTaskItem iconTitle={images.ic_today} title={'End Date'} value={!isEmpty(task?.timing.endDate) ? formatDate(task?.timing.endDate!, DATE_FORMAT.FIVE) : NONE_VALUE} onUpdateTask={openTimeModal('end')} />
+            <Divider /> */}
+            <UpdateTaskItem iconTitle={images.ic_tomorrow} title={'Priority'} value={task?.priority || PriorityTask.LOW} onUpdateTask={openPriorityModal} />
+            <Divider />
+            <UpdateTaskItem iconTitle={images.ic_project} title={'Project'} value={project?.projectInfo?.title || NONE_VALUE} canUpdate={false} />
           </Block>
           <Spacer height={16} />
           <Block
@@ -270,14 +308,14 @@ const TaskDetail = () => {
             <Button style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 16}}>
               <FastImage source={images.ic_add} style={styles.iconAdd} tintColor={theme.primaryText} />
               <Spacer width={'small'} />
-              <Typo text="Add Task" preset="b16" color={theme.secondaryText} />
+              <Typo text="Add sub task here..." preset="b16" color={theme.secondaryText} />
             </Button>
           </Block>
           <Spacer height={32} />
           <Block mHoz={SpacingDefault.medium}>
             <Typo text="Tags" preset="b16" color={theme.primaryText} />
             <Spacer height={16} />
-            <Block row alignCenter flexWrap="wrap">
+            <Block row flexWrap="wrap">
               {tags.map(renderTag)}
               {/* <Button style={{paddingVertical: 4, paddingHorizontal: SpacingDefault.small, borderWidth: 1, borderColor: theme.secondaryText, borderRadius: 100}} onPress={() => { }}>
               <FastImage source={images.ic_add} style={{width: 24, height: 24}} tintColor={theme.primaryText} />
@@ -309,7 +347,14 @@ const TaskDetail = () => {
         </Block>
       </ScrollView>
 
-      <SelectPriorityModal priority={task?.priority || PriorityTask.LOW} onSelectPriority={onUpdatePriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
+      <SelectPriorityModal priority={task?.priority || PriorityTask.LOW} onSelectPriority={(_priority: PriorityProps) => onUpdateTask({priority: _priority.key})} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
+      <SelectTimeModal
+        minDate={new Date()}
+        title={'Select Due Date'}
+        mode="multiple"
+        isVisible={isTimeVisible}
+        onCloseModal={closeTimeModal}
+        onSelectTime={onSelectTime} />
     </Container>
   );
 };

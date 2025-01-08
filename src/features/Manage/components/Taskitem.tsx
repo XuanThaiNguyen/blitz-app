@@ -1,64 +1,40 @@
 import React from 'react';
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {useSelector} from 'react-redux';
 
+import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
 import {Theme, useTheme} from '../../../context/ThemeProvider';
+import {ProjectProps} from '../../../model/Project.props';
+import {TaskProps} from '../../../model/Task.props';
 import {navigationRef} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
-import colors from '../../../themes/Colors';
+import {AppState} from '../../../redux/reducer';
+import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
-import {TaskProps} from '../../../model/Task.props';
-import {Block} from '../../../components/Block/Block';
 import {getColorsByPriority} from '../../../utils/handleStyle';
 
 interface TaskItemProps {
   item: TaskProps;
   style?: StyleProp<ViewStyle>;
   onCustomPress?: () => void;
+  projects: ProjectProps[];
 }
 
-const TaskItem = ({item, style, onCustomPress}: TaskItemProps) => {
+const TaskItem = ({item, style, projects, onCustomPress}: TaskItemProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
+  const user = useSelector((_state: AppState) => _state.user.user);
 
   const onTaskDetail = () => {
-    navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id});
+    const _project = projects?.find((project: ProjectProps) => project._id === item.projectId);
+    navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id, project: _project});
     onCustomPress?.();
   };
-
-  // let iconTime = images.ic_planned, iconColor = colors.orange;
-  // const hours = moment(item.timing.endDate).diff(moment(new Date()), 'hours');
-  // if (hours < 24) {
-  //   iconTime = images.ic_today;
-  //   iconColor = colors.green;
-  // } else if (hours < 48) {
-  //   iconTime = images.ic_tomorrow;
-  //   iconColor = colors.blue;
-  // } else if (hours < 168) {  // 7 days
-  //   iconTime = images.ic_week;
-  //   iconColor = colors.purple;
-  // }
-
-  // let priorityColor = colors.gray;
-  // switch (item.priority) {
-  //   case 'Low':
-  //     priorityColor = colors.priorityLow;
-  //     break;
-  //   case 'Medium':
-  //     priorityColor = colors.priorityMedium;
-  //     break;
-  //   case 'High':
-  //     priorityColor = colors.priorityHigh;
-  //     break;
-  //   case 'Critical':
-  //     priorityColor = colors.priorityCritical;
-  //     break;
-  //   default:
-  //     break;
-  // }
 
   const renderTime = () => {
     let _time = formatDate(item?.timing?.startDate || item?.timing?.endDate, DATE_FORMAT.FIVE);
@@ -72,18 +48,26 @@ const TaskItem = ({item, style, onCustomPress}: TaskItemProps) => {
 
   return (
     <Button style={[styles.buttonTask, style, {borderLeftColor: getColorsByPriority({priority: item.priority})}]} onPress={onTaskDetail}>
-      <Block row alignCenter>
-        <Block w={24} h={24} bgColor={theme.backgroundBox} borderWidth={3} borderColor={colors.primary} borderRadius={16} center />
-        <Spacer width={'small'} />
-        <Typo text={item.title} color={theme.primaryText} preset="b16" />
+      <Block row alignCenter justifyContent="space-between">
+        <FastImage source={{uri: user?.profileInfo?.avatar}} style={{width: 24, height: 24, borderRadius: 12}} />
+        <Block row alignCenter>
+          <Typo text="1" preset="r14" color={theme.secondaryText} />
+          <Spacer width={'tiny'} />
+          <FastImage source={images.ic_document} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
+          <Spacer width={'small'} />
+          <Typo text="2" preset="r14" color={theme.secondaryText} />
+          <Spacer width={'tiny'} />
+          <FastImage source={images.ic_comment} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
+        </Block>
       </Block>
       <Spacer height={12} />
-      {renderTime()}
-      {/* <Block row alignCenter>
-        <FastImage source={iconTime} style={{width: 16, height: 16}} tintColor={iconColor} />
-        <Spacer width={'small'} />
-        <FastImage source={images.ic_today} style={{width: 16, height: 16}} tintColor={priorityColor} />
-      </Block> */}
+      <Typo flex text={item.title} numberOfLines={2} color={theme.primaryText} preset="b16" />
+      <Spacer height={4} />
+      <Block row alignCenter>
+        <FastImage source={images.ic_calendar} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
+        <Spacer width={'smaller'} />
+        {renderTime()}
+      </Block>
     </Button>
   );
 };
@@ -94,7 +78,15 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     paddingHorizontal: SpacingDefault.normal,
     paddingVertical: 16,
     borderRadius: 6,
-    backgroundColor: theme.backgroundBox,
+    backgroundColor: theme.background,
+    shadowColor: 'rgba(0, 0, 0, 0.4)',
+    shadowOffset: {
+      width: 1,
+      height: 0
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 5
   },
 }));
 

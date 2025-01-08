@@ -4,8 +4,8 @@ export interface FontDefault {
 }
 
 export const FontDefault: FontDefault = {
-  Regular: 'Roboto-Regular',
-  Bold: 'Roboto-Bold',
+  Regular: 'Urbanist-Regular',
+  Bold: 'Urbanist-SemiBold',
 };
 
 export type FontFamily = keyof typeof FontDefault;

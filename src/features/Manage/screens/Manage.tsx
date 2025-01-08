@@ -1,6 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
-import {DeviceEventEmitter, FlatList, ScrollView, StyleSheet} from 'react-native';
+import {DeviceEventEmitter, FlatList, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Block} from '../../../components/Block/Block';
@@ -30,9 +30,8 @@ import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {isEmpty} from '../../../utils/handleUtils';
 import FilterTimeItem from '../components/FilterTimeItem';
-import ProjectItem from '../components/ProjectItem';
 import TaskItem from '../components/TaskItem';
-import {TIME_PROJECT_DEFAULT} from '../constant/Constant';
+import ProjectList from '../components/ProjectList';
 
 const Manage = () => {
   const {theme, isDark} = useTheme();
@@ -120,7 +119,7 @@ const Manage = () => {
     }
   };
 
-  const renderItem = ({item}: {item: TaskProps}) => <TaskItem item={item} style={styles.taskItem} />;
+  const renderItem = ({item}: {item: TaskProps}) => <TaskItem item={item} style={styles.taskItem} projects={data.projects} />;
 
   const onSearchTask = () => {
     navigate(Screen.SearchTask);
@@ -151,53 +150,44 @@ const Manage = () => {
 
   return (
     <Container>
-      <InsetSubstitute />
-      <Block h={52} row alignCenter paddingHorizontal={SpacingDefault.medium}>
-        <Block row alignCenter block>
-          {!isEmpty(user?.profileInfo.avatar) ? (
-            <FastImage source={{uri: user?.profileInfo.avatar}} style={styles.avatarUser} resizeMode="contain" />
-          ) : (
-            <Button style={styles.buttonAvatar} onPress={onLogin}>
-              <FastImage source={images.ic_personal} style={styles.iconAvatar} tintColor={theme.secondaryText} />
-            </Button>
-          )}
-          <Spacer width={'small'} />
-          <Button style={styles.buttonSearch} onPress={onSearchTask}>
-            <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.secondaryText} />
+      <Block bgColor={theme.backgroundBox}>
+        <InsetSubstitute />
+        <Block h={52} row alignCenter paddingHorizontal={SpacingDefault.normal}>
+          <Block row alignCenter block>
+            {!isEmpty(user?.profileInfo.avatar) ? (
+              <FastImage source={{uri: user?.profileInfo.avatar}} style={styles.avatarUser} resizeMode="contain" />
+            ) : (
+              <Button style={styles.buttonAvatar} onPress={onLogin}>
+                <FastImage source={images.ic_personal} style={styles.iconAvatar} tintColor={theme.secondaryText} />
+              </Button>
+            )}
             <Spacer width={'small'} />
-            <Typo text="Search" preset="r16" color={theme.secondaryText} />
-          </Button>
+            <Button style={styles.buttonSearch} onPress={onSearchTask}>
+              <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.secondaryText} />
+              <Spacer width={'small'} />
+              <Typo text="Search" preset="r16" color={theme.secondaryText} />
+            </Button>
+            <Spacer width={'small'} />
+            <Button>
+              <FastImage source={images.ic_notification} style={styles.iconSearch} tintColor={theme.primaryText} />
+            </Button>
+          </Block>
         </Block>
+        <Spacer height={32} />
+        <ProjectList projects={data.projects || []} />
+        <Spacer height={24} />
       </Block>
-      <Spacer height={32} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Block row alignCenter flexWrap="wrap" paddingHorizontal={SpacingDefault.medium}>
-          {TIME_PROJECT_DEFAULT.map((item, index) => <FilterTimeItem key={item.title} item={item} index={index} />)}
-        </Block>
-        <Spacer height={24} />
-        <Block row alignCenter overflow="hidden" paddingHorizontal={SpacingDefault.medium}>
-          <Typo text="Projects" preset="b14" color={theme.secondaryText} />
-          <Spacer width={'small'} />
-          <Divider width={'100%'} height={1} />
-        </Block>
-        <Spacer height={24} />
-        <Block row alignCenter flexWrap="wrap" paddingHorizontal={SpacingDefault.medium}>
-          {data.projects.map((item: ProjectProps, index: number) => <ProjectItem key={item._id} item={item} index={index} />)}
-        </Block>
-        <Spacer height={24} />
-        <Block row alignCenter overflow="hidden" paddingHorizontal={SpacingDefault.medium}>
-          <Typo text="Tasks" preset="b14" color={theme.secondaryText} />
-          <Spacer width={'small'} />
-          <Divider width={'100%'} height={1} />
-        </Block>
-        <Spacer height={24} />
+      <Block block>
+        <Spacer height={12} />
+        <Typo text="Tasks" preset="b14" color={theme.secondaryText} style={{marginLeft: SpacingDefault.normal}} />
+        <Spacer height={12} />
         <FlatList
-          nestedScrollEnabled
+          contentContainerStyle={{paddingTop: 12}}
           data={data.tasks}
           ListEmptyComponent={renderEmpty}
           keyExtractor={item => item._id}
           renderItem={renderItem} />
-      </ScrollView>
+      </Block>
 
       <Button style={styles.buttonAdd} onPress={onShowTooltip}>
         <Block ref={refMeasure}>
@@ -284,7 +274,7 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   buttonSearch: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.backgroundBox,
+    backgroundColor: theme.background,
     flex: 1,
     height: 36,
     borderRadius: 8,

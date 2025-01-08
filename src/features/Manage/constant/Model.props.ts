@@ -41,3 +41,8 @@ export interface StatusProps {
   key: StatusTask;
   value: string;
 }
+
+export interface CreateTaskFormProps {
+  title: string;
+  description?: string;
+}

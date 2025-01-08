@@ -23,7 +23,8 @@ interface SelectTimeModalProps {
   isVisible: boolean;
   onCloseModal: () => void;
   mode?: 'single' | 'multiple'; // default: single;
-  minDate?: string;
+  minDate?: Date;
+  title?: string;
   onSelectTime?: (
     time?: any,
     date?: {
@@ -33,7 +34,7 @@ interface SelectTimeModalProps {
   ) => void;
 }
 
-const SelectTimeModal = ({isVisible, onCloseModal, mode = 'single', minDate, onSelectTime}: SelectTimeModalProps) => {
+const SelectTimeModal = ({isVisible, onCloseModal, mode = 'single', minDate, onSelectTime, title = 'Time'}: SelectTimeModalProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
   const insets = useSafeAreaInsets();
@@ -196,7 +197,7 @@ const SelectTimeModal = ({isVisible, onCloseModal, mode = 'single', minDate, onS
           <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
         </Button>
         <Spacer height={24} />
-        <Typo text="Due Date" preset="b20" color={theme.primaryText} />
+        <Typo text={title} preset="b20" color={theme.primaryText} />
         <Spacer height={24} />
         <Calendar
           initialDate={today}

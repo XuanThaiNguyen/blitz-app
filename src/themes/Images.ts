@@ -5,6 +5,7 @@ const images = {
   empty_light: require('../assets/images/empty_light.png'),
   empty_search_light: require('../assets/images/empty_search_light.png'),
   empty_search_dark: require('../assets/images/empty_search_dark.png'),
+  project_cover_default: require('../assets/images/project_cover_default.png'),
 
   //icon
   ic_logout: require('../assets/images/logout.png'),
@@ -24,12 +25,18 @@ const images = {
   ic_tomorrow: require('../assets/images/ic_tomorrow.png'),
   ic_week: require('../assets/images/ic_week.png'),
   ic_planned: require('../assets/images/ic_planned.png'),
+  ic_calendar: require('../assets/images/ic_calendar.webp'),
   ic_success_check_circle: require('../assets/images/ic_success_check_circle.png'),
   ic_faill_cross_circle: require('../assets/images/ic_faill_cross_circle.png'),
   ic_personal: require('../assets/images/ic_personal.webp'),
   ic_more: require('../assets/images/ic_more.webp'),
   ic_edit: require('../assets/images/ic_edit.webp'),
   ic_project: require('../assets/images/ic_project.png'),
+  ic_pomodoro: require('../assets/images/ic_pomodoro.png'),
+  ic_arrow_down: require('../assets/images/ic_arrow_down.webp'),
+  ic_document: require('../assets/images/ic_document.webp'),
+  ic_comment: require('../assets/images/ic_comment.webp'),
+  ic_members: require('../assets/images/ic_members.webp'),
 
   //tabs
   tabs: {

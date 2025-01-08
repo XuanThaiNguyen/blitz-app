@@ -1,4 +1,5 @@
-import {PriorityTask} from '../features/Manage/constant/Model.props';
+import {PriorityTask, StatusTask} from '../features/Manage/constant/Model.props';
+import {User} from '../redux/user';
 
 export interface TaskProps {
   _id: string;
@@ -8,6 +9,11 @@ export interface TaskProps {
     endDate: Date;
     estimation: number;
   };
+  description?: string;
   priority: PriorityTask;
-  status: string;
+  status: StatusTask;
+  projectId: string;
+  subTasks?: TaskProps[];
+  additionalInfo?: any[];
+  assigneeInfo: User[];
 }
