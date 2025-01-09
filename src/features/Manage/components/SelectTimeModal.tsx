@@ -23,7 +23,7 @@ interface SelectTimeModalProps {
   isVisible: boolean;
   onCloseModal: () => void;
   mode?: 'single' | 'multiple'; // default: single;
-  minDate?: Date;
+  minDate?: string;
   title?: string;
   onSelectTime?: (
     time?: any,
@@ -191,51 +191,53 @@ const SelectTimeModal = ({isVisible, onCloseModal, mode = 'single', minDate, onS
       onModalHide={onCloseModal}
       backdropOpacity={0.4}
     >
-      <Block style={styles.block}>
-        <Spacer height={32} />
-        <Button onPress={onCloseModal} style={styles.buttonClose}>
-          <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
-        </Button>
-        <Spacer height={24} />
-        <Typo text={title} preset="b20" color={theme.primaryText} />
-        <Spacer height={24} />
-        <Calendar
-          initialDate={today}
-          onDayPress={onDaySelected}
-          markingType={endDate.length === 0 ? 'custom' : 'period'}
-          markedDates={
-            endDate.length === 0
-              ? convertSingleDayToMarker()
-              : convertDaysToMarker(dateRange())
-          }
-          firstDay={1}
-          minDate={minDate}
-          style={styles.calendar}
-          renderArrow={renderArrow}
-          onPressArrowLeft={onPreviousMonth}
-          onPressArrowRight={onNextMonth}
-          theme={{
-            ...calendarHeaderWeekDay,
-            calendarBackground: theme.background,
-            dayTextColor: theme.primaryText,
-            arrowColor: theme.secondaryText,
-            textDayHeaderFontSize: FontSizeDefault.FONT_12,
-            textDayHeaderFontFamily: FontDefault.Bold,
-            textDayHeaderFontWeight: '600',
-            textDayFontSize: FontSizeDefault.FONT_14,
-            textDayFontFamily: FontDefault.Regular,
-            textDisabledColor: theme.secondaryText,
-            textMonthFontSize: FontSizeDefault.FONT_16,
-            textMonthFontFamily: FontDefault.Bold,
-            textMonthFontWeight: '600',
-            monthTextColor: theme.primaryText,
-            todayTextColor: colors.primary,
-          }}
-        />
-        <Spacer height={32} />
-        <Button preset="primary" text="Confirm" onPress={onConfirm} disabled={buttonDisabled} />
-        <Spacer height={insets.bottom + 16} />
-      </Block>
+      {!!isVisible ? (
+        <Block style={styles.block}>
+          <Spacer height={32} />
+          <Button onPress={onCloseModal} style={styles.buttonClose}>
+            <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
+          </Button>
+          <Spacer height={24} />
+          <Typo text={title} preset="b20" color={theme.primaryText} />
+          <Spacer height={24} />
+          <Calendar
+            initialDate={today}
+            onDayPress={onDaySelected}
+            markingType={endDate.length === 0 ? 'custom' : 'period'}
+            markedDates={
+              endDate.length === 0
+                ? convertSingleDayToMarker()
+                : convertDaysToMarker(dateRange())
+            }
+            firstDay={1}
+            minDate={minDate}
+            style={styles.calendar}
+            renderArrow={renderArrow}
+            onPressArrowLeft={onPreviousMonth}
+            onPressArrowRight={onNextMonth}
+            theme={{
+              ...calendarHeaderWeekDay,
+              calendarBackground: theme.background,
+              dayTextColor: theme.primaryText,
+              arrowColor: theme.secondaryText,
+              textDayHeaderFontSize: FontSizeDefault.FONT_12,
+              textDayHeaderFontFamily: FontDefault.Bold,
+              textDayHeaderFontWeight: '600',
+              textDayFontSize: FontSizeDefault.FONT_14,
+              textDayFontFamily: FontDefault.Regular,
+              textDisabledColor: theme.secondaryText,
+              textMonthFontSize: FontSizeDefault.FONT_16,
+              textMonthFontFamily: FontDefault.Bold,
+              textMonthFontWeight: '600',
+              monthTextColor: theme.primaryText,
+              todayTextColor: colors.primary,
+            }}
+          />
+          <Spacer height={32} />
+          <Button preset="primary" text="Confirm" onPress={onConfirm} disabled={buttonDisabled} />
+          <Spacer height={insets.bottom + 16} />
+        </Block>
+      ) : <></>}
     </RNModal>
   );
 };

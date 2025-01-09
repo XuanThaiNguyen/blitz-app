@@ -1,5 +1,6 @@
 import {PriorityTask, StatusTask} from '../features/Manage/constant/Model.props';
 import {User} from '../redux/user';
+import {TagProps} from './Tag.props';
 
 export interface TaskProps {
   _id: string;
@@ -16,4 +17,6 @@ export interface TaskProps {
   subTasks?: TaskProps[];
   additionalInfo?: any[];
   assigneeInfo: User[];
+  tags: string[];
+  availableTags: TagProps[];
 }

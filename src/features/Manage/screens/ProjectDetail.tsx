@@ -62,7 +62,7 @@ const ProjectDetail = () => {
     navigate(Screen.CreateTask, {projectId: project?._id});
   }
 
-  const renderTaskItem = ({item, index}: {item: TaskProps, index: number}) => <TaskItem item={item} style={styles.taskItem} projects={[]} onCustomPress={() => { }} />;
+  const renderTaskItem = ({item, index}: {item: TaskProps, index: number}) => <TaskItem item={item} style={styles.taskItem} projects={[]} project={project} onCustomPress={() => { }} />;
 
   if (isEmpty(project)) return <></>;
 

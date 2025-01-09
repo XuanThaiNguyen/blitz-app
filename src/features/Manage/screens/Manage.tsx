@@ -1,6 +1,7 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import throttle from 'lodash/throttle';
 import React, {useEffect, useRef, useState} from 'react';
-import {DeviceEventEmitter, FlatList, StyleSheet} from 'react-native';
+import {DeviceEventEmitter, FlatList, LayoutChangeEvent, ScrollView, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Block} from '../../../components/Block/Block';
@@ -14,7 +15,6 @@ import Tooltip from '../../../components/Tooltip/Tooltip';
 import {MeasureObject} from '../../../components/Tooltip/Tooltip.prop';
 import {Typo} from '../../../components/Typo/Typo';
 import {Theme, useTheme} from '../../../context/ThemeProvider';
-import {ProjectProps} from '../../../model/Project.props';
 import {TaskProps} from '../../../model/Task.props';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import {showLoginModal} from '../../../navigation/navigationUtil';
@@ -29,9 +29,8 @@ import colors from '../../../themes/Colors';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {isEmpty} from '../../../utils/handleUtils';
-import FilterTimeItem from '../components/FilterTimeItem';
-import TaskItem from '../components/TaskItem';
 import ProjectList from '../components/ProjectList';
+import TaskItem from '../components/TaskItem';
 
 const Manage = () => {
   const {theme, isDark} = useTheme();
@@ -46,6 +45,7 @@ const Manage = () => {
   });
   const [measure, setMeasure] = useState<MeasureObject>(initMeasure);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [mainScrollViewHeight, setMainScrollViewHeight] = useState<number>(0);
 
   useEffect(() => {
     if (!isEmpty(user)) {
@@ -148,46 +148,70 @@ const Manage = () => {
     );
   };
 
+  const updateScrollViewHeight = throttle(
+    (height: number) => {
+      setMainScrollViewHeight(height);
+    },
+    500,
+    {leading: true, trailing: true}
+  );
+
+  const _onLayoutSV = (event: LayoutChangeEvent) => {
+    const height = event.nativeEvent.layout.height;
+    updateScrollViewHeight(height);
+  };
+
   return (
     <Container>
-      <Block bgColor={theme.backgroundBox}>
-        <InsetSubstitute />
-        <Block h={52} row alignCenter paddingHorizontal={SpacingDefault.normal}>
-          <Block row alignCenter block>
-            {!isEmpty(user?.profileInfo.avatar) ? (
-              <FastImage source={{uri: user?.profileInfo.avatar}} style={styles.avatarUser} resizeMode="contain" />
-            ) : (
-              <Button style={styles.buttonAvatar} onPress={onLogin}>
-                <FastImage source={images.ic_personal} style={styles.iconAvatar} tintColor={theme.secondaryText} />
-              </Button>
-            )}
-            <Spacer width={'small'} />
-            <Button style={styles.buttonSearch} onPress={onSearchTask}>
-              <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.secondaryText} />
-              <Spacer width={'small'} />
-              <Typo text="Search" preset="r16" color={theme.secondaryText} />
+      <InsetSubstitute />
+      <Block h={52} row alignCenter paddingHorizontal={SpacingDefault.normal}>
+        <Block row alignCenter block>
+          {!isEmpty(user?.profileInfo.avatar) ? (
+            <FastImage source={{uri: user?.profileInfo.avatar}} style={styles.avatarUser} resizeMode="contain" />
+          ) : (
+            <Button style={styles.buttonAvatar} onPress={onLogin}>
+              <FastImage source={images.ic_personal} style={styles.iconAvatar} tintColor={theme.secondaryText} />
             </Button>
+          )}
+          <Spacer width={'small'} />
+          <Button style={styles.buttonSearch} onPress={onSearchTask}>
+            <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.secondaryText} />
             <Spacer width={'small'} />
-            <Button>
-              <FastImage source={images.ic_notification} style={styles.iconSearch} tintColor={theme.primaryText} />
-            </Button>
+            <Typo text="Search" preset="r16" color={theme.secondaryText} />
+          </Button>
+          <Spacer width={'small'} />
+          <Button>
+            <FastImage source={images.ic_notification} style={styles.iconSearch} tintColor={theme.primaryText} />
+          </Button>
+        </Block>
+      </Block>
+      <Spacer height={16} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        onLayout={_onLayoutSV}>
+        <Block bgColor={theme.backgroundBox}>
+          <Spacer height={16} />
+          <ProjectList projects={data.projects || []} />
+          <Spacer height={24} />
+        </Block>
+        <Block h={mainScrollViewHeight}>
+          <Block block>
+            <Spacer height={12} />
+            <Typo text="Tasks" preset="b14" color={theme.primaryText} style={{marginLeft: SpacingDefault.normal}} />
+            <Spacer height={12} />
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              nestedScrollEnabled
+              bounces={false}
+              contentContainerStyle={{paddingTop: 12}}
+              data={data.tasks}
+              ListEmptyComponent={renderEmpty}
+              keyExtractor={item => item._id}
+              renderItem={renderItem} />
           </Block>
         </Block>
-        <Spacer height={32} />
-        <ProjectList projects={data.projects || []} />
-        <Spacer height={24} />
-      </Block>
-      <Block block>
-        <Spacer height={12} />
-        <Typo text="Tasks" preset="b14" color={theme.secondaryText} style={{marginLeft: SpacingDefault.normal}} />
-        <Spacer height={12} />
-        <FlatList
-          contentContainerStyle={{paddingTop: 12}}
-          data={data.tasks}
-          ListEmptyComponent={renderEmpty}
-          keyExtractor={item => item._id}
-          renderItem={renderItem} />
-      </Block>
+      </ScrollView>
 
       <Button style={styles.buttonAdd} onPress={onShowTooltip}>
         <Block ref={refMeasure}>
@@ -274,7 +298,7 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   buttonSearch: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.background,
+    backgroundColor: theme.backgroundBox,
     flex: 1,
     height: 36,
     borderRadius: 8,

@@ -70,8 +70,10 @@ const ProjectItem = ({item, index, scrollX, isLastIndex}: ProjectItemProps) => {
           <Spacer height={12} />
           <Typo preset="b16" color={theme.primaryText} text={`${item.projectInfo.title}`} />
           <Spacer height={16} />
-          <Block w={'100%'} h={4} bgColor={theme.backgroundBox} borderRadius={100}>
-            <Block position="absolute" w={'50%'} h={4} top={0} left={0} bgColor={item.projectInfo.color} styleOverride={styles.progressBar} />
+          <Block w={'100%'} h={6} bgColor={theme.backgroundBox} borderRadius={100}>
+            <Block position="absolute" w={'50%'} h={6} top={0} left={0} bgColor={item?.projectInfo.color} styleOverride={styles.progressBar}>
+              <Block w={20} h={20} borderRadius={12} borderWidth={6} borderColor={item?.projectInfo.color} bgColor={theme.background} position="absolute" top={-8} right={-8} />
+            </Block>
           </Block>
           <Spacer height={12} />
           <Block row alignCenter justifyContent="space-between">

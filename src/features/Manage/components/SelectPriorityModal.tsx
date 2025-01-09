@@ -62,17 +62,19 @@ const SelectPriorityModal = ({priority, onSelectPriority, isVisible, onCloseModa
       onModalHide={onCloseModal}
       backdropOpacity={0.4}
     >
-      <Block style={styles.block}>
-        <Spacer height={32} />
-        <Button onPress={onCloseModal} style={styles.buttonClose}>
-          <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
-        </Button>
-        <Spacer height={24} />
-        <Typo text="Priority" preset="b20" color={theme.primaryText} />
-        <Spacer height={32} />
-        {PRIORITIES.map(renderPriorityItem)}
-        <Spacer height={insets.bottom + 16} />
-      </Block>
+      {!!isVisible ? (
+        <Block style={styles.block}>
+          <Spacer height={32} />
+          <Button onPress={onCloseModal} style={styles.buttonClose}>
+            <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
+          </Button>
+          <Spacer height={24} />
+          <Typo text="Priority" preset="b20" color={theme.primaryText} />
+          <Spacer height={32} />
+          {PRIORITIES.map(renderPriorityItem)}
+          <Spacer height={insets.bottom + 16} />
+        </Block>
+      ) : <></>}
     </RNModal>
   );
 };

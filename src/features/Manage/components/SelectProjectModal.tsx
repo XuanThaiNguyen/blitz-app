@@ -61,17 +61,19 @@ const SelectProjectModal = ({isVisible, onCloseModal, projects, onSelectProject,
       onModalHide={onCloseModal}
       backdropOpacity={0.4}
     >
-      <Block style={styles.block}>
-        <Spacer height={32} />
-        <Button onPress={onCloseModal} style={styles.buttonClose}>
-          <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
-        </Button>
-        <Spacer height={24} />
-        <Typo text="Projects" preset="b20" color={theme.primaryText} />
-        <Spacer height={32} />
-        {projects.map(renderProjectItem)}
-        <Spacer height={insets.bottom + 16} />
-      </Block>
+      {!!isVisible ? (
+        <Block style={styles.block}>
+          <Spacer height={32} />
+          <Button onPress={onCloseModal} style={styles.buttonClose}>
+            <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
+          </Button>
+          <Spacer height={24} />
+          <Typo text="Projects" preset="b20" color={theme.primaryText} />
+          <Spacer height={32} />
+          {projects.map(renderProjectItem)}
+          <Spacer height={insets.bottom + 16} />
+        </Block>
+      ) : <></>}
     </RNModal>
   );
 };

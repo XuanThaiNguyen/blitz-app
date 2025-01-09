@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import RNModal from 'react-native-modal';
@@ -7,40 +7,30 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import {Spacer} from '../../../components/Spacer/Spacer';
+import TextField from '../../../components/TextField/TextField';
 import {Typo} from '../../../components/Typo/Typo';
-import {Theme, useTheme} from '../../../context/ThemeProvider';
+import {Theme, ThemeContext} from '../../../context/ThemeProvider';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
-import {STATUSES} from '../constant/Constant';
-import {StatusProps} from '../constant/Model.props';
 
-interface SelectStatusModalProps {
-  status: StatusProps;
-  onSelectStatus: (item: StatusProps) => void;
+interface AddDescriptionModalProps {
   isVisible: boolean;
   onCloseModal: () => void;
+  currentDesc?: string;
+  onAddDesc: (desc: string) => void;
 }
 
-const SelectStatusModal = ({status, onSelectStatus, isVisible, onCloseModal}: SelectStatusModalProps) => {
-  const {theme} = useTheme();
-  const styles = useStyles(theme);
+const AddDescriptionModal = ({isVisible, onCloseModal, currentDesc = '', onAddDesc}: AddDescriptionModalProps) => {
   const insets = useSafeAreaInsets();
+  const {theme} = useContext(ThemeContext);
+  const styles = useStyles(theme);
 
-  const _onSelect = (item: StatusProps) => () => {
-    onSelectStatus(item);
+  const [description, setDescription] = useState<string>(currentDesc);
+
+  const _onAddDesc = () => {
     onCloseModal();
-  };
-
-  const renderStatusItem = (item: StatusProps) => {
-    return (
-      <Button key={item.key} style={styles.buttonItem} onPress={_onSelect(item)}>
-        <Typo text={item.value} color={item.key === status.key ? theme.primaryText : theme.secondaryText} preset={item.key === status.key ? 'b14' : 'r14'} />
-        {item.key === status.key ? (
-          <FastImage source={images.ic_check} style={styles.iconCheck} tintColor={theme.primaryText} />
-        ) : <></>}
-      </Button>
-    );
-  };
+    onAddDesc(description);
+  }
 
   return (
     <RNModal
@@ -62,15 +52,19 @@ const SelectStatusModal = ({status, onSelectStatus, isVisible, onCloseModal}: Se
             <FastImage source={images.ic_close} style={styles.iconClose} tintColor={theme.primaryText} />
           </Button>
           <Spacer height={24} />
-          <Typo text="Priority" preset="b20" color={theme.primaryText} />
+          <Typo text="Add description" preset="b20" color={theme.primaryText} />
           <Spacer height={32} />
-          {STATUSES.map(renderStatusItem)}
+          <Typo text="Description" preset="r14" color={theme.primaryText} />
+          <Spacer height={8} />
+          <TextField value={description} onChangeText={setDescription} placeholder="Enter task description here..." multiline inputHeight={80} blockInputStyle={{alignItems: 'flex-start', paddingTop: 8}} />
+          <Spacer height={32} />
+          <Button preset="primary" text="Add" disabled={description === currentDesc} onPress={_onAddDesc} />
           <Spacer height={insets.bottom + 16} />
         </Block>
       ) : <></>}
     </RNModal>
-  );
-};
+  )
+}
 
 const useStyles = ((theme: Theme) => StyleSheet.create({
   modal: {
@@ -88,20 +82,6 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     backgroundColor: theme.background,
     paddingHorizontal: SpacingDefault.medium,
   },
-  buttonItem: {
-    marginBottom: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  iconFlag: {
-    width: 24,
-    height: 24,
-  },
-  iconCheck: {
-    width: 24,
-    height: 24,
-  },
 }));
 
-export default SelectStatusModal;
+export default AddDescriptionModal

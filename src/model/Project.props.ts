@@ -1,3 +1,4 @@
+import {TagProps} from "./Tag.props";
 import {TaskProps} from "./Task.props";
 
 export enum ProjectStatus {
@@ -25,4 +26,5 @@ export interface ProjectProps {
     title: string;
   };
   tasks?: TaskProps[];
+  tags?: TagProps[];
 }

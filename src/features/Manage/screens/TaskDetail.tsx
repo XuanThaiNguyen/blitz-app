@@ -13,13 +13,14 @@ import {Divider} from '../../../components/Divider/DIvider';
 import Header from '../../../components/Header/Header';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import Modal from '../../../components/Modal';
+import {showSnack} from '../../../components/SnackBar';
 import {Spacer} from '../../../components/Spacer/Spacer';
-import TextField from '../../../components/TextField/TextField';
 import {initMeasure, TOOLTIP_TASK_DETAIL_HEADER_WIDTH} from '../../../components/Tooltip/Constant';
 import Tooltip from '../../../components/Tooltip/Tooltip';
 import {MeasureObject} from '../../../components/Tooltip/Tooltip.prop';
 import {Typo} from '../../../components/Typo/Typo';
 import {useTheme} from '../../../context/ThemeProvider';
+import {TagProps} from '../../../model/Tag.props';
 import {TaskProps} from '../../../model/Task.props';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import {reset} from '../../../navigation/navigationUtil';
@@ -34,35 +35,19 @@ import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
 import {isEmpty} from '../../../utils/handleUtils';
 import TaskPomodoroItem from '../../Pomodoro/components/TaskPomodoroItem';
+import AddDescriptionModal from '../components/AddDescriptionModal';
 import SelectPriorityModal from '../components/SelectPriorityModal';
+import SelectTagModal from '../components/SelectTagModal';
 import SelectTimeModal from '../components/SelectTimeModal';
 import UpdateTaskItem from '../components/UpdateTaskItem';
 import {PriorityProps, PriorityTask} from '../constant/Model.props';
-
-const TAGS = [
-  {
-    key: 'Work',
-    color: '#1B97F0',
-  },
-  {
-    key: 'Design',
-    color: '#8CC356',
-  },
-  {
-    key: 'Productive',
-    color: '#9E2AAD',
-  },
-  {
-    key: 'Productiveeee',
-    color: '#9E2AAD',
-  },
-];
 
 const TaskDetail = () => {
   const insets = useSafeAreaInsets();
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.TaskDetail>>();
   const {dispatch} = useNavigation<NavigationProp<MainStackScreenProps>>();
   const {taskId = '', times = 1, project} = route.params;
+
   const popActions = StackActions.pop(times);
   const {theme} = useTheme();
   const refMeasure = useRef<any>(null);
@@ -72,13 +57,19 @@ const TaskDetail = () => {
 
   const [measure, setMeasure] = useState<MeasureObject>(initMeasure);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [tags] = useState(TAGS);
-  const [note, setNote] = useState('');
   const [isPriorityVisible, setIsPriorityVisible] = useState(false);
   const [isTimeVisible, setIsTimeVisible] = useState(false);
+  const [isDescVisible, setIsDescVisible] = useState(false);
+  const [isTagVisible, setIsTagVisible] = useState(false);
 
   const openPriorityModal = () => setIsPriorityVisible(true);
   const closePriorityModal = () => setIsPriorityVisible(false);
+
+  const openDescModal = () => setIsDescVisible(true);
+  const closeDescModal = () => setIsDescVisible(false);
+
+  const openTagModal = () => setIsTagVisible(true);
+  const closeTagModal = () => setIsTagVisible(false);
 
   const openTimeModal = () => {
     setIsTimeVisible(true);
@@ -164,10 +155,15 @@ const TaskDetail = () => {
     );
   };
 
-  const renderTag = (item: any) => {
+  const onRemoveTag = (tagId: string) => () => {
+    const selectedTags = task?.tags?.filter(ele => ele !== tagId);
+    onUpdateTask({tags: selectedTags});
+  }
+
+  const renderTag = (item: TagProps, index: number) => {
     return (
       <Block
-        key={item.key}
+        key={`${item.name}-${item.color}-${index}`}
         row
         styleOverride={{marginBottom: 12, marginRight: SpacingDefault.small}}
         alignCenter
@@ -176,9 +172,11 @@ const TaskDetail = () => {
         borderWidth={1}
         borderColor={item.color}
         borderRadius={100}>
-        <Typo text={`#${item.key}`} color={item.color} preset="b14" />
-        {/* <Spacer width={'tiny'} /> */}
-        <FastImage source={images.ic_add} style={{width: 24, height: 24, transform: [{rotate: '45deg'}]}} tintColor={theme.primaryText} />
+        <Typo text={`#${item.name}`} color={item.color} preset="b14" />
+        <Spacer width={'tiny'} />
+        <Button onPress={onRemoveTag(item._id)}>
+          <FastImage source={images.ic_close} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
+        </Button>
       </Block>
     );
   };
@@ -253,20 +251,30 @@ const TaskDetail = () => {
       if (data.status === ApiStatus.OK && !isEmpty(data.data)) {
         setTask(data.data);
         setTimeout(() => {
-          alertBottomModal({
-            title: 'Success',
-            message: 'Update Task Successfully',
-            status: 'success',
-            dismissable: true,
-            onCustomXPress: () => {
-              DeviceEventEmitter.emit(EmitterKeys.RELOAD_TASKS);
-            },
-          });
+          DeviceEventEmitter.emit(EmitterKeys.RELOAD_TASKS);
+          showSnack({msg: 'Update Task Successfully', type: 'success', position: 'top_under_header'});
         }, 500);
       }
     } catch (err) {
       console.log('err', err);
     }
+  };
+
+  const renderTags = () => {
+    const matchingTags = task?.availableTags.filter(obj => task?.tags.includes(obj._id));
+
+    return (
+      <Block mHoz={SpacingDefault.medium}>
+        <Typo text="Tags" preset="b16" color={theme.primaryText} />
+        <Spacer height={16} />
+        <Block row flexWrap="wrap">
+          {matchingTags && matchingTags?.length > 0 ? matchingTags.map(renderTag) : <></>}
+          <Button onPress={openTagModal} style={{height: 26, width: 48, borderRadius: 100, borderWidth: StyleSheet.hairlineWidth, borderColor: theme.secondaryText, alignItems: 'center', justifyContent: 'center'}}>
+            <FastImage source={images.ic_close} style={{width: 16, height: 16, transform: [{rotate: '45deg'}]}} tintColor={theme.primaryText} />
+          </Button>
+        </Block>
+      </Block>
+    )
   };
 
   if (isEmpty(task) || isEmpty(taskId)) {
@@ -291,13 +299,31 @@ const TaskDetail = () => {
             <Divider />
             <UpdateTaskItem iconTitle={images.ic_planned} title={'Due Date'} value={task?.timing.endDate && task.timing.startDate ? `${formatDate(task.timing.startDate, DATE_FORMAT.FIRST)} - ${formatDate(task.timing.endDate, DATE_FORMAT.FIRST)}` : (!task?.timing.endDate && task?.timing.startDate) ? formatDate(task.timing.startDate, DATE_FORMAT.FIRST) : NONE_VALUE} onUpdateTask={openTimeModal} />
             <Divider />
-            {/* <UpdateTaskItem iconTitle={images.ic_today} title={'Start Date'} value={!isEmpty(task?.timing.startDate) ? formatDate(task?.timing.startDate!, DATE_FORMAT.FIVE) : NONE_VALUE} onUpdateTask={openTimeModal('start')} />
-            <Divider />
-            <UpdateTaskItem iconTitle={images.ic_today} title={'End Date'} value={!isEmpty(task?.timing.endDate) ? formatDate(task?.timing.endDate!, DATE_FORMAT.FIVE) : NONE_VALUE} onUpdateTask={openTimeModal('end')} />
-            <Divider /> */}
             <UpdateTaskItem iconTitle={images.ic_tomorrow} title={'Priority'} value={task?.priority || PriorityTask.LOW} onUpdateTask={openPriorityModal} />
             <Divider />
             <UpdateTaskItem iconTitle={images.ic_project} title={'Project'} value={project?.projectInfo?.title || NONE_VALUE} canUpdate={false} />
+            <Divider />
+            <Block row alignCenter justifyContent="space-between" pTop={16}>
+              <Block row alignCenter>
+                <FastImage source={images.ic_document} style={{width: 16, height: 16}} tintColor={theme.primaryText} />
+                <Spacer width={'small'} />
+                <Typo text={'Description'} color={theme.primaryText} preset="r16" />
+              </Block>
+              <Button onPress={openDescModal}>
+                {!isEmpty(task?.description) ? (
+                  <FastImage source={images.ic_edit} style={{width: 16, height: 16}} tintColor={theme.primaryText} />
+                ) : (
+                  <Typo text="Thêm mô tả" color={colors.primary} preset="b16" />
+                )}
+              </Button>
+            </Block>
+            {!isEmpty(task?.description) ? (
+              <>
+                <Spacer height={8} />
+                <Typo text={task?.description || ''} color={theme.primaryText} preset="r16" />
+                <Spacer height={16} />
+              </>
+            ) : <Spacer height={16} />}
           </Block>
           <Spacer height={16} />
           <Block
@@ -312,30 +338,7 @@ const TaskDetail = () => {
             </Button>
           </Block>
           <Spacer height={32} />
-          <Block mHoz={SpacingDefault.medium}>
-            <Typo text="Tags" preset="b16" color={theme.primaryText} />
-            <Spacer height={16} />
-            <Block row flexWrap="wrap">
-              {tags.map(renderTag)}
-              {/* <Button style={{paddingVertical: 4, paddingHorizontal: SpacingDefault.small, borderWidth: 1, borderColor: theme.secondaryText, borderRadius: 100}} onPress={() => { }}>
-              <FastImage source={images.ic_add} style={{width: 24, height: 24}} tintColor={theme.primaryText} />
-            </Button> */}
-            </Block>
-          </Block>
-          <Spacer height={32} />
-          <Block mHoz={SpacingDefault.medium}>
-            <Typo text="Add a note" preset="b16" color={theme.primaryText} />
-            <Spacer height={16} />
-            <TextField
-              value={note}
-              onChangeText={setNote}
-              inputHeight={100}
-              placeholder="Add note here..."
-              multiline
-              blockInputStyle={{alignItems: 'flex-start'}}
-              inputStyle={{paddingVertical: 12, paddingHorizontal: SpacingDefault.tiny, alignItems: 'flex-start'}}
-            />
-          </Block>
+          {renderTags()}
           <Spacer height={32} />
           <Block mHoz={SpacingDefault.medium}>
             <Typo text="Add attachment" preset="b16" color={theme.primaryText} />
@@ -347,9 +350,24 @@ const TaskDetail = () => {
         </Block>
       </ScrollView>
 
-      <SelectPriorityModal priority={task?.priority || PriorityTask.LOW} onSelectPriority={(_priority: PriorityProps) => onUpdateTask({priority: _priority.key})} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
+      <SelectTagModal
+        projectId={project._id}
+        tags={project.tags || []}
+        currentTags={task?.availableTags.filter(obj => task?.tags.includes(obj._id))?.map(item => item._id)}
+        onSelectTag={(tags: string[]) => onUpdateTask({tags})}
+        isVisible={isTagVisible}
+        onCloseModal={closeTagModal} />
+      <AddDescriptionModal
+        currentDesc={task?.description || ''}
+        isVisible={isDescVisible}
+        onCloseModal={closeDescModal}
+        onAddDesc={(_desc: string) => onUpdateTask({description: _desc})} />
+      <SelectPriorityModal
+        priority={task?.priority || PriorityTask.LOW}
+        onSelectPriority={(_priority: PriorityProps) => onUpdateTask({priority: _priority.key})}
+        isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
       <SelectTimeModal
-        minDate={new Date()}
+        minDate={formatDate(new Date(), DATE_FORMAT.FOUR)}
         title={'Select Due Date'}
         mode="multiple"
         isVisible={isTimeVisible}

@@ -2,6 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 
+import {SnackBar} from '../components/SnackBar';
 import MainStack from './MainStack';
 import {navigationRef} from './navigationUtil';
 import Screen from './Screen';
@@ -11,7 +12,7 @@ const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
   return (
     <NavigationContainer ref={navigationRef}>
-      {/* <SnackBar /> */}
+      <SnackBar />
       <Stack.Navigator>
         <Stack.Screen
           name={Screen.RootStack}

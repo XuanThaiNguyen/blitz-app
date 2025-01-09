@@ -17,21 +17,28 @@ import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
 import {getColorsByPriority} from '../../../utils/handleStyle';
+import {isEmpty} from '../../../utils/handleUtils';
 
 interface TaskItemProps {
   item: TaskProps;
   style?: StyleProp<ViewStyle>;
   onCustomPress?: () => void;
   projects: ProjectProps[];
+  project?: ProjectProps | null;
 }
 
-const TaskItem = ({item, style, projects, onCustomPress}: TaskItemProps) => {
+const TaskItem = ({item, style, projects, onCustomPress, project}: TaskItemProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
   const user = useSelector((_state: AppState) => _state.user.user);
 
   const onTaskDetail = () => {
-    const _project = projects?.find((project: ProjectProps) => project._id === item.projectId);
+    let _project;
+    if (!isEmpty(project)) {
+      _project = project;
+    } else {
+      _project = projects?.find((project: ProjectProps) => project._id === item.projectId);
+    }
     navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id, project: _project});
     onCustomPress?.();
   };

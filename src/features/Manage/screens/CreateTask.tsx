@@ -42,7 +42,7 @@ const CreateTask = () => {
   const insets = useSafeAreaInsets();
   const {navigate, goBack} = useNavigation<NavigationProp<MainStackScreenProps>>();
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.CreateTask>>();
-  const {projectId = ''} = route.params;
+  const projectId = route.params?.projectId || '';
 
   const {
     control,
@@ -125,8 +125,8 @@ const CreateTask = () => {
     setStatus(item);
   };
 
-  const onSelectTag = (item: string) => {
-    setTags(prev => ([...prev, item]));
+  const onSelectTag = (tags: string[]) => {
+    setTags(tags);
   };
 
   const onSelectTime = (date: {startDate: Date, endDate: Date}) => {
@@ -149,13 +149,15 @@ const CreateTask = () => {
       _timing.endDate = moment(endDate).endOf('day').toDate();
     }
     // estimation: getEstimationDays(endDate),
-    const params = {
+    const params: any = {
       title: getValues().title,
       timing: _timing,
       priority: priority.key,
       projectId: project?._id,
     };
-    console.log('params', params);
+    if (tags.length > 0) {
+      params.tags = tags;
+    }
 
     try {
       const {data} = await createTask(params);
@@ -242,7 +244,7 @@ const CreateTask = () => {
       <Spacer height={insets.bottom + 16} />
 
       <SelectTimeModal
-        minDate={new Date()}
+        minDate={formatDate(new Date(), DATE_FORMAT.FOUR)}
         title={'Select Due Date'}
         mode="multiple"
         isVisible={isTimeVisible}
@@ -250,7 +252,7 @@ const CreateTask = () => {
         onSelectTime={onSelectTime} />
       <SelectPriorityModal priority={priority.key} onSelectPriority={onSelectPriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
       <SelectStatusModal status={status} onSelectStatus={onSelectStatus} isVisible={isStatusVisible} onCloseModal={closeStatusModal} />
-      <SelectTagModal tags={tags} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />
+      <SelectTagModal tags={project?.tags || []} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />
       <SelectProjectModal selectedProject={project} projects={projects} onSelectProject={onSelectProject} isVisible={isProjectVisible} onCloseModal={closeProjectModal} />
     </Container>
   );

@@ -68,6 +68,7 @@ const TextField = ({
         )}
         <Spacer width="small" />
         <TextInput
+          autoCorrect={false}
           placeholder={placeholder}
           onBlur={onBlur}
           multiline={multiline}
