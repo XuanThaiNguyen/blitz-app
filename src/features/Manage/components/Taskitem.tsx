@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
 
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
+import {Divider} from '../../../components/Divider/DIvider';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import {Typo} from '../../../components/Typo/Typo';
 import {Theme, useTheme} from '../../../context/ThemeProvider';
@@ -32,14 +33,18 @@ const TaskItem = ({item, style, projects, onCustomPress, project}: TaskItemProps
   const styles = useStyles(theme);
   const user = useSelector((_state: AppState) => _state.user.user);
 
-  const onTaskDetail = () => {
+  const projectOfTask = useMemo(() => {
     let _project;
     if (!isEmpty(project)) {
       _project = project;
     } else {
       _project = projects?.find((project: ProjectProps) => project._id === item.projectId);
     }
-    navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id, project: _project});
+    return _project;
+  }, [])
+
+  const onTaskDetail = () => {
+    navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id, project: projectOfTask});
     onCustomPress?.();
   };
 
@@ -55,25 +60,19 @@ const TaskItem = ({item, style, projects, onCustomPress, project}: TaskItemProps
 
   return (
     <Button style={[styles.buttonTask, style, {borderLeftColor: getColorsByPriority({priority: item.priority})}]} onPress={onTaskDetail}>
-      <Block row alignCenter justifyContent="space-between">
-        <FastImage source={{uri: user?.profileInfo?.avatar}} style={{width: 24, height: 24, borderRadius: 12}} />
-        <Block row alignCenter>
-          <Typo text="1" preset="r14" color={theme.secondaryText} />
-          <Spacer width={'tiny'} />
-          <FastImage source={images.ic_document} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
-          <Spacer width={'small'} />
-          <Typo text="2" preset="r14" color={theme.secondaryText} />
-          <Spacer width={'tiny'} />
-          <FastImage source={images.ic_comment} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
-        </Block>
-      </Block>
-      <Spacer height={12} />
       <Typo flex text={item.title} numberOfLines={2} color={theme.primaryText} preset="b16" />
       <Spacer height={4} />
-      <Block row alignCenter>
-        <FastImage source={images.ic_calendar} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
-        <Spacer width={'smaller'} />
-        {renderTime()}
+      <Typo flex text={projectOfTask?.projectInfo.title} numberOfLines={2} color={theme.secondaryText} preset="r14" />
+      <Spacer height={12} />
+      <Divider />
+      <Spacer height={12} />
+      <Block row alignCenter justifyContent="space-between">
+        <Block row alignCenter>
+          <FastImage source={images.ic_calendar} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
+          <Spacer width={'smaller'} />
+          {renderTime()}
+        </Block>
+        <FastImage source={{uri: user?.profileInfo?.avatar}} style={{width: 24, height: 24, borderRadius: 12}} />
       </Block>
     </Button>
   );
@@ -84,7 +83,7 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     borderLeftWidth: 4,
     paddingHorizontal: SpacingDefault.normal,
     paddingVertical: 16,
-    borderRadius: 6,
+    borderRadius: 12,
     backgroundColor: theme.background,
     shadowColor: 'rgba(0, 0, 0, 0.4)',
     shadowOffset: {

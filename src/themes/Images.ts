@@ -37,6 +37,8 @@ const images = {
   ic_document: require('../assets/images/ic_document.webp'),
   ic_comment: require('../assets/images/ic_comment.webp'),
   ic_members: require('../assets/images/ic_members.webp'),
+  ic_save: require('../assets/images/ic_save.webp'),
+  ic_delete: require('../assets/images/ic_delete.png'),
 
   //tabs
   tabs: {
@@ -44,6 +46,8 @@ const images = {
     ic_main_tab_manage_inactive: require('../assets/images/tabs/ic_main_tab_manage_inactive.png'),
     ic_main_tab_profile_active: require('../assets/images/tabs/ic_main_tab_profile_active.png'),
     ic_main_tab_profile_inactive: require('../assets/images/tabs/ic_main_tab_profile_inactive.png'),
+    ic_main_tab_bg: require('../assets/images/tabs/ic_main_tab_bg.webp'),
+    ic_main_tab_bg_dark: require('../assets/images/tabs/ic_main_tab_bg_dark.webp'),
   },
 };
 

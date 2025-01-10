@@ -174,10 +174,13 @@ const Manage = () => {
             </Button>
           )}
           <Spacer width={'small'} />
-          <Button style={styles.buttonSearch} onPress={onSearchTask}>
-            <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.secondaryText} />
-            <Spacer width={'small'} />
-            <Typo text="Search" preset="r16" color={theme.secondaryText} />
+          <Block block>
+            <Typo text={user?.profileInfo?.fullname} preset="b16" color={theme.primaryText} />
+            <Spacer height={4} />
+            <Typo text="You have 4 tasks today!" preset="r14" color={theme.secondaryText} />
+          </Block>
+          <Button onPress={onSearchTask}>
+            <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.primaryText} />
           </Button>
           <Spacer width={'small'} />
           <Button>
@@ -198,13 +201,15 @@ const Manage = () => {
         <Block h={mainScrollViewHeight}>
           <Block block>
             <Spacer height={12} />
-            <Typo text="Tasks" preset="b14" color={theme.primaryText} style={{marginLeft: SpacingDefault.normal}} />
+            <Block paddingHorizontal={SpacingDefault.normal}>
+              <Typo text="Tasks" preset="b16" color={theme.primaryText} />
+            </Block>
             <Spacer height={12} />
             <FlatList
               showsVerticalScrollIndicator={false}
               nestedScrollEnabled
               bounces={false}
-              contentContainerStyle={{paddingTop: 12}}
+              contentContainerStyle={styles.flatlistContainer}
               data={data.tasks}
               ListEmptyComponent={renderEmpty}
               keyExtractor={item => item._id}
@@ -213,7 +218,7 @@ const Manage = () => {
         </Block>
       </ScrollView>
 
-      <Button style={styles.buttonAdd} onPress={onShowTooltip}>
+      {/* <Button style={styles.buttonAdd} onPress={onShowTooltip}>
         <Block ref={refMeasure}>
           <FastImage source={images.ic_add} style={styles.iconAdd} tintColor={colors.white} />
           {measure ? (
@@ -263,7 +268,7 @@ const Manage = () => {
           ) : <></>
           }
         </Block>
-      </Button>
+      </Button> */}
     </Container>
   );
 };
@@ -305,8 +310,8 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     paddingHorizontal: SpacingDefault.small,
   },
   iconSearch: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
   },
   buttonAvatar: {
     width: 36,
@@ -323,20 +328,20 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   },
   taskItem: {
     marginBottom: 16,
-    marginHorizontal: SpacingDefault.medium,
+    marginHorizontal: SpacingDefault.normal,
   },
   buttonAddItem: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  flatlistContainer: {
-    paddingHorizontal: SpacingDefault.medium,
   },
   iconEmpty: {
     width: 124,
     height: 124,
     alignSelf: 'center',
   },
+  flatlistContainer: {
+    paddingTop: 12
+  }
 }));
 
 export default Manage;

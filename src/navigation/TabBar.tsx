@@ -21,6 +21,11 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
           icon: images.tabs.ic_main_tab_manage_active,
           name: 'Manage',
         };
+      case Screen.CreateTask:
+        return {
+          icon: images.ic_close,
+          name: 'CreateTask',
+        };
       case Screen.Profile:
         return {
           icon: images.tabs.ic_main_tab_profile_active,
@@ -38,6 +43,11 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
         return {
           icon: images.tabs.ic_main_tab_manage_inactive,
           name: 'Manage',
+        };
+      case Screen.CreateTask:
+        return {
+          icon: images.ic_close,
+          name: 'CreateTask',
         };
       case Screen.Profile:
         return {
@@ -57,7 +67,7 @@ const TabBar = (props: any) => {
   const insets = useSafeAreaInsets();
   const {navigation, state} = props || {};
   const {routes = [], index: activeTabIndex} = state || {};
-  const {theme} = useTheme();
+  const {theme, isDark} = useTheme();
   const styles = useStyles(theme);
 
   const onNavigateTab = (routeName: Screen) => () => {
@@ -83,12 +93,36 @@ const TabBar = (props: any) => {
           conditionalStyle(routeIndex !== 0, {marginLeft: SpacingDefault.small}),
         ]}
         onPress={onNavigateTab(route?.name)}>
-        <FastImage
-          resizeMode="contain"
-          source={tabbarInfo.icon}
-          tintColor={!isRouteActive ? theme.secondaryText : colors.primary}
-          style={styles.iconTabBar}
-        />
+        {routeIndex === 1
+          ? (
+            <>
+              <Block style={styles.iconTabBar} />
+              <Block
+                h={40}
+                w={40}
+                center
+                position="absolute"
+                bottom={24}
+                bgColor={colors.primary}
+                borderRadius={24} >
+                <FastImage
+                  resizeMode="contain"
+                  source={tabbarInfo.icon}
+                  tintColor={colors.white}
+                  style={[styles.iconTabBar, {transform: [{rotate: '45deg'}]}]}
+                />
+              </Block>
+            </>
+          )
+          : (
+            <FastImage
+              resizeMode="contain"
+              source={tabbarInfo.icon}
+              tintColor={!isRouteActive ? theme.secondaryText : colors.primary}
+              style={styles.iconTabBar}
+            />
+          )
+        }
         <Spacer height={4} />
         <Typo
           preset={isRouteActive ? 'b10' : 'r10'}
@@ -109,6 +143,12 @@ const TabBar = (props: any) => {
       bgColor={theme.background}
       styleOverride={styles.boxShadow}
     >
+      <Block pointerEvents="none" style={styles.vBg}>
+        <FastImage
+          source={isDark ? images.tabs.ic_main_tab_bg_dark : images.tabs.ic_main_tab_bg}
+          resizeMode="cover"
+          style={styles.imgBg} />
+      </Block>
       {routes.map(renderTab)}
     </Block>
   );
@@ -130,6 +170,16 @@ const useStyles = (theme: Theme) => StyleSheet.create({
     paddingHorizontal: SpacingDefault.normal,
     borderTopWidth: 1,
     borderTopColor: theme.divider,
+  },
+  vBg: {
+    position: 'absolute',
+    width: SpacingDefault.width,
+    aspectRatio: 392 / 98,
+    top: -(SpacingDefault.width * (17 / 392))
+  },
+  imgBg: {
+    width: '100%',
+    height: '100%'
   },
 });
 

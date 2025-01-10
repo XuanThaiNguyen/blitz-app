@@ -49,7 +49,9 @@ const ProjectItem = ({item, index, scrollX, isLastIndex}: ProjectItemProps) => {
       marginLeft: index === 0 ? SPACING_BETWEEN_CARD : undefined,
       marginRight: isLastIndex ? SPACING_BETWEEN_CARD : undefined,
       overflow: 'hidden',
-      backgroundColor: theme.background
+      backgroundColor: theme.background,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: theme.divider,
     }, translateStyle]}>
       <Button onPress={onProjectDetail}>
         <FastImage source={images.project_cover_default} style={styles.cover} resizeMode="cover" />

@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import {Block} from '../../../components/Block/Block';
+import Container from '../../../components/Container/Container';
 import Header from '../../../components/Header/Header';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
@@ -17,18 +18,20 @@ const Profile = () => {
   const {theme} = useTheme();
 
   return (
-    <Block block paddingHorizontal={SpacingDefault.medium} bgColor={theme.background}>
+    <Container>
       <InsetSubstitute />
       <Header titleHeader="Profile" />
       <Spacer height={16} />
-      <Block alignCenter>
-        <FastImage source={{uri: user?.profileInfo.avatar || ''}} style={styles.avatar} />
+      <Block paddingHorizontal={SpacingDefault.normal}>
+        <Block alignCenter>
+          <FastImage source={{uri: user?.profileInfo.avatar || ''}} style={styles.avatar} />
+        </Block>
+        <Spacer height={24} />
+        <TextField title="Full Name" value={user?.profileInfo.fullname || ''} editable={false} />
+        <Spacer height={16} />
+        <TextField title="Email" value={user?.profileInfo.email || ''} editable={false} />
       </Block>
-      <Spacer height={24} />
-      <TextField title="Full Name" value={user?.profileInfo.fullname || ''} editable={false} />
-      <Spacer height={16} />
-      <TextField title="Email" value={user?.profileInfo.email || ''} editable={false} />
-    </Block>
+    </Container>
   );
 };
 

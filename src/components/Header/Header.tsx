@@ -33,7 +33,7 @@ const Header = ({titleHeader, color, renderRight, onPressLeft}: HeaderProps) => 
   };
 
   return (
-    <Block row alignCenter justifyContent="space-between" h={52} paddingHorizontal={SpacingDefault.medium}>
+    <Block row alignCenter justifyContent="space-between" h={52} paddingHorizontal={SpacingDefault.normal}>
       <Button onPress={_onBack} style={styles.button}>
         <FastImage source={images.ic_left} style={styles.iconLeft} tintColor={_color} />
         <Spacer width={'smaller'} />

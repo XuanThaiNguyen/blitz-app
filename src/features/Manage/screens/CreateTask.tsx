@@ -1,16 +1,15 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {NavigationProp, RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {DeviceEventEmitter, Keyboard, TouchableWithoutFeedback} from 'react-native';
+import {DeviceEventEmitter, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container/Container';
-import Header from '../../../components/Header/Header';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import TextField from '../../../components/TextField/TextField';
@@ -27,6 +26,7 @@ import colors from '../../../themes/Colors';
 import {NONE_VALUE} from '../../../themes/Constant';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
+import {conditionalStyle} from '../../../utils/handleStyle';
 import {isEmpty} from '../../../utils/handleUtils';
 import SelectOption from '../components/SelectOption';
 import SelectPriorityModal from '../components/SelectPriorityModal';
@@ -36,6 +36,10 @@ import SelectTagModal from '../components/SelectTagModal';
 import SelectTimeModal from '../components/SelectTimeModal';
 import {initialCreateTaskForm, PRIORITIES, STATUSES, validationCreateTaskSchema} from '../constant/Constant';
 import {CreateTaskFormProps, PriorityProps, StatusProps} from '../constant/Model.props';
+
+export type DynamicCreateType = 'task' | 'project' | 'tag';
+
+const HEADERS: DynamicCreateType[] = ['task', 'project', 'tag'];
 
 const CreateTask = () => {
   const {theme} = useTheme();
@@ -138,6 +142,14 @@ const CreateTask = () => {
     }
   };
 
+  const onCreateProject = () => {
+    navigate(Screen.CreateProject);
+  }
+
+  const onCreateTag = () => {
+    navigate(Screen.CreateTag, {});
+  }
+
   const onCreateTask = async () => {
     setLoading(true);
     let _timing: any = {};
@@ -205,11 +217,43 @@ const CreateTask = () => {
     setEndDate(null);
   };
 
-
   return (
     <Container>
       <InsetSubstitute />
-      <Header titleHeader="Create Task" />
+      <Block row h={52} mHoz={SpacingDefault.normal}>
+        <Button block >
+          <Block
+            borderWidth={1}
+            borderColor={theme.divider}
+            block
+            bgColor={theme.backgroundBox}
+            center
+            styleOverride={styles.leftTabHeader}>
+            <Typo preset="b14" color={theme.primaryText} text="Task" />
+          </Block>
+        </Button>
+        <Button block onPress={onCreateProject}>
+          <Block
+            center
+            borderWidth={1}
+            borderColor={theme.divider}
+            block
+            bgColor="transparent">
+            <Typo preset="b14" color={theme.primaryText} text="Project" />
+          </Block>
+        </Button>
+        <Button block onPress={onCreateTag}>
+          <Block
+            center
+            borderWidth={1}
+            borderColor={theme.divider}
+            block
+            bgColor="transparent"
+            styleOverride={styles.rightTabHeader}>
+            <Typo preset="b14" color={theme.primaryText} text="Tag" />
+          </Block>
+        </Button>
+      </Block>
       <Spacer height={24} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Block block paddingHorizontal={SpacingDefault.medium}>
@@ -229,7 +273,6 @@ const CreateTask = () => {
               />
             )}
           />
-          {/* <TextField value={title} placeholder={'Enter task name'} onChangeText={setTitle} /> */}
           <Spacer height={16} />
           <SelectOption title="Project" value={project?.projectInfo.title || ''} onSelect={openProjectModal} isOptional={false} />
           <Spacer height={16} />
@@ -241,7 +284,7 @@ const CreateTask = () => {
         </Block>
       </TouchableWithoutFeedback>
       <Button mHoz={SpacingDefault.medium} preset="primary" text="Create Task" onPress={handleSubmit(onCreateTask)} loading={loading} />
-      <Spacer height={insets.bottom + 16} />
+      <Spacer height={32} />
 
       <SelectTimeModal
         minDate={formatDate(new Date(), DATE_FORMAT.FOUR)}
@@ -255,6 +298,45 @@ const CreateTask = () => {
       <SelectTagModal tags={project?.tags || []} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />
       <SelectProjectModal selectedProject={project} projects={projects} onSelectProject={onSelectProject} isVisible={isProjectVisible} onCloseModal={closeProjectModal} />
     </Container>
+  );
+};
+
+const styles = StyleSheet.create({
+  leftTabHeader: {
+    borderTopStartRadius: 4,
+    borderBottomStartRadius: 4
+  },
+  rightTabHeader: {
+    borderTopEndRadius: 4,
+    borderBottomEndRadius: 4,
+    borderStartWidth: 0
+  }
+})
+
+type IProps = {
+  type: DynamicCreateType;
+  onPress: (_value: DynamicCreateType, _index: number) => void;
+  title: string;
+  isActive: boolean;
+  index: number;
+};
+
+const Item = ({type, onPress, title, isActive, index}: IProps) => {
+  const {theme} = useTheme();
+
+  return (
+    <Button
+      hitSlop={10}
+      isDebounce
+      debounceTime={300}
+      onPress={() => onPress(type, index)}
+      style={conditionalStyle(index !== 2, {marginRight: SpacingDefault.normal})}
+    >
+      <Typo
+        color={isActive ? theme.primaryText : theme.secondaryText}
+        preset={isActive ? 'b16' : 'r16'}
+        text={title} />
+    </Button>
   );
 };
 

@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import Animated, {AnimationCallback, Easing, useDerivedValue, useSharedValue, withTiming, WithTimingConfig} from "react-native-reanimated";
+import Animated, {AnimationCallback, Easing, ExtrapolationType, interpolate, interpolateColor, useDerivedValue, useSharedValue, withTiming, WithTimingConfig} from "react-native-reanimated";
 
 export const sharedTiming = (
   toValue: number,
@@ -42,4 +42,23 @@ export const useSharedTransition = (
 export const sharedBin = (value: boolean): 0 | 1 => {
   'worklet';
   return value ? 1 : 0;
+};
+
+export const useInterpolate = (
+  progress: Animated.SharedValue<number>,
+  input: number[],
+  output: number[],
+  type?: ExtrapolationType
+) => useDerivedValue(() => interpolate(progress.value, input, output, type));
+
+export const useInterpolateColor = (
+  progress: Animated.SharedValue<number>,
+  input: number[],
+  output: (string)[],
+  colorSpace?: 'RGB' | 'HSV' | undefined
+) => {
+  'worklet';
+  return useDerivedValue(() =>
+    interpolateColor(progress.value, input, output, colorSpace)
+  );
 };

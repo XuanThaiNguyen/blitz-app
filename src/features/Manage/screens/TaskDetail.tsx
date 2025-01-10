@@ -8,6 +8,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
+import Checkbox from '../../../components/Checkbox/Checkbox';
 import Container from '../../../components/Container/Container';
 import {Divider} from '../../../components/Divider/DIvider';
 import Header from '../../../components/Header/Header';
@@ -36,11 +37,12 @@ import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
 import {isEmpty} from '../../../utils/handleUtils';
 import TaskPomodoroItem from '../../Pomodoro/components/TaskPomodoroItem';
 import AddDescriptionModal from '../components/AddDescriptionModal';
+import AddSubTaskModal from '../components/AddSubTaskModal';
 import SelectPriorityModal from '../components/SelectPriorityModal';
 import SelectTagModal from '../components/SelectTagModal';
 import SelectTimeModal from '../components/SelectTimeModal';
 import UpdateTaskItem from '../components/UpdateTaskItem';
-import {PriorityProps, PriorityTask} from '../constant/Model.props';
+import {PriorityProps, PriorityTask, StatusTask} from '../constant/Model.props';
 
 const TaskDetail = () => {
   const insets = useSafeAreaInsets();
@@ -61,9 +63,13 @@ const TaskDetail = () => {
   const [isTimeVisible, setIsTimeVisible] = useState(false);
   const [isDescVisible, setIsDescVisible] = useState(false);
   const [isTagVisible, setIsTagVisible] = useState(false);
+  const [isSubTaskVisible, setIsSubTaskVisible] = useState(false);
 
   const openPriorityModal = () => setIsPriorityVisible(true);
   const closePriorityModal = () => setIsPriorityVisible(false);
+
+  const openSubTaskModal = () => setIsSubTaskVisible(true);
+  const closeSubTaskModal = () => setIsSubTaskVisible(false);
 
   const openDescModal = () => setIsDescVisible(true);
   const closeDescModal = () => setIsDescVisible(false);
@@ -140,11 +146,11 @@ const TaskDetail = () => {
           >
             <Block paddingHorizontal={SpacingDefault.smaller} paddingVertical={8}>
               <Button style={styles.buttonDelete} onPress={onDeleteTask}>
-                <FastImage source={images.ic_add} style={styles.iconDelete} tintColor={colors.red} />
-                <Spacer width={'smaller'} />
+                <FastImage source={images.ic_delete} style={styles.iconDelete} tintColor={colors.red} />
+                <Spacer width={'small'} />
                 <Typo
                   color={theme.primaryText}
-                  preset="b14"
+                  preset="b16"
                   text={'Delete'} />
               </Button>
             </Block>
@@ -295,8 +301,8 @@ const TaskDetail = () => {
             paddingHorizontal={SpacingDefault.normal}
             bgColor={theme.backgroundBox}
             borderRadius={12}>
-            <UpdateTaskItem iconTitle={images.ic_pomodoro} title={'Pomodoro'} value={'4'} />
-            <Divider />
+            {/* <UpdateTaskItem iconTitle={images.ic_pomodoro} title={'Pomodoro'} value={'4'} />
+            <Divider /> */}
             <UpdateTaskItem iconTitle={images.ic_planned} title={'Due Date'} value={task?.timing.endDate && task.timing.startDate ? `${formatDate(task.timing.startDate, DATE_FORMAT.FIRST)} - ${formatDate(task.timing.endDate, DATE_FORMAT.FIRST)}` : (!task?.timing.endDate && task?.timing.startDate) ? formatDate(task.timing.startDate, DATE_FORMAT.FIRST) : NONE_VALUE} onUpdateTask={openTimeModal} />
             <Divider />
             <UpdateTaskItem iconTitle={images.ic_tomorrow} title={'Priority'} value={task?.priority || PriorityTask.LOW} onUpdateTask={openPriorityModal} />
@@ -330,8 +336,31 @@ const TaskDetail = () => {
             mHoz={SpacingDefault.medium}
             paddingHorizontal={SpacingDefault.normal}
             bgColor={theme.backgroundBox}
+            paddingVertical={16}
             borderRadius={12}>
-            <Button style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 16}}>
+            {task?.subTasks && task?.subTasks?.length > 0 ? task?.subTasks.map((subTask) => (
+              <Block key={subTask._id}>
+                <Block row alignCenter justifyContent="space-between">
+                  <Typo text={subTask.title} preset="b16" color={subTask.status === StatusTask.Done ? theme.secondaryText : theme.primaryText} style={{textDecorationLine: subTask.status === StatusTask.Done ? 'line-through' : 'none'}} />
+                  <Checkbox
+                    checked={subTask.status === StatusTask.Done}
+                    onChange={(checked: boolean) => {
+                      let newSubTasks = task?.subTasks ? [...task.subTasks] : [];
+                      const subtaskIndex = newSubTasks?.findIndex((_subTask) => _subTask.title === subTask.title);
+                      if (subtaskIndex !== -1) {
+                        newSubTasks[subtaskIndex] = {
+                          ...newSubTasks[subtaskIndex],
+                          status: checked ? StatusTask.Done : StatusTask.NotStartYet,
+                        };
+                      }
+                      onUpdateTask({subTasks: newSubTasks});
+                    }}
+                    size={20} />
+                </Block>
+                <Spacer height={16} />
+              </Block>
+            )) : <></>}
+            <Button style={{flexDirection: 'row', alignItems: 'center'}} onPress={openSubTaskModal}>
               <FastImage source={images.ic_add} style={styles.iconAdd} tintColor={theme.primaryText} />
               <Spacer width={'small'} />
               <Typo text="Add sub task here..." preset="b16" color={theme.secondaryText} />
@@ -362,6 +391,12 @@ const TaskDetail = () => {
         isVisible={isDescVisible}
         onCloseModal={closeDescModal}
         onAddDesc={(_desc: string) => onUpdateTask({description: _desc})} />
+      <AddSubTaskModal
+        isVisible={isSubTaskVisible}
+        currentSubTasks={task?.subTasks || []}
+        onCloseModal={closeSubTaskModal}
+        onAddSubtask={(subTasks: any[]) => onUpdateTask({subTasks})}
+      />
       <SelectPriorityModal
         priority={task?.priority || PriorityTask.LOW}
         onSelectPriority={(_priority: PriorityProps) => onUpdateTask({priority: _priority.key})}
@@ -391,8 +426,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconDelete: {
-    width: 24,
-    height: 24,
+    width: 16,
+    height: 16,
   },
   iconAdd: {
     width: 28,

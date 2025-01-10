@@ -1,3 +1,5 @@
+import {Source} from 'react-native-fast-image';
+
 import Screen from '../../../navigation/Screen';
 
 export enum SettingKeyProps {
@@ -7,5 +9,6 @@ export enum SettingKeyProps {
 
 export interface SettingProps {
   key: SettingKeyProps;
-  screenId: Screen | null
+  screenId: Screen | null;
+  icon?: number | Source;
 }

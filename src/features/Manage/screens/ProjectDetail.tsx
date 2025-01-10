@@ -32,7 +32,7 @@ const ProjectDetail = () => {
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.ProjectDetail>>();
   const {times = 1, projectId = ''} = route.params;
   const popActions = StackActions.pop(times);
-  const {theme} = useTheme();
+  const {theme, isDark} = useTheme();
 
   const user = useAppSelector((_state: AppState) => _state.user.user);
 
@@ -61,6 +61,21 @@ const ProjectDetail = () => {
   const onCreateNewTask = () => {
     navigate(Screen.CreateTask, {projectId: project?._id});
   }
+
+  const renderEmpty = () => {
+    return (
+      <Block center>
+        <FastImage source={isDark ? images.empty_dark : images.empty_light} style={styles.iconEmpty} />
+        <Spacer height={12} />
+        <Typo text="You have no tasks right now" preset="r16" color={theme.primaryText} center />
+        <Spacer height={12} />
+        <Button onPress={onCreateNewTask}>
+          <Typo text="Create Now" preset="b16" color={colors.primary} />
+        </Button>
+        <Spacer height={16} />
+      </Block >
+    );
+  };
 
   const renderTaskItem = ({item, index}: {item: TaskProps, index: number}) => <TaskItem item={item} style={styles.taskItem} projects={[]} project={project} onCustomPress={() => { }} />;
 
@@ -114,14 +129,16 @@ const ProjectDetail = () => {
       <Block paddingHorizontal={SpacingDefault.medium}>
         <Block row alignCenter justifyContent="space-between">
           <Typo text="Task" preset="b16" color={theme.primaryText} />
-          <Button style={styles.buttonAdd} onPress={onCreateNewTask}>
-            <FastImage source={images.ic_add} style={styles.iconAdd} tintColor={colors.primary} />
-            <Spacer width={'tiny'} />
-            <Typo text="Add new" preset="r14" color={colors.primary} />
-          </Button>
+          {project?.tasks?.length === 0 ? <></> : (
+            <Button style={styles.buttonAdd} onPress={onCreateNewTask}>
+              <FastImage source={images.ic_add} style={styles.iconAdd} tintColor={colors.primary} />
+              <Spacer width={'tiny'} />
+              <Typo text="Add new" preset="r14" color={colors.primary} />
+            </Button>
+          )}
         </Block>
         <Spacer height={16} />
-        <FlatList data={project?.tasks || []} keyExtractor={item => item._id} renderItem={renderTaskItem} />
+        <FlatList data={project?.tasks || []} keyExtractor={item => item._id} renderItem={renderTaskItem} ListEmptyComponent={renderEmpty} />
       </Block>
     </Container>
   );
@@ -155,7 +172,12 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12
-  }
+  },
+  iconEmpty: {
+    width: 124,
+    height: 124,
+    alignSelf: 'center',
+  },
 });
 
 export default ProjectDetail;

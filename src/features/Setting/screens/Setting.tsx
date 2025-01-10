@@ -24,7 +24,7 @@ import {SpacingDefault} from '../../../themes/Spacing';
 import {isEmpty} from '../../../utils/handleUtils';
 import http from '../../../utils/http';
 import {ACCOUNT_BLOCKS, APP_BLOCKS} from '../constants/Constant';
-import {SettingProps} from '../constants/Setting.props';
+import {SettingKeyProps, SettingProps} from '../constants/Setting.props';
 
 const Setting = () => {
   const {theme, setScheme, isDark} = useTheme();
@@ -45,11 +45,13 @@ const Setting = () => {
     return (
       <Button style={styles.blockItem} key={item.key} onPress={onPressBlock(item)}>
         <Block row alignCenter>
-          <FastImage source={images.ic_setting} style={styles.icon} tintColor={colors.primary} />
+          <FastImage source={item.icon} style={styles.icon} tintColor={theme.secondaryText} />
           <Spacer width={'normal'} />
           <Typo text={item.key} preset="b16" color={theme.primaryText} />
         </Block>
-        <FastImage source={images.ic_left} style={styles.iconRight} tintColor={theme.primaryText} />
+        {item.key === SettingKeyProps.AppAppearance ? <></> : (
+          <FastImage source={images.ic_left} style={styles.iconRight} tintColor={theme.primaryText} />
+        )}
       </Button>
     );
   };
@@ -82,11 +84,14 @@ const Setting = () => {
         </Block>
         <Spacer height={16} />
         {ACCOUNT_BLOCKS.map(renderBlockItem)}
-        <Spacer height={16} />
         {APP_BLOCKS.map(renderBlockItem)}
+        <Spacer height={16} />
+        <Button style={styles.logout} onPress={onLogout}>
+          <FastImage source={images.ic_save} style={styles.iconLogout} tintColor={colors.primary} />
+          <Spacer width={'normal'} />
+          <Typo text={'Logout'} preset="b16" color={colors.primary} />
+        </Button>
       </Block>
-      <Button preset="primary" text="Logout" onPress={onLogout} loading={loading} />
-      <Spacer height={16} />
     </Container>
   );
 };
@@ -108,7 +113,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingVertical: 12
   },
+  logout: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconLogout: {
+    width: 20,
+    height: 20,
+    transform: [{rotate: '90deg'}],
+  }
 });
 
 export default Setting;
