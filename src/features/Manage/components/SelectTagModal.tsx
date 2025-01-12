@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import RNModal from 'react-native-modal';
@@ -46,10 +46,12 @@ const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag, projectId, 
   const insets = useSafeAreaInsets();
 
   const [selectedTags, setSelectedTags] = useState<string[]>(currentTags);
+  const tagsRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (JSON.stringify(currentTags) !== JSON.stringify(selectedTags)) {
       setSelectedTags(currentTags);
+      tagsRef.current = currentTags;
     }
   }, [currentTags])
 
@@ -81,12 +83,15 @@ const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag, projectId, 
   const _onSelectTags = () => {
     onCloseModal();
     onSelectTag(selectedTags);
+    tagsRef.current = selectedTags;
   }
 
   const _onCreateTag = () => {
     onCloseModal();
     navigationRef.current?.navigate(Screen.CreateTag, {projectId});
   };
+
+  const _shouldDisabled = useMemo(() => JSON.stringify(tagsRef.current) === JSON.stringify(selectedTags), [selectedTags])
 
   return (
     <RNModal
@@ -117,7 +122,7 @@ const SelectTagModal = ({isVisible, onCloseModal, tags, onSelectTag, projectId, 
               <Block row alignCenter>
                 <Button block preset="secondary" text="Create tag" onPress={_onCreateTag} />
                 <Spacer width={'normal'} />
-                <Button block preset="primary" text="Add tag" onPress={_onSelectTags} />
+                <Button block preset="primary" isUseColorDisabledForText disabled={_shouldDisabled} text="Add tag" onPress={_onSelectTags} />
               </Block>
             </>
           )}

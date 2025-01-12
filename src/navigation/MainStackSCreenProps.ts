@@ -1,6 +1,6 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 
-import {TimeFilterKey} from '../features/Manage/constant/Model.props';
+import {StatusTask, TimeFilterKey} from '../features/Manage/constant/Model.props';
 import {ProjectProps} from '../model/Project.props';
 import {MainTabScreenProps} from './MainTabScreenProps';
 import Screen from './Screen';
@@ -10,6 +10,7 @@ export type MainStackScreenProps = {
   MainTab: NavigatorScreenParams<MainTabScreenProps>;
   [Screen.Register]: undefined;
   [Screen.Login]: undefined;
+  [Screen.Notification]: undefined;
   [Screen.CreateTask]: {
     projectId?: string;
   };
@@ -32,6 +33,9 @@ export type MainStackScreenProps = {
   [Screen.TaskManageFilter]: {
     filterKey: TimeFilterKey;
   };
-  [Screen.SearchTask]: undefined;
+  [Screen.SearchTask]: {
+    status?: StatusTask;
+    projects?: ProjectProps[];
+  };
   [Screen.Pomodoro]: undefined;
 };

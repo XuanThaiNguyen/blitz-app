@@ -24,7 +24,7 @@ interface TaskItemProps {
   item: TaskProps;
   style?: StyleProp<ViewStyle>;
   onCustomPress?: () => void;
-  projects: ProjectProps[];
+  projects?: ProjectProps[];
   project?: ProjectProps | null;
 }
 
@@ -84,10 +84,12 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     paddingHorizontal: SpacingDefault.normal,
     paddingVertical: 16,
     borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.divider,
     backgroundColor: theme.background,
-    shadowColor: 'rgba(0, 0, 0, 0.4)',
+    shadowColor: 'rgba(0, 0, 0, 0.2)',
     shadowOffset: {
-      width: 1,
+      width: 0,
       height: 0
     },
     shadowOpacity: 0.5,

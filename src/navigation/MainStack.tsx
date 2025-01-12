@@ -10,6 +10,7 @@ import ProjectDetail from '../features/Manage/screens/ProjectDetail';
 import SearchTask from '../features/Manage/screens/SearchTask';
 import TaskDetail from '../features/Manage/screens/TaskDetail';
 import TaskManageFilter from '../features/Manage/screens/TaskManageFilter';
+import Notification from '../features/Notification/screens/Notification';
 import Pomodoro from '../features/Pomodoro/screens/Pomodoro';
 import Profile from '../features/Profile/screens/Profile';
 import {useAppSelector} from '../redux/hook';
@@ -43,6 +44,7 @@ const MainStack = () => {
       <Stack.Screen name={Screen.TaskManageFilter} component={TaskManageFilter} />
       <Stack.Screen name={Screen.SearchTask} component={SearchTask} />
       <Stack.Screen name={Screen.Pomodoro} component={Pomodoro} />
+      <Stack.Screen name={Screen.Notification} component={Notification} />
     </Stack.Navigator>
   );
 };

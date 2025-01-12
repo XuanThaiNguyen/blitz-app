@@ -29,6 +29,8 @@ enum Screen {
   Login = 'Login',
   Register = 'Register',
 
+  //Others
+  Notification = 'Notification',
   Loading = 'Loading',
 }
 

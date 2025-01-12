@@ -39,6 +39,7 @@ const images = {
   ic_members: require('../assets/images/ic_members.webp'),
   ic_save: require('../assets/images/ic_save.webp'),
   ic_delete: require('../assets/images/ic_delete.png'),
+  ic_guideline: require('../assets/images/ic_guideline.webp'),
 
   //tabs
   tabs: {

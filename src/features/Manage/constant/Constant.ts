@@ -8,38 +8,49 @@ export const ITEM_SIZE_SPACE = 18;
 export const SPACING_BETWEEN_CARD = SpacingDefault.large;
 export const ITEM_PROJECT_WIDTH = SpacingDefault.width - SPACING_BETWEEN_CARD * 2;
 
-export const TIME_PROJECT_DEFAULT: TimeProjectProps[] = [
+export const TASKS_BY_STATUS_WITH_SEARCH = [
   {
-    title: 'Today',
-    color: colors.green,
-    total: 4,
-    timeEst: '6h 25m',
+    title: 'All',
+    key: 'All',
+  },
+  {
+    title: 'To do',
+    key: StatusTask.NotStartYet,
+  },
+  {
+    title: 'Pending',
+    key: StatusTask.Pending,
+  },
+  {
+    title: 'In Progress',
+    key: StatusTask.InProgress,
+  },
+  {
+    title: 'Completed',
+    key: StatusTask.Done,
+  },
+];
+
+export const TASKS_BY_STATUS: TimeProjectProps[] = [
+  {
+    title: 'To do',
     icon: 'ic_today',
-    key: TimeFilterKey.TODAY,
+    key: StatusTask.NotStartYet,
   },
   {
-    title: 'Tomorrow',
-    color: colors.blue,
-    total: 4,
-    timeEst: '6h 40m',
+    title: 'Pending',
     icon: 'ic_tomorrow',
-    key: TimeFilterKey.TOMORROW,
+    key: StatusTask.Pending,
   },
   {
-    title: 'This week',
-    color: colors.purple,
-    total: 10,
-    timeEst: '13h 20m',
+    title: 'In Progress',
     icon: 'ic_week',
-    key: TimeFilterKey.WEEK,
+    key: StatusTask.InProgress,
   },
   {
-    title: 'Planned',
-    color: colors.orange,
-    total: 18,
-    timeEst: '20h 50m',
+    title: 'Completed',
     icon: 'ic_planned',
-    key: TimeFilterKey.PLANNED,
+    key: StatusTask.Done,
   },
 ];
 

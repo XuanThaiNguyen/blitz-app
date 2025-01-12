@@ -12,6 +12,11 @@ const colors = {
   purple: '#9D28AC',
   red: '#F54336',
   disabledButton: '#CC4F39',
+  disabledTextButton: '#F0EDED',
+
+  //switch
+  darkDisabledSwitchBg: '#35383F',
+  lightDisabledSwitchBg: '#E0E0E0',
 
   //background
   lightBackground: '#FFFFFF',

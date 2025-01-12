@@ -1,3 +1,5 @@
+import qs from 'query-string';
+
 import http from '../../utils/http';
 import APIs from './APIs';
 
@@ -21,6 +23,6 @@ export const deleteTaskById = async (taskId: string) => {
   return http.delete(APIs.GET_TASK_BY_ID.replace(':taskId', taskId));
 };
 
-export const searchTasks = async (search: string) => {
-  return http.get(`${APIs.GET_TASKS}?query=${search}`);
+export const searchTasks = async (params: any) => {
+  return http.get(`${APIs.GET_TASKS}?${qs.stringify(params, {arrayFormat: 'bracket'})}`);
 };

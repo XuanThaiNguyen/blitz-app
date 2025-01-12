@@ -1,9 +1,9 @@
 import {yupResolver} from '@hookform/resolvers/yup';
 import {NavigationProp, RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import moment from 'moment';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {DeviceEventEmitter, Keyboard, ScrollView, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {DeviceEventEmitter, Keyboard, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
@@ -31,11 +31,11 @@ import {isEmpty} from '../../../utils/handleUtils';
 import SelectOption from '../components/SelectOption';
 import SelectPriorityModal from '../components/SelectPriorityModal';
 import SelectProjectModal from '../components/SelectProjectModal';
-import SelectStatusModal from '../components/SelectStatusModal';
 import SelectTagModal from '../components/SelectTagModal';
 import SelectTimeModal from '../components/SelectTimeModal';
 import {initialCreateTaskForm, PRIORITIES, STATUSES, validationCreateTaskSchema} from '../constant/Constant';
 import {CreateTaskFormProps, PriorityProps, StatusProps} from '../constant/Model.props';
+import Header from '../../../components/Header/Header';
 
 export type DynamicCreateType = 'task' | 'project' | 'tag';
 
@@ -47,6 +47,7 @@ const CreateTask = () => {
   const {navigate, goBack} = useNavigation<NavigationProp<MainStackScreenProps>>();
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.CreateTask>>();
   const projectId = route.params?.projectId || '';
+  const isHide = route.params?.isHide || '';
 
   const {
     control,
@@ -220,40 +221,44 @@ const CreateTask = () => {
   return (
     <Container>
       <InsetSubstitute />
-      <Block row h={52} mHoz={SpacingDefault.normal}>
-        <Button block >
-          <Block
-            borderWidth={1}
-            borderColor={theme.divider}
-            block
-            bgColor={theme.backgroundBox}
-            center
-            styleOverride={styles.leftTabHeader}>
-            <Typo preset="b14" color={theme.primaryText} text="Task" />
-          </Block>
-        </Button>
-        <Button block onPress={onCreateProject}>
-          <Block
-            center
-            borderWidth={1}
-            borderColor={theme.divider}
-            block
-            bgColor="transparent">
-            <Typo preset="b14" color={theme.primaryText} text="Project" />
-          </Block>
-        </Button>
-        <Button block onPress={onCreateTag}>
-          <Block
-            center
-            borderWidth={1}
-            borderColor={theme.divider}
-            block
-            bgColor="transparent"
-            styleOverride={styles.rightTabHeader}>
-            <Typo preset="b14" color={theme.primaryText} text="Tag" />
-          </Block>
-        </Button>
-      </Block>
+      {isHide ? (
+        <Header titleHeader="Create Task" />
+      ) : (
+        <Block row h={52} mHoz={SpacingDefault.normal}>
+          <Button block >
+            <Block
+              borderWidth={1}
+              borderColor={theme.divider}
+              block
+              bgColor={theme.backgroundBox}
+              center
+              styleOverride={styles.leftTabHeader}>
+              <Typo preset="b14" color={theme.primaryText} text="Task" />
+            </Block>
+          </Button>
+          <Button block onPress={onCreateProject}>
+            <Block
+              center
+              borderWidth={1}
+              borderColor={theme.divider}
+              block
+              bgColor="transparent">
+              <Typo preset="b14" color={theme.primaryText} text="Project" />
+            </Block>
+          </Button>
+          {/* <Button block onPress={onCreateTag}>
+            <Block
+              center
+              borderWidth={1}
+              borderColor={theme.divider}
+              block
+              bgColor="transparent"
+              styleOverride={styles.rightTabHeader}>
+              <Typo preset="b14" color={theme.primaryText} text="Tag" />
+            </Block>
+          </Button> */}
+        </Block>
+      )}
       <Spacer height={24} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Block block paddingHorizontal={SpacingDefault.medium}>
@@ -279,8 +284,8 @@ const CreateTask = () => {
           <SelectOption title="Priority" value={priority.value} onSelect={openPriorityModal} isOptional={false} />
           <Spacer height={16} />
           <SelectOption title="Due Date" value={endDate && startDate ? `${formatDate(startDate, DATE_FORMAT.FIRST)} - ${formatDate(endDate, DATE_FORMAT.FIRST)}` : (!endDate && startDate) ? formatDate(startDate, DATE_FORMAT.FIRST) : NONE_VALUE} onSelect={openTimeModal} onClearValue={onClearDate} />
-          <Spacer height={16} />
-          <SelectOption title="Tags" value={tags?.length === 0 ? NONE_VALUE : ''} onSelect={openTagModal} />
+          {/* <Spacer height={16} />
+          <SelectOption title="Tags" value={tags?.length === 0 ? NONE_VALUE : ''} onSelect={openTagModal} /> */}
         </Block>
       </TouchableWithoutFeedback>
       <Button mHoz={SpacingDefault.medium} preset="primary" text="Create Task" onPress={handleSubmit(onCreateTask)} loading={loading} />
@@ -294,7 +299,7 @@ const CreateTask = () => {
         onCloseModal={closeTimeModal}
         onSelectTime={onSelectTime} />
       <SelectPriorityModal priority={priority.key} onSelectPriority={onSelectPriority} isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
-      <SelectStatusModal status={status} onSelectStatus={onSelectStatus} isVisible={isStatusVisible} onCloseModal={closeStatusModal} />
+      {/* <SelectStatusModal status={status} onSelectStatus={onSelectStatus} isVisible={isStatusVisible} onCloseModal={closeStatusModal} /> */}
       <SelectTagModal tags={project?.tags || []} onSelectTag={onSelectTag} isVisible={isTagVisible} onCloseModal={closeTagModal} />
       <SelectProjectModal selectedProject={project} projects={projects} onSelectProject={onSelectProject} isVisible={isProjectVisible} onCloseModal={closeProjectModal} />
     </Container>

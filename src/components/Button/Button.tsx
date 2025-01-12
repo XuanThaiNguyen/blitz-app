@@ -5,8 +5,10 @@ import {Typo} from '../Typo/Typo';
 import colors from '../../themes/Colors';
 import {primaryTextChecker, stylesView} from './Button.preset';
 import {ButtonProps} from './Button.props';
+import {useTheme} from '../../context/ThemeProvider';
 
 const Button = (props: ButtonProps) => {
+  const {theme} = useTheme();
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const {
     preset = '',
@@ -42,6 +44,7 @@ const Button = (props: ButtonProps) => {
     block,
     center,
     selfCenter,
+    isUseColorDisabledForText,
     pressedColor,
     ...rest
   } = props;
@@ -114,7 +117,9 @@ const Button = (props: ButtonProps) => {
           text={text}
           preset={textPreset}
           color={_typoColor}
-          style={textStyleOverride}
+          style={[disabled && isUseColorDisabledForText && {
+            color: colors.disabledTextButton
+          }, , textStyleOverride]}
         />
       )
     );

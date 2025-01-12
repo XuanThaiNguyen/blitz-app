@@ -32,6 +32,7 @@ const MainTab = () => {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: theme.secondaryText,
       }}
+      backBehavior={'initialRoute'}
     >
       <Tab.Screen
         name={Screen.Manage}

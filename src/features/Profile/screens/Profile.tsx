@@ -8,14 +8,12 @@ import Header from '../../../components/Header/Header';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import TextField from '../../../components/TextField/TextField';
-import {useTheme} from '../../../context/ThemeProvider';
 import {useAppSelector} from '../../../redux/hook';
 import {AppState} from '../../../redux/reducer';
 import {SpacingDefault} from '../../../themes/Spacing';
 
 const Profile = () => {
   const {user} = useAppSelector((_state: AppState) => _state.user || {});
-  const {theme} = useTheme();
 
   return (
     <Container>

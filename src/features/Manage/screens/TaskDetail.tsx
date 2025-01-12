@@ -34,11 +34,12 @@ import {NONE_VALUE} from '../../../themes/Constant';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
+import {getColorsByPriority} from '../../../utils/handleStyle';
 import {isEmpty} from '../../../utils/handleUtils';
-import TaskPomodoroItem from '../../Pomodoro/components/TaskPomodoroItem';
 import AddDescriptionModal from '../components/AddDescriptionModal';
 import AddSubTaskModal from '../components/AddSubTaskModal';
 import SelectPriorityModal from '../components/SelectPriorityModal';
+import SelectStatusModal from '../components/SelectStatusModal';
 import SelectTagModal from '../components/SelectTagModal';
 import SelectTimeModal from '../components/SelectTimeModal';
 import UpdateTaskItem from '../components/UpdateTaskItem';
@@ -64,9 +65,13 @@ const TaskDetail = () => {
   const [isDescVisible, setIsDescVisible] = useState(false);
   const [isTagVisible, setIsTagVisible] = useState(false);
   const [isSubTaskVisible, setIsSubTaskVisible] = useState(false);
+  const [isStatusVisible, setIsStatusVisible] = useState(false);
 
   const openPriorityModal = () => setIsPriorityVisible(true);
   const closePriorityModal = () => setIsPriorityVisible(false);
+
+  const openStatusModal = () => setIsStatusVisible(true);
+  const closeStatusModal = () => setIsStatusVisible(false);
 
   const openSubTaskModal = () => setIsSubTaskVisible(true);
   const closeSubTaskModal = () => setIsSubTaskVisible(false);
@@ -270,7 +275,7 @@ const TaskDetail = () => {
     const matchingTags = task?.availableTags.filter(obj => task?.tags.includes(obj._id));
 
     return (
-      <Block mHoz={SpacingDefault.medium}>
+      <Block mHoz={SpacingDefault.normal}>
         <Typo text="Tags" preset="b16" color={theme.primaryText} />
         <Spacer height={16} />
         <Block row flexWrap="wrap">
@@ -294,10 +299,24 @@ const TaskDetail = () => {
       <Spacer height={8} />
       <ScrollView contentContainerStyle={{paddingBottom: insets.bottom + 16, paddingTop: 8}} showsVerticalScrollIndicator={false}>
         <Block block>
-          <TaskPomodoroItem task={task!} style={styles.taskItem} />
+          {/* <TaskPomodoroItem task={task!} style={styles.taskItem} /> */}
+          <Button style={[{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderLeftWidth: 4,
+            paddingHorizontal: SpacingDefault.normal,
+            paddingVertical: 16,
+            borderRadius: 6,
+            marginHorizontal: SpacingDefault.normal,
+            backgroundColor: theme.backgroundBox,
+          }, {borderLeftColor: getColorsByPriority({priority: task?.priority || PriorityTask.LOW})}]}>
+            <Typo text={task?.title || ''} color={task?.status === StatusTask.Done ? theme.secondaryText : theme.primaryText} preset="b16" flex style={{textDecorationLine: task?.status === StatusTask.Done ? 'line-through' : 'none'}} />
+            <Checkbox size={20} checked={task?.status === StatusTask.Done} onChange={(checked: boolean) => onUpdateTask({status: checked ? StatusTask.Done : StatusTask.NotStartYet})} />
+          </Button>
           <Spacer height={24} />
           <Block
-            mHoz={SpacingDefault.medium}
+            mHoz={SpacingDefault.normal}
             paddingHorizontal={SpacingDefault.normal}
             bgColor={theme.backgroundBox}
             borderRadius={12}>
@@ -306,6 +325,8 @@ const TaskDetail = () => {
             <UpdateTaskItem iconTitle={images.ic_planned} title={'Due Date'} value={task?.timing.endDate && task.timing.startDate ? `${formatDate(task.timing.startDate, DATE_FORMAT.FIRST)} - ${formatDate(task.timing.endDate, DATE_FORMAT.FIRST)}` : (!task?.timing.endDate && task?.timing.startDate) ? formatDate(task.timing.startDate, DATE_FORMAT.FIRST) : NONE_VALUE} onUpdateTask={openTimeModal} />
             <Divider />
             <UpdateTaskItem iconTitle={images.ic_tomorrow} title={'Priority'} value={task?.priority || PriorityTask.LOW} onUpdateTask={openPriorityModal} />
+            <Divider />
+            <UpdateTaskItem iconTitle={images.ic_today} title={'Status'} value={task?.status || StatusTask.NotStartYet} onUpdateTask={openStatusModal} />
             <Divider />
             <UpdateTaskItem iconTitle={images.ic_project} title={'Project'} value={project?.projectInfo?.title || NONE_VALUE} canUpdate={false} />
             <Divider />
@@ -333,7 +354,7 @@ const TaskDetail = () => {
           </Block>
           <Spacer height={16} />
           <Block
-            mHoz={SpacingDefault.medium}
+            mHoz={SpacingDefault.normal}
             paddingHorizontal={SpacingDefault.normal}
             bgColor={theme.backgroundBox}
             paddingVertical={16}
@@ -369,10 +390,10 @@ const TaskDetail = () => {
           <Spacer height={32} />
           {renderTags()}
           <Spacer height={32} />
-          <Block mHoz={SpacingDefault.medium}>
+          <Block mHoz={SpacingDefault.normal}>
             <Typo text="Add attachment" preset="b16" color={theme.primaryText} />
             <Spacer height={16} />
-            <Button center height={100} buttonColor={theme.backgroundBox}>
+            <Button center height={100} style={{borderRadius: 12}} buttonColor={theme.backgroundBox}>
               <Typo text="Upload" preset="r14" color={theme.secondaryText} />
             </Button>
           </Block>
@@ -400,7 +421,13 @@ const TaskDetail = () => {
       <SelectPriorityModal
         priority={task?.priority || PriorityTask.LOW}
         onSelectPriority={(_priority: PriorityProps) => onUpdateTask({priority: _priority.key})}
-        isVisible={isPriorityVisible} onCloseModal={closePriorityModal} />
+        isVisible={isPriorityVisible}
+        onCloseModal={closePriorityModal} />
+      <SelectStatusModal
+        status={task?.status || StatusTask.NotStartYet}
+        onSelectStatus={(_status: StatusTask) => onUpdateTask({status: _status})}
+        isVisible={isStatusVisible}
+        onCloseModal={closeStatusModal} />
       <SelectTimeModal
         minDate={formatDate(new Date(), DATE_FORMAT.FOUR)}
         title={'Select Due Date'}
@@ -419,7 +446,7 @@ const styles = StyleSheet.create({
     transform: [{rotate: '90deg'}],
   },
   taskItem: {
-    marginHorizontal: SpacingDefault.medium,
+    marginHorizontal: SpacingDefault.normal,
   },
   buttonDelete: {
     flexDirection: 'row',

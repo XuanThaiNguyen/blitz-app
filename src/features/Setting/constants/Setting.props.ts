@@ -5,6 +5,11 @@ import Screen from '../../../navigation/Screen';
 export enum SettingKeyProps {
   Profile = 'Profile',
   AppAppearance = 'App Appearance',
+  MyTasks = 'My Tasks',
+  MyProjects = 'My Projects',
+  ChangePassword = 'Change Password',
+  Notification = 'Notification',
+  HelpAndSupport = 'Help and Support'
 }
 
 export interface SettingProps {

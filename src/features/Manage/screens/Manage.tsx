@@ -31,6 +31,7 @@ import {SpacingDefault} from '../../../themes/Spacing';
 import {isEmpty} from '../../../utils/handleUtils';
 import ProjectList from '../components/ProjectList';
 import TaskItem from '../components/TaskItem';
+import {StatusTask} from '../constant/Model.props';
 
 const Manage = () => {
   const {theme, isDark} = useTheme();
@@ -121,8 +122,8 @@ const Manage = () => {
 
   const renderItem = ({item}: {item: TaskProps}) => <TaskItem item={item} style={styles.taskItem} projects={data.projects} />;
 
-  const onSearchTask = () => {
-    navigate(Screen.SearchTask);
+  const onSearchTask = (status?: StatusTask) => () => {
+    navigate(Screen.SearchTask, {status, projects: data.projects});
   };
 
   const onLogin = () => {
@@ -144,7 +145,7 @@ const Manage = () => {
           <Typo text="Create Now" preset="b16" color={colors.primary} />
         </Button>
         <Spacer height={16} />
-      </Block >
+      </Block>
     );
   };
 
@@ -161,6 +162,14 @@ const Manage = () => {
     updateScrollViewHeight(height);
   };
 
+  const onCreateTask = () => {
+    navigate(Screen.CreateTask, {});
+  }
+
+  const onNotification = () => {
+    navigate(Screen.Notification);
+  }
+
   return (
     <Container>
       <InsetSubstitute />
@@ -174,16 +183,18 @@ const Manage = () => {
             </Button>
           )}
           <Spacer width={'small'} />
-          <Block block>
-            <Typo text={user?.profileInfo?.fullname} preset="b16" color={theme.primaryText} />
-            <Spacer height={4} />
-            <Typo text="You have 4 tasks today!" preset="r14" color={theme.secondaryText} />
-          </Block>
-          <Button onPress={onSearchTask}>
+          {!isEmpty(user) ? (
+            <Block block>
+              <Typo text={user?.profileInfo?.fullname} preset="b16" color={theme.primaryText} />
+              <Spacer height={4} />
+              <Typo text="You have 4 tasks today!" preset="r14" color={theme.secondaryText} />
+            </Block>
+          ) : <></>}
+          <Button onPress={onSearchTask()}>
             <FastImage source={images.ic_search} style={styles.iconSearch} tintColor={theme.primaryText} />
           </Button>
           <Spacer width={'small'} />
-          <Button>
+          <Button onPress={onNotification}>
             <FastImage source={images.ic_notification} style={styles.iconSearch} tintColor={theme.primaryText} />
           </Button>
         </Block>
@@ -193,6 +204,46 @@ const Manage = () => {
         showsVerticalScrollIndicator={false}
         bounces={false}
         onLayout={_onLayoutSV}>
+        <Block paddingHorizontal={SpacingDefault.normal}>
+          <Typo text="Task Overview" preset="b16" color={theme.primaryText} />
+          <Spacer height={24} />
+          <Block row alignCenter>
+            <Button onPress={onSearchTask(StatusTask.NotStartYet)} style={[styles.blockOverview, styles.shadow]}>
+              <FastImage source={images.ic_today} style={styles.iconSearch} tintColor={theme.primaryText} />
+              <Spacer height={12} />
+              <Typo text="10 Tasks" preset="b16" color={theme.primaryText} />
+              <Spacer height={4} />
+              <Typo text="To do" preset="r14" color={theme.secondaryText} />
+            </Button>
+            <Spacer width={'small'} />
+            <Button onPress={onSearchTask(StatusTask.Pending)} style={[styles.blockOverview, styles.shadow]}>
+              <FastImage source={images.ic_faill_cross_circle} style={styles.iconSearch} tintColor={theme.primaryText} />
+              <Spacer height={12} />
+              <Typo text="10 Tasks" preset="b16" color={theme.primaryText} />
+              <Spacer height={4} />
+              <Typo text="Pending" preset="r14" color={theme.secondaryText} />
+            </Button>
+          </Block>
+          <Spacer height={16} />
+          <Block row alignCenter>
+            <Button onPress={onSearchTask(StatusTask.InProgress)} style={[styles.blockOverview, styles.shadow]}>
+              <FastImage source={images.ic_planned} style={styles.iconSearch} tintColor={theme.primaryText} />
+              <Spacer height={12} />
+              <Typo text="10 Tasks" preset="b16" color={theme.primaryText} />
+              <Spacer height={4} />
+              <Typo text="In Progress" preset="r14" color={theme.secondaryText} />
+            </Button>
+            <Spacer width={'small'} />
+            <Button onPress={onSearchTask(StatusTask.Done)} style={[styles.blockOverview, styles.shadow]}>
+              <FastImage source={images.ic_success_check_circle} style={styles.iconSearch} tintColor={theme.primaryText} />
+              <Spacer height={12} />
+              <Typo text="10 Tasks" preset="b16" color={theme.primaryText} />
+              <Spacer height={4} />
+              <Typo text="Completed" preset="r14" color={theme.secondaryText} />
+            </Button>
+          </Block>
+          <Spacer height={24} />
+        </Block>
         <Block bgColor={theme.backgroundBox}>
           <Spacer height={16} />
           <ProjectList projects={data.projects || []} />
@@ -201,8 +252,13 @@ const Manage = () => {
         <Block h={mainScrollViewHeight}>
           <Block block>
             <Spacer height={12} />
-            <Block paddingHorizontal={SpacingDefault.normal}>
+            <Block paddingHorizontal={SpacingDefault.normal} row alignCenter justifyContent="space-between">
               <Typo text="Tasks" preset="b16" color={theme.primaryText} />
+              <Button onPress={onCreateTask} style={{flexDirection: 'row', alignItems: 'center'}}>
+                <FastImage source={images.ic_close} style={{width: 12, height: 12, transform: [{rotate: '45deg'}]}} tintColor={colors.primary} />
+                <Spacer width={'tiny'} />
+                <Typo text="Add new" preset="r14" color={colors.primary} />
+              </Button>
             </Block>
             <Spacer height={12} />
             <FlatList
@@ -341,6 +397,26 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
   },
   flatlistContainer: {
     paddingTop: 12
+  },
+  shadow: {
+    backgroundColor: theme.background,
+    shadowColor: 'rgba(0, 0, 0, 0.4)',
+    shadowOffset: {
+      width: 1,
+      height: 0
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 5
+  },
+  blockOverview:
+  {
+    borderWidth: 1,
+    borderColor: theme.divider,
+    paddingVertical: 16,
+    paddingHorizontal: SpacingDefault.normal,
+    flex: 1,
+    borderRadius: 12
   }
 }));
 
