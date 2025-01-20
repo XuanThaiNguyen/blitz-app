@@ -1,6 +1,8 @@
 import {ButtonPresetNames} from '../Button/Button.preset';
 import {ButtonProps} from '../Button/Button.props';
 
+type StringAndElementType = string | React.ReactElement;
+
 export interface AlertButtonProps {
   text?: string;
   preset?: ButtonPresetNames;
@@ -11,20 +13,22 @@ export interface AlertButtonProps {
 }
 
 export interface AlertBottomContentProps {
-  message: string;
-  title: string;
-  status: 'error' | 'success';
+  message?: string;
+  title?: string;
+  status?: 'error' | 'success';
   showCloseIcon?: boolean;
   buttons?: AlertButtonProps[];
   onCustomXPress?: () => void;
+  content?: StringAndElementType;
 }
 
 export interface AlertErrorProps {
-  title: string;
-  message: string;
+  title?: string;
+  message?: string;
   dismissable?: boolean;
-  status: 'error' | 'success';
+  status?: 'error' | 'success';
   showCloseIcon?: boolean;
   buttons?: AlertButtonProps[];
   onCustomXPress?: () => void;
+  content?: StringAndElementType;
 }

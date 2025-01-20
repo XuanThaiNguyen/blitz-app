@@ -125,10 +125,18 @@ export const COLORS = [
 
 export const initialCreateTaskForm: CreateTaskFormProps = {
   title: '',
-  description: ''
+  description: '',
+  startDate: '',
+  endDate: '',
+  priority: PriorityTask.LOW,
+  project: undefined
 };
 
 export const validationCreateTaskSchema = yup.object({
   title: yup.string().required('Trường này bắt buộc'),
+  project: yup.object(),
   description: yup.string(),
+  startDate: yup.string(),
+  endDate: yup.string(),
+  priority: yup.string(),
 });

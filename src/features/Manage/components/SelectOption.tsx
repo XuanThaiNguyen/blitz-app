@@ -19,23 +19,29 @@ interface SelectOptionProps {
   onSelect?: () => void;
   isOptional?: boolean;
   onClearValue?: () => void;
+  isEdit?: boolean;
 }
 
-const SelectOption = ({value = '', title = '', onSelect, isOptional = true, onClearValue}: SelectOptionProps) => {
+const SelectOption = ({value = '', title = '', onSelect, isOptional = true, onClearValue, isEdit}: SelectOptionProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
+
+  const _onSelect = () => {
+    if (isEdit) return;
+    onSelect?.();
+  }
 
   return (
     <Block>
       {isOptional ? (
-        <Typo text={title} preset="r12" color={theme.primaryText} />
+        <Typo text={title} preset="r14" color={theme.primaryText} />
       ) : (
-        <Typo preset="r12" color={theme.primaryText}>{title} <Typo preset="r12" color={colors.primary}>*</Typo></Typo>
+        <Typo preset="r14" color={theme.primaryText}>{title} <Typo preset="r14" color={colors.primary}>*</Typo></Typo>
       )}
       <Spacer height={8} />
-      <Button onPress={onSelect} style={styles.button}>
-        <Typo text={value} preset="r14" color={theme.primaryText} />
-        {isOptional && !isEmpty(value) && value !== NONE_VALUE ? (
+      <Button onPress={_onSelect} style={styles.button} activeOpacity={isEdit ? 1 : 0.5}>
+        <Typo text={value} preset="r16" color={theme.primaryText} />
+        {isEdit ? <></> : isOptional && !isEmpty(value) && value !== NONE_VALUE ? (
           <Button onPress={onClearValue} hitSlop={5}>
             <FastImage source={images.ic_close} style={styles.icon} tintColor={theme.secondaryText} />
           </Button>

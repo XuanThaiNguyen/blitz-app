@@ -1,5 +1,4 @@
 import {NavigationProp, RouteProp, StackActions, useNavigation, useRoute} from '@react-navigation/native';
-import moment from 'moment';
 import React, {useEffect, useRef, useState} from 'react';
 import {DeviceEventEmitter, ScrollView, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -26,6 +25,8 @@ import {TaskProps} from '../../../model/Task.props';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import {reset} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
+import {useAppSelector} from '../../../redux/hook';
+import {AppState} from '../../../redux/reducer';
 import {ApiStatus} from '../../../services/api/ApiStatus';
 import {deleteTaskById, getTaskById, updateTaskById} from '../../../services/api/task';
 import {EmitterKeys} from '../../../services/emitter/EmitterKeys';
@@ -38,18 +39,18 @@ import {getColorsByPriority} from '../../../utils/handleStyle';
 import {isEmpty} from '../../../utils/handleUtils';
 import AddDescriptionModal from '../components/AddDescriptionModal';
 import AddSubTaskModal from '../components/AddSubTaskModal';
-import SelectPriorityModal from '../components/SelectPriorityModal';
 import SelectStatusModal from '../components/SelectStatusModal';
 import SelectTagModal from '../components/SelectTagModal';
-import SelectTimeModal from '../components/SelectTimeModal';
 import UpdateTaskItem from '../components/UpdateTaskItem';
-import {PriorityProps, PriorityTask, StatusTask} from '../constant/Model.props';
+import {PriorityTask, StatusTask} from '../constant/Model.props';
 
 const TaskDetail = () => {
   const insets = useSafeAreaInsets();
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.TaskDetail>>();
-  const {dispatch} = useNavigation<NavigationProp<MainStackScreenProps>>();
+  const {dispatch, navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
   const {taskId = '', times = 1, project} = route.params;
+
+  const userProjects = useAppSelector((state: AppState) => state.user.projects || []);
 
   const popActions = StackActions.pop(times);
   const {theme} = useTheme();
@@ -60,15 +61,10 @@ const TaskDetail = () => {
 
   const [measure, setMeasure] = useState<MeasureObject>(initMeasure);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [isPriorityVisible, setIsPriorityVisible] = useState(false);
-  const [isTimeVisible, setIsTimeVisible] = useState(false);
   const [isDescVisible, setIsDescVisible] = useState(false);
   const [isTagVisible, setIsTagVisible] = useState(false);
   const [isSubTaskVisible, setIsSubTaskVisible] = useState(false);
   const [isStatusVisible, setIsStatusVisible] = useState(false);
-
-  const openPriorityModal = () => setIsPriorityVisible(true);
-  const closePriorityModal = () => setIsPriorityVisible(false);
 
   const openStatusModal = () => setIsStatusVisible(true);
   const closeStatusModal = () => setIsStatusVisible(false);
@@ -82,33 +78,22 @@ const TaskDetail = () => {
   const openTagModal = () => setIsTagVisible(true);
   const closeTagModal = () => setIsTagVisible(false);
 
-  const openTimeModal = () => {
-    setIsTimeVisible(true);
-  };
-  const closeTimeModal = () => setIsTimeVisible(false);
-
-  const onSelectTime = (date: {startDate: Date, endDate: Date}) => {
-    let _timing: any = {};
-    if (!isEmpty(date.startDate)) {
-      _timing = {
-        startDate: moment(date.startDate).startOf('day').toDate(),
-        endDate: moment(date.startDate).endOf('day').toDate(),
-      };
-    }
-    if (!isEmpty(date.endDate)) {
-      _timing = {
-        endDate: moment(date.endDate).endOf('day').toDate(),
-      };
-    }
-    onUpdateTask({timing: _timing});
-  };
-
   useEffect(() => {
     if (!isEmpty(taskId)) {
       getTaskDetail();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
+
+  useEffect(() => {
+    const taskListener = DeviceEventEmitter.addListener(EmitterKeys.RELOAD_TASK_DETAIL, () => {
+      getTaskDetail();
+    });
+
+    return () => {
+      taskListener?.remove();
+    }
+  }, []);
 
   const onBack = () => dispatch(popActions);
 
@@ -149,7 +134,18 @@ const TaskDetail = () => {
               left: SpacingDefault.width - SpacingDefault.normal * 2 - TOOLTIP_TASK_DETAIL_HEADER_WIDTH,
             }}
           >
-            <Block paddingHorizontal={SpacingDefault.smaller} paddingVertical={8}>
+            <Block paddingHorizontal={SpacingDefault.small} paddingVertical={16}>
+              <Button style={styles.buttonDelete} onPress={onEditTask}>
+                <FastImage source={images.ic_edit} style={styles.iconDelete} tintColor={theme.primaryText} />
+                <Spacer width={'small'} />
+                <Typo
+                  color={theme.primaryText}
+                  preset="b16"
+                  text={'Edit'} />
+              </Button>
+              <Spacer height={16} />
+              <Divider />
+              <Spacer height={16} />
               <Button style={styles.buttonDelete} onPress={onDeleteTask}>
                 <FastImage source={images.ic_delete} style={styles.iconDelete} tintColor={colors.red} />
                 <Spacer width={'small'} />
@@ -228,6 +224,21 @@ const TaskDetail = () => {
       setLoading(false);
     }
   };
+
+  const onEditTask = () => {
+    setShowTooltip(false);
+    const _existingProject = userProjects.find(item => item._id === project._id);
+    const editTask = {
+      project: _existingProject,
+      title: task?.title || '',
+      description: task?.description || '',
+      priority: task?.priority,
+      startDate: task?.timing?.startDate,
+      endDate: task?.timing?.endDate
+    }
+    //@ts-ignore
+    navigate(Screen.CreateTask, {isEdit: true, task: editTask, projectId: project._id, taskId: task?._id || ''});
+  }
 
   const onDeleteTask = () => {
     setShowTooltip(false);
@@ -320,29 +331,20 @@ const TaskDetail = () => {
             paddingHorizontal={SpacingDefault.normal}
             bgColor={theme.backgroundBox}
             borderRadius={12}>
-            {/* <UpdateTaskItem iconTitle={images.ic_pomodoro} title={'Pomodoro'} value={'4'} />
-            <Divider /> */}
-            <UpdateTaskItem iconTitle={images.ic_planned} title={'Due Date'} value={task?.timing.endDate && task.timing.startDate ? `${formatDate(task.timing.startDate, DATE_FORMAT.FIRST)} - ${formatDate(task.timing.endDate, DATE_FORMAT.FIRST)}` : (!task?.timing.endDate && task?.timing.startDate) ? formatDate(task.timing.startDate, DATE_FORMAT.FIRST) : NONE_VALUE} onUpdateTask={openTimeModal} />
+            <UpdateTaskItem iconTitle={images.ic_today} title={'Status'} value={task?.status || StatusTask.NotStartYet} canEdit onEdit={openStatusModal} />
             <Divider />
-            <UpdateTaskItem iconTitle={images.ic_tomorrow} title={'Priority'} value={task?.priority || PriorityTask.LOW} onUpdateTask={openPriorityModal} />
+            <UpdateTaskItem iconTitle={images.ic_planned} title={'Start Date'} value={task?.timing.startDate ? `${formatDate(new Date(task.timing.startDate), DATE_FORMAT.THIRD)}` : NONE_VALUE} />
             <Divider />
-            <UpdateTaskItem iconTitle={images.ic_today} title={'Status'} value={task?.status || StatusTask.NotStartYet} onUpdateTask={openStatusModal} />
+            <UpdateTaskItem iconTitle={images.ic_planned} title={'End Date'} value={task?.timing.endDate ? `${formatDate(new Date(task.timing.endDate), DATE_FORMAT.THIRD)}` : NONE_VALUE} />
             <Divider />
-            <UpdateTaskItem iconTitle={images.ic_project} title={'Project'} value={project?.projectInfo?.title || NONE_VALUE} canUpdate={false} />
+            <UpdateTaskItem iconTitle={images.ic_project} title={'Project'} value={project?.projectInfo?.title || NONE_VALUE} />
             <Divider />
-            <Block row alignCenter justifyContent="space-between" pTop={16}>
-              <Block row alignCenter>
-                <FastImage source={images.ic_document} style={{width: 16, height: 16}} tintColor={theme.primaryText} />
-                <Spacer width={'small'} />
-                <Typo text={'Description'} color={theme.primaryText} preset="r16" />
-              </Block>
-              <Button onPress={openDescModal}>
-                {!isEmpty(task?.description) ? (
-                  <FastImage source={images.ic_edit} style={{width: 16, height: 16}} tintColor={theme.primaryText} />
-                ) : (
-                  <Typo text="Thêm mô tả" color={colors.primary} preset="b16" />
-                )}
-              </Button>
+            <UpdateTaskItem iconTitle={images.ic_tomorrow} title={'Priority'} value={task?.priority || PriorityTask.LOW} />
+            <Divider />
+            <Block row alignCenter pTop={16}>
+              <FastImage source={images.ic_document} style={{width: 16, height: 16}} tintColor={theme.primaryText} />
+              <Spacer width={'small'} />
+              <Typo text={'Description'} color={theme.primaryText} preset="r16" />
             </Block>
             {!isEmpty(task?.description) ? (
               <>
@@ -418,23 +420,11 @@ const TaskDetail = () => {
         onCloseModal={closeSubTaskModal}
         onAddSubtask={(subTasks: any[]) => onUpdateTask({subTasks})}
       />
-      <SelectPriorityModal
-        priority={task?.priority || PriorityTask.LOW}
-        onSelectPriority={(_priority: PriorityProps) => onUpdateTask({priority: _priority.key})}
-        isVisible={isPriorityVisible}
-        onCloseModal={closePriorityModal} />
       <SelectStatusModal
         status={task?.status || StatusTask.NotStartYet}
         onSelectStatus={(_status: StatusTask) => onUpdateTask({status: _status})}
         isVisible={isStatusVisible}
         onCloseModal={closeStatusModal} />
-      <SelectTimeModal
-        minDate={formatDate(new Date(), DATE_FORMAT.FOUR)}
-        title={'Select Due Date'}
-        mode="multiple"
-        isVisible={isTimeVisible}
-        onCloseModal={closeTimeModal}
-        onSelectTime={onSelectTime} />
     </Container>
   );
 };

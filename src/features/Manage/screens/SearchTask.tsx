@@ -43,15 +43,6 @@ const SearchTask = () => {
 
   const searchDebounced = useDebounce(search, 500);
 
-  // useEffect(() => {
-  //   if (isEmpty(searchDebounced) && isEmpty(status)) {
-  //     setTasks([])
-  //   } else {
-  //     onSearchTask();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [searchDebounced, status]);
-
   useEffect(() => {
     onSearchTask({filterStatus: currentStatus});
   }, [searchDebounced, status])
@@ -64,14 +55,10 @@ const SearchTask = () => {
     if (filterStatus && filterStatus !== 'All') {
       params.status = filterStatus;
     }
-    // params.status = ['NotStartYet', 'InProgress'];
-    console.log('queryBuilder(params)', params);
 
     try {
       const {data} = await searchTasks(params);
       if (data?.status === ApiStatus.OK) {
-        console.log('data.data', data.data);
-
         setTasks(data.data);
       }
     } catch (err) {
@@ -110,7 +97,7 @@ const SearchTask = () => {
   };
 
   const renderSearchedTasks = useCallback(() => {
-    if (isEmpty(searchDebounced)) {
+    if (isEmpty(searchDebounced) || searchDebounced.length < 2) {
       return !isEmpty(searchHistories) ? (
         <Block paddingHorizontal={SpacingDefault.normal}>
           <Typo text="Recent Searches" preset="b20" color={theme.primaryText} />

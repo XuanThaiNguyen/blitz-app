@@ -18,7 +18,7 @@ interface SelectProjectModalProps {
   onCloseModal: () => void;
   projects: ProjectProps[];
   onSelectProject: (item: ProjectProps) => void;
-  selectedProject: ProjectProps | null;
+  selectedProject?: ProjectProps | null;
 }
 
 const SelectProjectModal = ({isVisible, onCloseModal, projects, onSelectProject, selectedProject}: SelectProjectModalProps) => {
@@ -31,9 +31,11 @@ const SelectProjectModal = ({isVisible, onCloseModal, projects, onSelectProject,
     onCloseModal();
   };
 
-  const renderProjectItem = (item: ProjectProps) => {
+  const renderProjectItem = (item: ProjectProps, index: number) => {
+    const isLastIndex = projects?.length - 1 === index;
+
     return (
-      <Button key={item._id} style={{marginBottom: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}} onPress={_onSelect(item)}>
+      <Button key={item._id} style={{paddingVertical: 12, marginBottom: isLastIndex ? 0 : 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}} onPress={_onSelect(item)}>
         <Block row alignCenter>
           <Block row alignCenter>
             <FastImage source={images.ic_project} style={{width: 16, height: 16}} tintColor={item.projectInfo.color} />

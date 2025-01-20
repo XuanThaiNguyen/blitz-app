@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {isValidElement} from 'react';
 import {StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 
@@ -18,6 +18,7 @@ const AlertBottomContent = ({
   showCloseIcon = true,
   buttons = [],
   onCustomXPress,
+  content
 }: AlertBottomContentProps) => {
   const {theme} = useTheme();
 
@@ -50,6 +51,14 @@ const AlertBottomContent = ({
     });
   };
 
+  if (isValidElement(content)) {
+    return (
+      <BaseBottomModalContainer showIconClose={showCloseIcon} onCustomXPress={onCustomXPress}>
+        {content}
+      </BaseBottomModalContainer>
+    )
+  }
+
   return (
     <BaseBottomModalContainer showIconClose={showCloseIcon} onCustomXPress={onCustomXPress}>
       <FastImage source={icon} style={styles.icon} />
@@ -75,9 +84,11 @@ export const alertBottomModal = ({
   showCloseIcon = true,
   buttons = [],
   onCustomXPress,
+  content
 }: AlertErrorProps) => {
   Modal.show({
     children: <AlertBottomContent
+      content={content}
       buttons={buttons}
       title={title}
       message={message}

@@ -69,7 +69,7 @@ const ProjectDetail = () => {
   };
 
   const onCreateNewTask = () => {
-    navigationRef.current?.navigate(Screen.CreateTask, {projectId: project?._id, isHide: true});
+    navigationRef.current?.navigate(Screen.CreateTask, {projectId: project?._id});
   }
 
   const renderEmpty = () => {

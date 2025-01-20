@@ -1,3 +1,4 @@
+import {ProjectProps} from './../../../model/Project.props';
 import {IconTypes} from '../../../themes/Images';
 
 export enum TimeFilterKey {
@@ -42,4 +43,8 @@ export interface StatusProps {
 export interface CreateTaskFormProps {
   title: string;
   description?: string;
+  startDate?: string | Date;
+  project?: ProjectProps;
+  endDate?: string | Date;
+  priority: PriorityTask;
 }

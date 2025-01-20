@@ -3,10 +3,12 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import {alertBottomModal} from '../components/AlertBottomContent/AlertBottomContent';
 import {Block} from '../components/Block/Block';
 import {Spacer} from '../components/Spacer/Spacer';
 import {Typo} from '../components/Typo/Typo';
 import {Theme, useTheme} from '../context/ThemeProvider';
+import CreateTabContent from '../features/Manage/components/CreateTabContent';
 import colors from '../themes/Colors';
 import images from '../themes/Images';
 import {SpacingDefault} from '../themes/Spacing';
@@ -21,10 +23,10 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
           icon: images.tabs.ic_main_tab_manage_active,
           name: 'Manage',
         };
-      case Screen.CreateTask:
+      case Screen.CreateAll:
         return {
           icon: images.ic_close,
-          name: 'CreateTask',
+          name: 'CreateAll',
         };
       case Screen.Profile:
         return {
@@ -44,10 +46,10 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
           icon: images.tabs.ic_main_tab_manage_inactive,
           name: 'Manage',
         };
-      case Screen.CreateTask:
+      case Screen.CreateAll:
         return {
           icon: images.ic_close,
-          name: 'CreateTask',
+          name: 'CreateAll',
         };
       case Screen.Profile:
         return {
@@ -71,6 +73,14 @@ const TabBar = (props: any) => {
   const styles = useStyles(theme);
 
   const onNavigateTab = (routeName: Screen) => () => {
+    if (routeName === Screen.CreateAll) {
+      alertBottomModal({
+        content: <CreateTabContent />,
+        dismissable: true,
+      })
+      return;
+    }
+
     navigation.navigate(routeName);
   };
 

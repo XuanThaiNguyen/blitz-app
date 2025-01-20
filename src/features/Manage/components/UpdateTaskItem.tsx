@@ -12,18 +12,13 @@ import images from '../../../themes/Images';
 interface UpdateTaskItemProps {
   title: string;
   value: string;
-  onUpdateTask?: () => void;
-  canUpdate?: boolean;
   iconTitle: string;
+  canEdit?: boolean;
+  onEdit?: () => void;
 }
 
-const UpdateTaskItem = ({title, value, onUpdateTask, canUpdate = true, iconTitle}: UpdateTaskItemProps) => {
+const UpdateTaskItem = ({title, value, iconTitle, canEdit, onEdit}: UpdateTaskItemProps) => {
   const {theme} = useTheme();
-
-  const _onUpdateItem = () => {
-    if (!canUpdate) return;
-    onUpdateTask?.();
-  };
 
   return (
     <Block row alignCenter justifyContent="space-between" paddingVertical={16}>
@@ -32,15 +27,17 @@ const UpdateTaskItem = ({title, value, onUpdateTask, canUpdate = true, iconTitle
         <Spacer width={'small'} />
         <Typo text={title} color={theme.primaryText} preset="r16" />
       </Block>
-      <Button style={styles.buttonContent} onPress={_onUpdateItem} activeOpacity={canUpdate ? 0.5 : 1}>
+      <Block row alignCenter>
         <Typo text={value} preset="b16" color={theme.primaryText} />
-        {canUpdate ? (
+        {canEdit ? (
           <>
             <Spacer width={'small'} />
-            <FastImage source={images.ic_edit} style={styles.icon} tintColor={theme.primaryText} />
+            <Button onPress={onEdit}>
+              <FastImage source={images.ic_edit} style={{width: 16, height: 16}} tintColor={theme.primaryText} />
+            </Button>
           </>
         ) : <></>}
-      </Button>
+      </Block>
     </Block>
   );
 };
@@ -49,10 +46,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 16,
     height: 16,
-  },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
 });
 

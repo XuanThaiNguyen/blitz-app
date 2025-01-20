@@ -1,5 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+import {ProjectProps} from './../../model/Project.props';
+
 export interface TagModel {
   _id: string;
   title: string;
@@ -28,11 +30,13 @@ export interface User {
 interface InitialUserProps {
   user: User | null;
   searchHistories: string[];
+  projects: ProjectProps[];
 }
 
 const initialState: InitialUserProps = {
   user: null,
   searchHistories: [],
+  projects: []
 };
 
 const userSlice = createSlice({
@@ -54,6 +58,9 @@ const userSlice = createSlice({
         state.searchHistories.splice(payloadIndex, 1);
       }
     },
+    setProjects: (state, {payload}) => {
+      state.projects = payload;
+    }
   },
 });
 

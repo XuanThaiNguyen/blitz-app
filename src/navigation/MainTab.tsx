@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 
 import {useTheme} from '../context/ThemeProvider';
-import CreateTask from '../features/Manage/screens/CreateTask';
+import CreateAll from '../features/Manage/screens/CreateAll';
 import Manage from '../features/Manage/screens/Manage';
 import Setting from '../features/Setting/screens/Setting';
 import colors from '../themes/Colors';
@@ -40,8 +40,8 @@ const MainTab = () => {
         options={defaultOptions}
       />
       <Tab.Screen
-        name={Screen.CreateTask}
-        component={CreateTask}
+        name={Screen.CreateAll}
+        component={CreateAll}
         options={defaultOptions}
       />
       <Tab.Screen

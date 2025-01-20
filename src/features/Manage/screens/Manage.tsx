@@ -7,11 +7,9 @@ import FastImage from 'react-native-fast-image';
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container/Container';
-import {Divider} from '../../../components/Divider/DIvider';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
-import {initMeasure, TOOLTIP_ADD_BUTTON_HEIGHT, TOOLTIP_ADD_BUTTON_WIDTH} from '../../../components/Tooltip/Constant';
-import Tooltip from '../../../components/Tooltip/Tooltip';
+import {initMeasure} from '../../../components/Tooltip/Constant';
 import {MeasureObject} from '../../../components/Tooltip/Tooltip.prop';
 import {Typo} from '../../../components/Typo/Typo';
 import {Theme, useTheme} from '../../../context/ThemeProvider';
@@ -19,8 +17,9 @@ import {TaskProps} from '../../../model/Task.props';
 import {MainStackScreenProps} from '../../../navigation/MainStackScreenProps';
 import {showLoginModal} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
-import {useAppSelector} from '../../../redux/hook';
+import {useAppDispatch, useAppSelector} from '../../../redux/hook';
 import {AppState} from '../../../redux/reducer';
+import {actions as UserActions} from '../../../redux/user';
 import {ApiStatus} from '../../../services/api/ApiStatus';
 import {getProjects} from '../../../services/api/project';
 import {getTasks} from '../../../services/api/task';
@@ -38,6 +37,7 @@ const Manage = () => {
   const styles = useStyles(theme);
   const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
   const refMeasure = useRef<any>(null);
+  const dispatch = useAppDispatch();
 
   const user = useAppSelector((state: AppState) => state.user.user);
   const [data, setData] = useState({
@@ -92,6 +92,7 @@ const Manage = () => {
       const [{data: dataProjects}, {data: dataTasks}] = await Promise.all([getProjects(), getTasks()]);
       if (dataProjects?.status === ApiStatus.OK && dataTasks?.status === ApiStatus.OK) {
         setData(prev => ({...prev, projects: dataProjects?.data, tasks: dataTasks?.data}));
+        dispatch(UserActions.setProjects(dataProjects?.data));
       }
     } catch (err: any) {
 
@@ -114,6 +115,7 @@ const Manage = () => {
       const {data: dataProjects} = await getProjects();
       if (dataProjects?.status === ApiStatus.OK) {
         setData(prev => ({...prev, projects: dataProjects?.data}));
+        dispatch(UserActions.setProjects(dataProjects?.data));
       }
     } catch (err: any) {
       console.log('errr', err);
@@ -396,7 +398,8 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     alignSelf: 'center',
   },
   flatlistContainer: {
-    paddingTop: 12
+    paddingTop: 12,
+    paddingBottom: 16
   },
   shadow: {
     backgroundColor: theme.background,
