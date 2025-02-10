@@ -28,15 +28,15 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
           icon: images.ic_close,
           name: 'CreateAll',
         };
-      case Screen.Profile:
+      case Screen.Schedule:
         return {
           icon: images.tabs.ic_main_tab_profile_active,
-          name: 'Setting',
+          name: 'Schedule',
         };
       default:
         return {
-          icon: images.tabs.ic_main_tab_profile_active,
-          name: 'Setting',
+          icon: images.tabs.ic_main_tab_manage_active,
+          name: 'Manage',
         };
     }
   } else {
@@ -51,15 +51,15 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
           icon: images.ic_close,
           name: 'CreateAll',
         };
-      case Screen.Profile:
+      case Screen.Schedule:
         return {
           icon: images.tabs.ic_main_tab_profile_inactive,
-          name: 'Setting',
+          name: 'Schedule',
         };
       default:
         return {
-          icon: images.tabs.ic_main_tab_profile_inactive,
-          name: 'Setting',
+          icon: images.tabs.ic_main_tab_manage_active,
+          name: 'Manage',
         };
     }
   }
@@ -189,7 +189,7 @@ const useStyles = (theme: Theme) => StyleSheet.create({
   },
   imgBg: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
 });
 

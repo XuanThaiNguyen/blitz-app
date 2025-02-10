@@ -1,4 +1,4 @@
 export enum ApiStatus {
   OK = 200,
-  UNAUTHORIZED = 403,
+  UNAUTHORIZED = 401,
 }

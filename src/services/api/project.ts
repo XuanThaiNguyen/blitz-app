@@ -16,3 +16,7 @@ export const getProjectDetailById = async (projectId: string) => {
 export const updateProjectById = async (projectId: string, params: any) => {
   return http.patch(APIs.GET_PROJECT_BY_ID.replace(':projectId', projectId), params);
 };
+
+export const deleteProjectById = async (projectId: string) => {
+  return http.delete(APIs.GET_PROJECT_BY_ID.replace(':projectId', projectId));
+};

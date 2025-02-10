@@ -4,7 +4,7 @@ import React from 'react';
 import {useTheme} from '../context/ThemeProvider';
 import CreateAll from '../features/Manage/screens/CreateAll';
 import Manage from '../features/Manage/screens/Manage';
-import Setting from '../features/Setting/screens/Setting';
+import Schedule from '../features/Schedule/Schedule';
 import colors from '../themes/Colors';
 import Screen from './Screen';
 import TabBar from './TabBar';
@@ -45,8 +45,8 @@ const MainTab = () => {
         options={defaultOptions}
       />
       <Tab.Screen
-        name={Screen.Setting}
-        component={Setting}
+        name={Screen.Schedule}
+        component={Schedule}
         options={defaultOptions}
       />
     </Tab.Navigator>

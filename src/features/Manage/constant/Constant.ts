@@ -1,14 +1,14 @@
 import * as yup from 'yup';
 
 import colors from '../../../themes/Colors';
-import {CreateTaskFormProps, PriorityProps, PriorityTask, StatusProps, StatusTask, TimeFilterKey, TimeProjectProps} from './Model.props';
 import {SpacingDefault} from '../../../themes/Spacing';
+import {CreateTaskFormProps, PriorityProps, PriorityTask, StatusProps, StatusTask, TasksStatusSearch, TimeProjectProps} from './Model.props';
 
 export const ITEM_SIZE_SPACE = 18;
 export const SPACING_BETWEEN_CARD = SpacingDefault.large;
 export const ITEM_PROJECT_WIDTH = SpacingDefault.width - SPACING_BETWEEN_CARD * 2;
 
-export const TASKS_BY_STATUS_WITH_SEARCH = [
+export const TASKS_BY_STATUS_WITH_SEARCH: TasksStatusSearch[] = [
   {
     title: 'All',
     key: 'All',

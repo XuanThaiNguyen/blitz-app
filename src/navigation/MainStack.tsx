@@ -1,18 +1,21 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 
+import Account from '../features/Account/screens/Account';
+import Profile from '../features/Account/screens/Profile';
 import Login from '../features/Auth/screens/Login';
 import Register from '../features/Auth/screens/Register';
+import AllTasks from '../features/Manage/screens/AllTasks';
 import CreateProject from '../features/Manage/screens/CreateProject';
 import CreateTag from '../features/Manage/screens/CreateTag';
 import CreateTask from '../features/Manage/screens/CreateTask';
+import MyProjects from '../features/Manage/screens/MyProjects';
 import ProjectDetail from '../features/Manage/screens/ProjectDetail';
 import SearchTask from '../features/Manage/screens/SearchTask';
 import TaskDetail from '../features/Manage/screens/TaskDetail';
 import TaskManageFilter from '../features/Manage/screens/TaskManageFilter';
 import Notification from '../features/Notification/screens/Notification';
 import Pomodoro from '../features/Pomodoro/screens/Pomodoro';
-import Profile from '../features/Profile/screens/Profile';
 import {useAppSelector} from '../redux/hook';
 import {AppState} from '../redux/reducer';
 import {MainStackScreenProps} from './MainStackScreenProps';
@@ -45,6 +48,9 @@ const MainStack = () => {
       <Stack.Screen name={Screen.SearchTask} component={SearchTask} />
       <Stack.Screen name={Screen.Pomodoro} component={Pomodoro} />
       <Stack.Screen name={Screen.Notification} component={Notification} />
+      <Stack.Screen name={Screen.Account} component={Account} />
+      <Stack.Screen name={Screen.MyProjects} component={MyProjects} />
+      <Stack.Screen name={Screen.AllTasks} component={AllTasks} />
     </Stack.Navigator>
   );
 };

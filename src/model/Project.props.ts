@@ -1,3 +1,4 @@
+import {User} from "../redux/user";
 import {TagProps} from "./Tag.props";
 import {TaskProps} from "./Task.props";
 
@@ -15,8 +16,8 @@ export interface ProjectProps {
     urls: string[];
   };
   participantInfo: {
-    memberIds: string[];
-    ownerId: string;
+    members: User[];
+    owner: User;
   };
   projectInfo: {
     color: string;

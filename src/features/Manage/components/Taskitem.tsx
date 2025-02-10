@@ -1,7 +1,6 @@
 import React, {useMemo} from 'react';
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useSelector} from 'react-redux';
 
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
@@ -13,7 +12,9 @@ import {ProjectProps} from '../../../model/Project.props';
 import {TaskProps} from '../../../model/Task.props';
 import {navigationRef} from '../../../navigation/navigationUtil';
 import Screen from '../../../navigation/Screen';
+import {useAppSelector} from '../../../redux/hook';
 import {AppState} from '../../../redux/reducer';
+import colors from '../../../themes/Colors';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
@@ -24,14 +25,14 @@ interface TaskItemProps {
   item: TaskProps;
   style?: StyleProp<ViewStyle>;
   onCustomPress?: () => void;
-  projects?: ProjectProps[];
   project?: ProjectProps | null;
 }
 
-const TaskItem = ({item, style, projects, onCustomPress, project}: TaskItemProps) => {
+const TaskItem = ({item, style, onCustomPress, project}: TaskItemProps) => {
   const {theme} = useTheme();
   const styles = useStyles(theme);
-  const user = useSelector((_state: AppState) => _state.user.user);
+
+  const projects = useAppSelector((_state: AppState) => _state.user.projects || []);
 
   const projectOfTask = useMemo(() => {
     let _project;
@@ -43,8 +44,21 @@ const TaskItem = ({item, style, projects, onCustomPress, project}: TaskItemProps
     return _project;
   }, [])
 
+  const allMembers = useMemo(() => {
+    let _members: any[] = [];
+    _members.push(projectOfTask?.participantInfo.owner!);
+
+    if (projectOfTask?.participantInfo && projectOfTask?.participantInfo?.members?.length > 0) {
+      _members = [..._members, ...projectOfTask?.participantInfo?.members];
+    }
+
+    return _members
+  }, [projectOfTask?.participantInfo])
+
+  const assignee = allMembers.find(member => member._id === item.assigneeInfo[0]?._id);
+
   const onTaskDetail = () => {
-    navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id, project: projectOfTask});
+    navigationRef.current?.navigate(Screen.TaskDetail, {taskId: item._id});
     onCustomPress?.();
   };
 
@@ -60,19 +74,26 @@ const TaskItem = ({item, style, projects, onCustomPress, project}: TaskItemProps
 
   return (
     <Button style={[styles.buttonTask, style, {borderLeftColor: getColorsByPriority({priority: item.priority})}]} onPress={onTaskDetail}>
-      <Typo flex text={item.title} numberOfLines={2} color={theme.primaryText} preset="b16" />
-      <Spacer height={4} />
-      <Typo flex text={projectOfTask?.projectInfo.title} numberOfLines={2} color={theme.secondaryText} preset="r14" />
+      <Block row alignCenter justifyContent="space-between">
+        <Block>
+          <Typo flex text={item.title} numberOfLines={2} color={theme.primaryText} preset="b16" />
+          <Spacer height={4} />
+          <Typo flex text={projectOfTask?.projectInfo.title} numberOfLines={2} color={theme.secondaryText} preset="r14" />
+        </Block>
+        <Block bgColor={colors.secondary} pVer={4} paddingHorizontal={SpacingDefault.smaller} borderRadius={8} alignSelf="flex-start">
+          <Typo preset="b16" color={colors.primary} text={`${item.status}`} />
+        </Block>
+      </Block>
       <Spacer height={12} />
       <Divider />
       <Spacer height={12} />
       <Block row alignCenter justifyContent="space-between">
         <Block row alignCenter>
-          <FastImage source={images.ic_calendar} style={{width: 16, height: 16}} tintColor={theme.secondaryText} />
+          <FastImage source={images.ic_calendar} style={styles.iconCalendar} tintColor={theme.secondaryText} />
           <Spacer width={'smaller'} />
           {renderTime()}
         </Block>
-        <FastImage source={{uri: user?.profileInfo?.avatar}} style={{width: 24, height: 24, borderRadius: 12}} />
+        <FastImage source={{uri: assignee?.profileInfo?.avatar}} style={styles.avatar} />
       </Block>
     </Button>
   );
@@ -96,6 +117,15 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     shadowRadius: 3,
     elevation: 5
   },
+  iconCalendar: {
+    width: 16,
+    height: 16
+  },
+  avatar: {
+    width: 24,
+    height: 24,
+    borderRadius: 12
+  }
 }));
 
 export default TaskItem;

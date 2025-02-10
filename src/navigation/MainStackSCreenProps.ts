@@ -1,7 +1,6 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 
-import {CreateTaskFormProps, StatusTask, TimeFilterKey} from '../features/Manage/constant/Model.props';
-import {ProjectProps} from '../model/Project.props';
+import {CreateTaskFormProps, TimeFilterKey} from '../features/Manage/constant/Model.props';
 import {MainTabScreenProps} from './MainTabScreenProps';
 import Screen from './Screen';
 
@@ -21,12 +20,12 @@ export type MainStackScreenProps = {
     projectId?: string;
   };
   [Screen.CreateProject]: undefined;
+  [Screen.MyProjects]: undefined;
   [Screen.Profile]: undefined;
   [Screen.TaskDetail]: {
     taskId: string;
     fromScreen?: Screen;
     times?: number;
-    project: ProjectProps;
   };
   [Screen.ProjectDetail]: {
     projectId: string;
@@ -36,9 +35,8 @@ export type MainStackScreenProps = {
   [Screen.TaskManageFilter]: {
     filterKey: TimeFilterKey;
   };
-  [Screen.SearchTask]: {
-    status?: StatusTask;
-    projects?: ProjectProps[];
-  };
+  [Screen.SearchTask]: undefined;
   [Screen.Pomodoro]: undefined;
+  [Screen.Account]: undefined;
+  [Screen.AllTasks]: undefined;
 };

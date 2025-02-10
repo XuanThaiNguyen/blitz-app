@@ -1,9 +1,9 @@
-import {yupResolver} from '@hookform/resolvers/yup';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useFormik} from 'formik';
 import React, {useState} from 'react';
-import {Controller, useForm} from 'react-hook-form';
-import {DeviceEventEmitter, StyleSheet} from 'react-native';
+import {DeviceEventEmitter, Keyboard, StyleSheet, TouchableNativeFeedback} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import * as Yup from 'yup';
 
 import {alertBottomModal} from '../../../components/AlertBottomContent/AlertBottomContent';
 import {Block} from '../../../components/Block/Block';
@@ -25,24 +25,29 @@ import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {moderateScale} from '../../../utils/handleResponsive';
 import {isEmpty} from '../../../utils/handleUtils';
-import {COLORS, initialCreateTaskForm, validationCreateTaskSchema} from '../constant/Constant';
-import {CreateTaskFormProps} from '../constant/Model.props';
+import {COLORS} from '../constant/Constant';
 
 const SIZE = (SpacingDefault.width - SpacingDefault.medium * 2 - moderateScale(64)) / 5;
+
+interface CreateProjectForm {
+  title: string;
+  description?: string;
+}
 
 const CreateProject = () => {
   const {theme} = useTheme();
   const {navigate, goBack} = useNavigation<NavigationProp<MainStackScreenProps>>();
 
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    formState: {errors},
-  } = useForm<CreateTaskFormProps>({
-    defaultValues: initialCreateTaskForm,
-    resolver: yupResolver(validationCreateTaskSchema),
-  });
+  const {values, handleSubmit, errors, touched, handleBlur, handleChange} = useFormik<CreateProjectForm>({
+    initialValues: {
+      title: '',
+      description: ''
+    },
+    validationSchema: Yup.object({
+      title: Yup.string().required('Trường này bắt buộc')
+    }),
+    onSubmit: () => onAddProject()
+  })
 
   const [color, setColor] = useState('');
   const [loading, setLoading] = useState(false);
@@ -80,11 +85,11 @@ const CreateProject = () => {
 
     const randomColorIndex = Math.floor(Math.random() * 20);
     const params: any = {
-      title: getValues().title,
+      title: values.title,
       color: !isEmpty(color) ? color : COLORS[randomColorIndex],
     };
-    if (!isEmpty(getValues().description)) {
-      params.description = getValues().description;
+    if (!isEmpty(values.description)) {
+      params.description = values.description;
     }
 
     try {
@@ -127,52 +132,44 @@ const CreateProject = () => {
       <InsetSubstitute />
       <Header titleHeader="Create Project" />
       <Spacer height={24} />
-      <Block block paddingHorizontal={SpacingDefault.medium}>
-        <Typo preset="r16" color={theme.primaryText}>Title <Typo preset="r16" color={colors.primary}>*</Typo></Typo>
-        <Spacer height={8} />
-        <Controller
-          name="title"
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextField
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              placeholder="Enter project name"
-              error={errors?.title}
-              errorMessage={errors?.title?.message}
-            />
-          )}
-        />
-        <Spacer height={16} />
-        <Typo preset="r16" color={theme.primaryText} text="Description" />
-        <Spacer height={8} />
-        <Controller
-          name="description"
-          control={control}
-          render={({field: {onChange, onBlur, value = ''}}) => (
-            <TextField
-              multiline
-              value={value}
-              inputHeight={88}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              placeholder="Enter project description"
-              error={errors?.description}
-              errorMessage={errors?.description?.message}
-              style={styles.input}
-              blockInputStyle={styles.blockInput}
-            />
-          )}
-        />
-        <Spacer height={16} />
-        <Typo text="Tag Color Mark" preset="r16" color={theme.primaryText} />
-        <Spacer height={16} />
-        <Block row alignCenter flexWrap="wrap">
-          {COLORS.map(renderColorItem)}
+      <TouchableNativeFeedback onPress={Keyboard.dismiss}>
+        <Block block paddingHorizontal={SpacingDefault.medium}>
+          <Typo preset="r16" color={theme.primaryText}>Title <Typo preset="r16" color={colors.primary}>*</Typo></Typo>
+          <Spacer height={8} />
+          <TextField
+            value={values.title}
+            onBlur={handleBlur('title')}
+            onChangeText={handleChange('title')}
+            placeholder="Enter project name"
+            error={errors?.title && touched?.title}
+            errorMessage={errors?.title}
+          />
+          <Spacer height={24} />
+          <Typo preset="r16" color={theme.primaryText} text="Description" />
+          <Spacer height={8} />
+          <TextField
+            value={values.description || ''}
+            onBlur={handleBlur('description')}
+            onChangeText={handleChange('description')}
+            placeholder="Enter project name"
+            error={errors?.description && touched?.description}
+            errorMessage={errors?.description}
+          />
+          <Spacer height={24} />
+          <Typo text="Tag Color Mark" preset="r16" color={theme.primaryText} />
+          <Spacer height={16} />
+          <Block row alignCenter flexWrap="wrap">
+            {COLORS.map(renderColorItem)}
+          </Block>
         </Block>
-      </Block>
-      <Button loading={loading} preset="primary" text="Create" style={styles.buttonAdd} onPress={handleSubmit(onAddProject)} />
+      </TouchableNativeFeedback>
+      <Button
+        loading={loading}
+        preset="primary"
+        text="Create"
+        style={styles.buttonAdd}
+        disabled={isEmpty(values.title)}
+        onPress={handleSubmit} />
       <InsetSubstitute type="bottom" />
     </Container>
   );
@@ -192,6 +189,10 @@ const styles = StyleSheet.create({
   blockInput: {
     alignItems: 'flex-start',
     paddingTop: 8
+  },
+  iconAdd: {
+    width: 16,
+    height: 16
   }
 });
 

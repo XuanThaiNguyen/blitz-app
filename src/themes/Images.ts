@@ -40,6 +40,7 @@ const images = {
   ic_save: require('../assets/images/ic_save.webp'),
   ic_delete: require('../assets/images/ic_delete.png'),
   ic_guideline: require('../assets/images/ic_guideline.webp'),
+  ic_filter: require('../assets/images/ic_filter.webp'),
 
   //tabs
   tabs: {

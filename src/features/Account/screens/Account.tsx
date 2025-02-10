@@ -3,11 +3,13 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {ActivityIndicator, ScrollView, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container/Container';
 import {Divider} from '../../../components/Divider/DIvider';
+import Header from '../../../components/Header/Header';
 import {InsetSubstitute} from '../../../components/InsetSubstitute/InsetSubstitute';
 import {Spacer} from '../../../components/Spacer/Spacer';
 import Switch from '../../../components/Switch';
@@ -26,18 +28,19 @@ import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {isEmpty} from '../../../utils/handleUtils';
 import http from '../../../utils/http';
+import {AccountKeyProps, AccountProps} from '../constants/Account.props';
 import {ACCOUNT_BLOCKS, APP_BLOCKS, WORKSPACE_BLOCKS} from '../constants/Constant';
-import {SettingKeyProps, SettingProps} from '../constants/Setting.props';
 
-const Setting = () => {
+const Account = () => {
   const {user} = useAppSelector((_state: AppState) => _state.user || {});
   const {theme, setScheme, isDark} = useTheme();
   const dispatch = useAppDispatch();
-  const {navigate} = useNavigation<NavigationProp<MainStackScreenProps>>();
+  const {navigate, goBack} = useNavigation<NavigationProp<MainStackScreenProps>>();
+  const insets = useSafeAreaInsets()
 
   const [loading, setLoading] = useState(false);
 
-  const onPressBlock = (item: SettingProps) => () => {
+  const onPressBlock = (item: AccountProps) => () => {
     if (isEmpty(item.screenId)) {
       setScheme(isDark ? 'light' : 'dark');
     } else {
@@ -45,7 +48,7 @@ const Setting = () => {
     }
   };
 
-  const renderBlockItem = (item: SettingProps) => {
+  const renderBlockItem = (item: AccountProps) => {
     return (
       <Button style={styles.blockItem} key={item.key} onPress={onPressBlock(item)}>
         <Block row alignCenter>
@@ -53,7 +56,7 @@ const Setting = () => {
           <Spacer width={'normal'} />
           <Typo text={item.key} preset="b16" color={theme.primaryText} />
         </Block>
-        {item.key === SettingKeyProps.AppAppearance ? (
+        {item.key === AccountKeyProps.AppAppearance ? (
           <Switch
             checked={false}
             onChange={onPressBlock(item)}
@@ -82,10 +85,11 @@ const Setting = () => {
   };
 
   return (
-    <Container style={styles.container}>
+    <Container>
       <InsetSubstitute />
+      <Header titleHeader="Account" onPressLeft={goBack} />
       <Spacer height={8} />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <Spacer height={8} />
         <Block alignCenter>
           <FastImage source={{uri: user?.profileInfo.avatar || ''}} style={styles.avatar} />
@@ -120,7 +124,7 @@ const Setting = () => {
           <Spacer width={'normal'} />
           <Typo text={'Logout'} preset="b16" color={colors.primary} />
         </Button>
-        <Spacer height={32} />
+        <Spacer height={insets.bottom + 16} />
       </ScrollView>
     </Container>
   );
@@ -161,4 +165,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Setting;
+export default Account;

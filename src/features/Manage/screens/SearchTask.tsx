@@ -2,6 +2,7 @@ import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
+
 import {Block} from '../../../components/Block/Block';
 import Button from '../../../components/Button/Button';
 import Container from '../../../components/Container/Container';
@@ -31,10 +32,9 @@ const SearchTask = () => {
   const {goBack} = useNavigation();
   const dispatch = useAppDispatch();
   const route = useRoute<RouteProp<MainStackScreenProps, Screen.SearchTask>>();
-  const status = route.params?.status || null;
-  const projects = route.params?.projects || [];
   const flatlistRef = useRef<FlatList>(null);
 
+  const projects = useAppSelector((state: AppState) => state.user.projects || []);
   const searchHistories = useAppSelector((_state: AppState) => _state.user.searchHistories || []);
 
   const [search, setSearch] = useState('');
@@ -45,7 +45,7 @@ const SearchTask = () => {
 
   useEffect(() => {
     onSearchTask({filterStatus: currentStatus});
-  }, [searchDebounced, status])
+  }, [searchDebounced])
 
   const onSearchTask = async ({filterStatus}: {filterStatus?: any}) => {
     let params: any = {};
@@ -74,14 +74,14 @@ const SearchTask = () => {
 
   const renderItem = ({item}: {item: TaskProps}) => {
     return (
-      <TaskItem item={item} style={{marginBottom: 12}} onCustomPress={onSaveSearchKey(item.title)} projects={projects} />
+      <TaskItem item={item} style={styles.taskItem} onCustomPress={onSaveSearchKey(item.title)} />
     );
   };
 
   const renderEmpty = () => {
     return (
       <Block center mTop={'40%'}>
-        <FastImage source={isDark ? images.empty_light : images.empty_dark} style={{width: 124, height: 124}} />
+        <FastImage source={isDark ? images.empty_light : images.empty_dark} style={styles.iconEmpty} />
         <Spacer height={12} />
         <Typo text="Không tìm thấy kết quả" preset="r14" color={theme.secondaryText} />
       </Block>
@@ -108,7 +108,7 @@ const SearchTask = () => {
                 <Typo text={item} preset="r16" color={theme.primaryText} />
               </Button>
               <Button onPress={onDeleteSearchKey(item)}>
-                <FastImage source={images.ic_close} style={{width: 16, height: 16}} />
+                <FastImage source={images.ic_close} style={styles.iconClose} />
               </Button>
             </Block>
           ))}
@@ -130,7 +130,7 @@ const SearchTask = () => {
         <FlatList
           data={tasks}
           keyExtractor={item => item._id}
-          contentContainerStyle={[styles.flatlistContainer, {paddingTop: 12}]}
+          contentContainerStyle={styles.flatlistContainer}
           ListEmptyComponent={renderEmpty}
           renderItem={renderItem} />
       </Block>
@@ -150,7 +150,7 @@ const SearchTask = () => {
     const isLastIndex = index === TASKS_BY_STATUS_WITH_SEARCH.length - 1;
 
     return (
-      <Button onPress={onSelectTab(item, index)} style={{paddingVertical: 8, paddingHorizontal: SpacingDefault.smaller, borderRadius: 6, backgroundColor: isSelected ? theme.backgroundBox : undefined, marginRight: isLastIndex ? SpacingDefault.none : SpacingDefault.smaller}}>
+      <Button onPress={onSelectTab(item, index)} style={[styles.buttonFilterItem, isSelected ? styles.selectedFilterItem : {}, isLastIndex ? styles.lastIndexFilterItem : {}]}>
         <Typo text={item.title} preset={isSelected ? 'b16' : 'r16'} color={isSelected ? theme.primaryText : theme.secondaryText} />
       </Button>
     )
@@ -212,7 +212,28 @@ const useStyles = ((theme: Theme) => StyleSheet.create({
     height: 16,
   },
   flatlistContainer: {
-    paddingHorizontal: SpacingDefault.normal
+    paddingHorizontal: SpacingDefault.normal,
+    paddingTop: 12
+  },
+  taskItem: {
+    marginBottom: 12
+  },
+  iconEmpty: {
+    width: 124,
+    height: 124
+  },
+  buttonFilterItem: {
+    paddingVertical: 8,
+    paddingHorizontal: SpacingDefault.smaller,
+    borderRadius: 6,
+    backgroundColor: undefined,
+    marginRight: SpacingDefault.smaller
+  },
+  selectedFilterItem: {
+    backgroundColor: theme.backgroundBox
+  },
+  lastIndexFilterItem: {
+    marginRight: SpacingDefault.none
   }
 }));
 

@@ -2,7 +2,7 @@ import {Source} from 'react-native-fast-image';
 
 import Screen from '../../../navigation/Screen';
 
-export enum SettingKeyProps {
+export enum AccountKeyProps {
   Profile = 'Profile',
   AppAppearance = 'App Appearance',
   MyTasks = 'My Tasks',
@@ -12,8 +12,8 @@ export enum SettingKeyProps {
   HelpAndSupport = 'Help and Support'
 }
 
-export interface SettingProps {
-  key: SettingKeyProps;
+export interface AccountProps {
+  key: AccountKeyProps;
   screenId: Screen | null;
   icon?: number | Source;
 }

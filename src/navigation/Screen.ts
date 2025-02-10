@@ -4,17 +4,18 @@ enum Screen {
 
   //Main Tabbar
   Manage = 'Manage',
-  Setting = 'Setting',
+  CreateAll = 'CreateAll',
+  Schedule = 'Schedule',
 
   //Pomodoro
   Pomodoro = 'Pomodoro',
 
   //Task
-  CreateAll = 'CreateAll',
   CreateTask = 'CreateTask',
   TaskDetail = 'TaskDetail',
   TaskManageFilter = 'TaskManageFilter',
   SearchTask = 'SearchTask',
+  AllTasks = 'AllTasks',
 
   //Tag
   CreateTag = 'CreateTag',
@@ -22,8 +23,10 @@ enum Screen {
   //Project
   CreateProject = 'CreateProject',
   ProjectDetail = 'ProjectDetail',
+  MyProjects = 'MyProjects',
 
-  //Profile
+  //Account
+  Account = 'Account',
   Profile = 'Profile',
 
   //Authen

@@ -31,12 +31,14 @@ interface InitialUserProps {
   user: User | null;
   searchHistories: string[];
   projects: ProjectProps[];
+  defaultProject: ProjectProps | null;
 }
 
 const initialState: InitialUserProps = {
   user: null,
   searchHistories: [],
-  projects: []
+  projects: [],
+  defaultProject: null
 };
 
 const userSlice = createSlice({
@@ -60,7 +62,10 @@ const userSlice = createSlice({
     },
     setProjects: (state, {payload}) => {
       state.projects = payload;
-    }
+    },
+    setDefaultProject: (state, {payload}) => {
+      state.defaultProject = payload;
+    },
   },
 });
 

@@ -1,46 +1,46 @@
 import Screen from '../../../navigation/Screen';
 import images from '../../../themes/Images';
-import {SettingKeyProps, SettingProps} from './Setting.props';
+import {AccountKeyProps, AccountProps} from './Account.props';
 
-export const WORKSPACE_BLOCKS: SettingProps[] = [
+export const WORKSPACE_BLOCKS: AccountProps[] = [
   {
-    key: SettingKeyProps.MyProjects,
-    screenId: Screen.Profile,
+    key: AccountKeyProps.MyProjects,
+    screenId: Screen.MyProjects,
     icon: images.ic_project
   },
   {
-    key: SettingKeyProps.MyTasks,
+    key: AccountKeyProps.MyTasks,
     screenId: Screen.Profile,
     icon: images.ic_task
   },
 ];
 
-export const ACCOUNT_BLOCKS: SettingProps[] = [
+export const ACCOUNT_BLOCKS: AccountProps[] = [
   {
-    key: SettingKeyProps.Profile,
+    key: AccountKeyProps.Profile,
     screenId: Screen.Profile,
     icon: images.ic_personal
   },
   {
-    key: SettingKeyProps.ChangePassword,
+    key: AccountKeyProps.ChangePassword,
     screenId: Screen.Profile,
     icon: images.ic_password
   },
 ];
 
-export const APP_BLOCKS: SettingProps[] = [
+export const APP_BLOCKS: AccountProps[] = [
   {
-    key: SettingKeyProps.Notification,
+    key: AccountKeyProps.Notification,
     screenId: Screen.Profile,
     icon: images.ic_notification
   },
   {
-    key: SettingKeyProps.AppAppearance,
+    key: AccountKeyProps.AppAppearance,
     screenId: null,
     icon: images.ic_setting
   },
   {
-    key: SettingKeyProps.HelpAndSupport,
+    key: AccountKeyProps.HelpAndSupport,
     screenId: Screen.Profile,
     icon: images.ic_guideline
   },

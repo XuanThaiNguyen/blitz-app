@@ -104,8 +104,6 @@ const CreateTask = () => {
         startDate: existingTask?.startDate,
         endDate: existingTask?.endDate
       }
-      console.log('_existingTask', _existingTask);
-
       setValues((prev: any) => ({
         ...prev,
         ..._existingTask
@@ -237,8 +235,7 @@ const CreateTask = () => {
                 navigate(Screen.TaskDetail, {
                   taskId: data.data._id,
                   fromScreen: Screen.CreateTask,
-                  times: 2,
-                  project: values.project!,
+                  times: 2
                 });
               },
             },
@@ -277,7 +274,6 @@ const CreateTask = () => {
     <Container>
       <InsetSubstitute />
       <Header titleHeader={isEdit ? 'Edit Task' : 'Create Task'} />
-      <Spacer height={16} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <Spacer height={16} />

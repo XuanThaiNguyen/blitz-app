@@ -8,6 +8,11 @@ export enum TimeFilterKey {
   PLANNED = 'planned',
 }
 
+export interface TasksStatusSearch {
+  title: string;
+  key: StatusTask | 'All'
+}
+
 export interface TimeProjectProps {
   title: string;
   icon: IconTypes;

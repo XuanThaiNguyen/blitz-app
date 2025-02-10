@@ -8,7 +8,7 @@ enum APIs {
 
   //tasks
   CREATE_TASK = 'tasks/create',
-  GET_TASKS = 'tasks/my-tasks',
+  GET_TASKS = 'tasks',
   GET_TASK_BY_ID = 'tasks/:taskId',
 
   //tags
@@ -18,7 +18,10 @@ enum APIs {
   //projects
   GET_PROJECTS = 'projects/my-projects',
   CREATE_PROJECT = 'projects/create',
-  GET_PROJECT_BY_ID = 'projects/:projectId'
+  GET_PROJECT_BY_ID = 'projects/:projectId',
+
+  //account
+  FIND_USER = 'accounts/search'
 }
 
 export default APIs;

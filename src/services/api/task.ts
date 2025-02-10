@@ -8,7 +8,7 @@ export const createTask = async (params: any) => {
 };
 
 export const getTasks = async (params?: any) => {
-  return http.get(APIs.GET_TASKS, params);
+  return http.get(`${APIs.GET_TASKS}?isOwned=true`, params);
 };
 
 export const getTaskById = async (taskId: string) => {
