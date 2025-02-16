@@ -15,6 +15,7 @@ import Screen from '../../../navigation/Screen';
 import {useAppSelector} from '../../../redux/hook';
 import {AppState} from '../../../redux/reducer';
 import colors from '../../../themes/Colors';
+import {NONE_VALUE} from '../../../themes/Constant';
 import images from '../../../themes/Images';
 import {SpacingDefault} from '../../../themes/Spacing';
 import {DATE_FORMAT, formatDate} from '../../../utils/handleDateTime';
@@ -63,6 +64,10 @@ const TaskItem = ({item, style, onCustomPress, project}: TaskItemProps) => {
   };
 
   const renderTime = () => {
+    if (isEmpty(item?.timing?.startDate) && isEmpty(item?.timing?.endDate)) {
+      return <Typo text={`${NONE_VALUE}${NONE_VALUE}`} color={theme.secondaryText} preset="r14" />
+    }
+
     let _time = formatDate(item?.timing?.startDate || item?.timing?.endDate, DATE_FORMAT.FIVE);
     if (item?.timing?.startDate && item?.timing?.endDate) {
       _time = `${formatDate(item?.timing?.startDate, DATE_FORMAT.FIVE)} - ${formatDate(item?.timing?.endDate, DATE_FORMAT.FIVE)}`;

@@ -44,6 +44,8 @@ const images = {
 
   //tabs
   tabs: {
+    ic_main_tab_calendar_active: require('../assets/images/tabs/ic_main_tab_calendar_active.png'),
+    ic_main_tab_calendar_inactive: require('../assets/images/tabs/ic_main_tab_calendar_inactive.png'),
     ic_main_tab_manage_active: require('../assets/images/tabs/ic_main_tab_manage_active.png'),
     ic_main_tab_manage_inactive: require('../assets/images/tabs/ic_main_tab_manage_inactive.png'),
     ic_main_tab_profile_active: require('../assets/images/tabs/ic_main_tab_profile_active.png'),

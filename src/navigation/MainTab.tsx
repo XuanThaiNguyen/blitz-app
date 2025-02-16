@@ -4,7 +4,7 @@ import React from 'react';
 import {useTheme} from '../context/ThemeProvider';
 import CreateAll from '../features/Manage/screens/CreateAll';
 import Manage from '../features/Manage/screens/Manage';
-import Schedule from '../features/Schedule/Schedule';
+import Schedule from '../features/Schedule/screens/Schedule';
 import colors from '../themes/Colors';
 import Screen from './Screen';
 import TabBar from './TabBar';

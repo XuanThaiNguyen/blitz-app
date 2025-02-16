@@ -30,7 +30,7 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
         };
       case Screen.Schedule:
         return {
-          icon: images.tabs.ic_main_tab_profile_active,
+          icon: images.tabs.ic_main_tab_calendar_active,
           name: 'Schedule',
         };
       default:
@@ -53,7 +53,7 @@ const getIconTabBar = (key: Screen, isActive: Boolean) => {
         };
       case Screen.Schedule:
         return {
-          icon: images.tabs.ic_main_tab_profile_inactive,
+          icon: images.tabs.ic_main_tab_calendar_inactive,
           name: 'Schedule',
         };
       default:
